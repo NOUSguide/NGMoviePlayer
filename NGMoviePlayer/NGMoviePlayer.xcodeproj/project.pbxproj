@@ -1,0 +1,236 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		9B04550E150640BA007F8E7C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B04550D150640BA007F8E7C /* Foundation.framework */; };
+		9B045514150640BA007F8E7C /* NGMoviePlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B045513150640BA007F8E7C /* NGMoviePlayer.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		9B04550A150640BA007F8E7C /* libNGMoviePlayer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libNGMoviePlayer.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		9B04550D150640BA007F8E7C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		9B045511150640BA007F8E7C /* Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Prefix.pch; sourceTree = "<group>"; };
+		9B045512150640BA007F8E7C /* NGMoviePlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NGMoviePlayer.h; sourceTree = "<group>"; };
+		9B045513150640BA007F8E7C /* NGMoviePlayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NGMoviePlayer.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		9B045507150640BA007F8E7C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9B04550E150640BA007F8E7C /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		9B0454FF150640BA007F8E7C = {
+			isa = PBXGroup;
+			children = (
+				9B04550F150640BA007F8E7C /* NGMoviePlayer */,
+				9B04550C150640BA007F8E7C /* Frameworks */,
+				9B04550B150640BA007F8E7C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		9B04550B150640BA007F8E7C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9B04550A150640BA007F8E7C /* libNGMoviePlayer.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		9B04550C150640BA007F8E7C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9B04550D150640BA007F8E7C /* Foundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		9B04550F150640BA007F8E7C /* NGMoviePlayer */ = {
+			isa = PBXGroup;
+			children = (
+				9B045512150640BA007F8E7C /* NGMoviePlayer.h */,
+				9B045513150640BA007F8E7C /* NGMoviePlayer.m */,
+				9B045510150640BA007F8E7C /* Supporting Files */,
+			);
+			path = NGMoviePlayer;
+			sourceTree = "<group>";
+		};
+		9B045510150640BA007F8E7C /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				9B045511150640BA007F8E7C /* Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		9B045508150640BA007F8E7C /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		9B045509150640BA007F8E7C /* NGMoviePlayer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9B045517150640BA007F8E7C /* Build configuration list for PBXNativeTarget "NGMoviePlayer" */;
+			buildPhases = (
+				9B045506150640BA007F8E7C /* Sources */,
+				9B045507150640BA007F8E7C /* Frameworks */,
+				9B045508150640BA007F8E7C /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NGMoviePlayer;
+			productName = NGMoviePlayer;
+			productReference = 9B04550A150640BA007F8E7C /* libNGMoviePlayer.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		9B045501150640BA007F8E7C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+				ORGANIZATIONNAME = "NOUS Wissensmanagement GmbH";
+			};
+			buildConfigurationList = 9B045504150640BA007F8E7C /* Build configuration list for PBXProject "NGMoviePlayer" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 9B0454FF150640BA007F8E7C;
+			productRefGroup = 9B04550B150640BA007F8E7C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				9B045509150640BA007F8E7C /* NGMoviePlayer */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		9B045506150640BA007F8E7C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9B045514150640BA007F8E7C /* NGMoviePlayer.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		9B045515150640BA007F8E7C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		9B045516150640BA007F8E7C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		9B045518150640BA007F8E7C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/NGMoviePlayer.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = NGMoviePlayer/Prefix.pch;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		9B045519150640BA007F8E7C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/NGMoviePlayer.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = NGMoviePlayer/Prefix.pch;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		9B045504150640BA007F8E7C /* Build configuration list for PBXProject "NGMoviePlayer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9B045515150640BA007F8E7C /* Debug */,
+				9B045516150640BA007F8E7C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9B045517150640BA007F8E7C /* Build configuration list for PBXNativeTarget "NGMoviePlayer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9B045518150640BA007F8E7C /* Debug */,
+				9B045519150640BA007F8E7C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 9B045501150640BA007F8E7C /* Project object */;
+}
