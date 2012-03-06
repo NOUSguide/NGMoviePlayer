@@ -1,16 +1,57 @@
 #import "NGMoviePlayerView.h"
 #import "NGMoviePlayerLayerView.h"
+#import "NGSlider.h"
+
+@interface NGMoviePlayerView ()
+
+@property (nonatomic, strong) NGMoviePlayerLayerView *playerLayerView;
+
+@end
+
 
 @implementation NGMoviePlayerView
 
-- (id)init
-{
-    self = [super init];
-    if (self) {
-        // Initialization code here.
-    }
-    
-    return self;
+@synthesize playerLayerView = _playerLayerView;
+@dynamic playerLayer;
+
+////////////////////////////////////////////////////////////////////////
+#pragma mark - Lifecycle
+////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////
+#pragma mark - UIView
+////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////
+#pragma mark - NGMoviePlayerView Properties
+////////////////////////////////////////////////////////////////////////
+
+- (void)setControlsVisible:(BOOL)controlsVisible {
+    [self setControlsVisible:controlsVisible animated:NO];
 }
+
+- (void)setControlsVisible:(BOOL)controlsVisible animated:(BOOL)animated {
+    
+}
+
+- (BOOL)controlsVisible {
+    
+}
+
+- (void)setFullScreen:(BOOL)fullScreen {
+    
+}
+
+- (BOOL)fullScreen {
+    
+}
+
+- (AVPlayerLayer *)playerLayer {
+    return (AVPlayerLayer *)[self.playerLayerView layer];
+}
+
+////////////////////////////////////////////////////////////////////////
+#pragma mark - Private
+////////////////////////////////////////////////////////////////////////
 
 @end
