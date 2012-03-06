@@ -1,5 +1,5 @@
 //
-//  NGMoviePlayer.h
+//  NGMoviePlayerView.h
 //  NGMoviePlayer
 //
 //  Created by Philip Messlehner on 06.03.12.
@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NGMoviePlayer : NSObject
+@class NGMoviePlayerLayerView;
+
+@interface NGMoviePlayerView : UIView
 
 @end

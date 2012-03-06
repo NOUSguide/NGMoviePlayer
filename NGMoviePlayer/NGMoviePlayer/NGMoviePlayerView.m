@@ -1,6 +1,7 @@
-#import "NGMoviePlayer.h"
+#import "NGMoviePlayerView.h"
+#import "NGMoviePlayerLayerView.h"
 
-@implementation NGMoviePlayer
+@implementation NGMoviePlayerView
 
 - (id)init
 {

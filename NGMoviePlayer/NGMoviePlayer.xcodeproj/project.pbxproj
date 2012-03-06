@@ -8,19 +8,29 @@
 
 /* Begin PBXBuildFile section */
 		9B04550E150640BA007F8E7C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B04550D150640BA007F8E7C /* Foundation.framework */; };
-		9B045514150640BA007F8E7C /* NGMoviePlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B045513150640BA007F8E7C /* NGMoviePlayer.m */; };
+		9B045514150640BA007F8E7C /* NGMoviePlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B045513150640BA007F8E7C /* NGMoviePlayerView.m */; };
 		9B0455741506421D007F8E7C /* NGSlider.h in Headers */ = {isa = PBXBuildFile; fileRef = 9B0455721506421D007F8E7C /* NGSlider.h */; };
 		9B0455751506421D007F8E7C /* NGSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B0455731506421D007F8E7C /* NGSlider.m */; };
+		9B0455781506448D007F8E7C /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B0455771506448D007F8E7C /* AVFoundation.framework */; };
+		9B04557A15064493007F8E7C /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B04557915064493007F8E7C /* QuartzCore.framework */; };
+		9B04557C15064499007F8E7C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B04557B15064499007F8E7C /* UIKit.framework */; };
+		9B04557F150644EE007F8E7C /* NGMoviePlayerLayerView.h in Headers */ = {isa = PBXBuildFile; fileRef = 9B04557D150644EE007F8E7C /* NGMoviePlayerLayerView.h */; };
+		9B045580150644EE007F8E7C /* NGMoviePlayerLayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B04557E150644EE007F8E7C /* NGMoviePlayerLayerView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		9B04550A150640BA007F8E7C /* libNGMoviePlayer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libNGMoviePlayer.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B04550D150640BA007F8E7C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		9B045511150640BA007F8E7C /* Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Prefix.pch; sourceTree = "<group>"; };
-		9B045512150640BA007F8E7C /* NGMoviePlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NGMoviePlayer.h; sourceTree = "<group>"; };
-		9B045513150640BA007F8E7C /* NGMoviePlayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NGMoviePlayer.m; sourceTree = "<group>"; };
+		9B045512150640BA007F8E7C /* NGMoviePlayerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NGMoviePlayerView.h; sourceTree = "<group>"; };
+		9B045513150640BA007F8E7C /* NGMoviePlayerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NGMoviePlayerView.m; sourceTree = "<group>"; };
 		9B0455721506421D007F8E7C /* NGSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NGSlider.h; sourceTree = "<group>"; };
 		9B0455731506421D007F8E7C /* NGSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NGSlider.m; sourceTree = "<group>"; };
+		9B0455771506448D007F8E7C /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		9B04557915064493007F8E7C /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		9B04557B15064499007F8E7C /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		9B04557D150644EE007F8E7C /* NGMoviePlayerLayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NGMoviePlayerLayerView.h; sourceTree = "<group>"; };
+		9B04557E150644EE007F8E7C /* NGMoviePlayerLayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NGMoviePlayerLayerView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -28,6 +38,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B04557C15064499007F8E7C /* UIKit.framework in Frameworks */,
+				9B04557A15064493007F8E7C /* QuartzCore.framework in Frameworks */,
+				9B0455781506448D007F8E7C /* AVFoundation.framework in Frameworks */,
 				9B04550E150640BA007F8E7C /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -55,7 +68,10 @@
 		9B04550C150640BA007F8E7C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9B0455771506448D007F8E7C /* AVFoundation.framework */,
 				9B04550D150640BA007F8E7C /* Foundation.framework */,
+				9B04557915064493007F8E7C /* QuartzCore.framework */,
+				9B04557B15064499007F8E7C /* UIKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -63,8 +79,10 @@
 		9B04550F150640BA007F8E7C /* NGMoviePlayer */ = {
 			isa = PBXGroup;
 			children = (
-				9B045512150640BA007F8E7C /* NGMoviePlayer.h */,
-				9B045513150640BA007F8E7C /* NGMoviePlayer.m */,
+				9B045512150640BA007F8E7C /* NGMoviePlayerView.h */,
+				9B045513150640BA007F8E7C /* NGMoviePlayerView.m */,
+				9B04557D150644EE007F8E7C /* NGMoviePlayerLayerView.h */,
+				9B04557E150644EE007F8E7C /* NGMoviePlayerLayerView.m */,
 				9B0455721506421D007F8E7C /* NGSlider.h */,
 				9B0455731506421D007F8E7C /* NGSlider.m */,
 				9B045510150640BA007F8E7C /* Supporting Files */,
@@ -88,6 +106,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9B0455741506421D007F8E7C /* NGSlider.h in Headers */,
+				9B04557F150644EE007F8E7C /* NGMoviePlayerLayerView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -142,8 +161,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9B045514150640BA007F8E7C /* NGMoviePlayer.m in Sources */,
+				9B045514150640BA007F8E7C /* NGMoviePlayerView.m in Sources */,
 				9B0455751506421D007F8E7C /* NGSlider.m in Sources */,
+				9B045580150644EE007F8E7C /* NGMoviePlayerLayerView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
