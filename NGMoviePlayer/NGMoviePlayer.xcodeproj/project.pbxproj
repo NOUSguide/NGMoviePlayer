@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		9B04550E150640BA007F8E7C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B04550D150640BA007F8E7C /* Foundation.framework */; };
 		9B045514150640BA007F8E7C /* NGMoviePlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B045513150640BA007F8E7C /* NGMoviePlayer.m */; };
+		9B0455741506421D007F8E7C /* NGSlider.h in Headers */ = {isa = PBXBuildFile; fileRef = 9B0455721506421D007F8E7C /* NGSlider.h */; };
+		9B0455751506421D007F8E7C /* NGSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B0455731506421D007F8E7C /* NGSlider.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -17,6 +19,8 @@
 		9B045511150640BA007F8E7C /* Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Prefix.pch; sourceTree = "<group>"; };
 		9B045512150640BA007F8E7C /* NGMoviePlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NGMoviePlayer.h; sourceTree = "<group>"; };
 		9B045513150640BA007F8E7C /* NGMoviePlayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NGMoviePlayer.m; sourceTree = "<group>"; };
+		9B0455721506421D007F8E7C /* NGSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NGSlider.h; sourceTree = "<group>"; };
+		9B0455731506421D007F8E7C /* NGSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NGSlider.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +65,8 @@
 			children = (
 				9B045512150640BA007F8E7C /* NGMoviePlayer.h */,
 				9B045513150640BA007F8E7C /* NGMoviePlayer.m */,
+				9B0455721506421D007F8E7C /* NGSlider.h */,
+				9B0455731506421D007F8E7C /* NGSlider.m */,
 				9B045510150640BA007F8E7C /* Supporting Files */,
 			);
 			path = NGMoviePlayer;
@@ -81,6 +87,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B0455741506421D007F8E7C /* NGSlider.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -136,6 +143,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9B045514150640BA007F8E7C /* NGMoviePlayer.m in Sources */,
+				9B0455751506421D007F8E7C /* NGSlider.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -229,6 +237,7 @@
 				9B045519150640BA007F8E7C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
