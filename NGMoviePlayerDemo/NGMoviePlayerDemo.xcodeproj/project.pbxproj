@@ -14,6 +14,7 @@
 		9B04555C1506418C007F8E7C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B04555B1506418C007F8E7C /* main.m */; };
 		9B0455601506418C007F8E7C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B04555F1506418C007F8E7C /* AppDelegate.m */; };
 		9B045571150641B0007F8E7C /* libNGMoviePlayer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B04556E150641A3007F8E7C /* libNGMoviePlayer.a */; };
+		9B045598150754DD007F8E7C /* NGMoviePlayer.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9B045597150754DD007F8E7C /* NGMoviePlayer.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +46,7 @@
 		9B04555E1506418C007F8E7C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		9B04555F1506418C007F8E7C /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		9B045566150641A2007F8E7C /* NGMoviePlayer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = NGMoviePlayer.xcodeproj; path = ../NGMoviePlayer/NGMoviePlayer.xcodeproj; sourceTree = "<group>"; };
+		9B045597150754DD007F8E7C /* NGMoviePlayer.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = NGMoviePlayer.bundle; path = ../NGMoviePlayer/Resources/NGMoviePlayer.bundle; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +68,7 @@
 			isa = PBXGroup;
 			children = (
 				9B0455551506418C007F8E7C /* NGMoviePlayerDemo */,
+				9B045596150754CD007F8E7C /* Resources */,
 				9B04554E1506418C007F8E7C /* Frameworks */,
 				9B04554C1506418C007F8E7C /* Products */,
 			);
@@ -117,6 +120,14 @@
 				9B04556E150641A3007F8E7C /* libNGMoviePlayer.a */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		9B045596150754CD007F8E7C /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				9B045597150754DD007F8E7C /* NGMoviePlayer.bundle */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -188,6 +199,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9B04555A1506418C007F8E7C /* InfoPlist.strings in Resources */,
+				9B045598150754DD007F8E7C /* NGMoviePlayer.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

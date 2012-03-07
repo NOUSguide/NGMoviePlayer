@@ -39,6 +39,7 @@
 		9B0455851506482A007F8E7C /* NGMoviePlayerVideoGravity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NGMoviePlayerVideoGravity.h; sourceTree = "<group>"; };
 		9B04558715064DAD007F8E7C /* NGMoviePlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NGMoviePlayer.h; sourceTree = "<group>"; };
 		9B04558815064DAE007F8E7C /* NGMoviePlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NGMoviePlayer.m; sourceTree = "<group>"; };
+		9B0455951507545E007F8E7C /* NGMoviePlayer.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = NGMoviePlayer.bundle; path = Resources/NGMoviePlayer.bundle; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +61,7 @@
 			isa = PBXGroup;
 			children = (
 				9B04550F150640BA007F8E7C /* NGMoviePlayer */,
+				9B0455941507543A007F8E7C /* Resources */,
 				9B04550C150640BA007F8E7C /* Frameworks */,
 				9B04550B150640BA007F8E7C /* Products */,
 			);
@@ -108,6 +110,14 @@
 				9B045511150640BA007F8E7C /* Prefix.pch */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		9B0455941507543A007F8E7C /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				9B0455951507545E007F8E7C /* NGMoviePlayer.bundle */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

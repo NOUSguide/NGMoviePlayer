@@ -13,8 +13,11 @@
 
 @interface NGMoviePlayer : NSObject
 
+/** The wrapped AVPlayer object */
+@property (nonatomic, strong, readonly) AVPlayer *player;
 /** The player view */
 @property (nonatomic, strong, readonly) NGMoviePlayerView *playerView;
+
 /** The URL of the video to play, start player by setting the URL */
 @property (nonatomic, copy) NSURL *URL;
 /** flag to indicate if the player is currently playing */
@@ -23,6 +26,10 @@
 @property (nonatomic, ng_weak) id<NGMoviePlayerDelegate> delegate;
 /** The gravity of the video */
 @property (nonatomic, assign) NGMoviePlayerVideoGravity videoGravity;
+
+/** current playback time of the player */
+@property (nonatomic, assign) NSTimeInterval currentTime;
+@property (nonatomic, readonly) NSTimeInterval duration;
 
 - (void)play;
 - (void)pause;

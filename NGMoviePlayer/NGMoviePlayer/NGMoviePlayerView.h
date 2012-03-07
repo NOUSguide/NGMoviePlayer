@@ -15,19 +15,27 @@
 
 @interface NGMoviePlayerView : UIView
 
-/** The wrapped AVPlayer object */
-@property (nonatomic, strong, readonly) AVPlayer *player;
 /** The wrapped player layer */
 @property (nonatomic, readonly) AVPlayerLayer *playerLayer;
+
+/** The view that contains the controls and fades in/out */
+@property (nonatomic, strong, readonly) UIView *controlsView;
 
 /** flag that indicates whether the player controls are currently visible. changes are made non-animated */
 @property (nonatomic, assign) BOOL controlsVisible;
 /** Controls whether the player is currently in full-screen mode or not */
-@property (nonatomic, assign) BOOL fullScreen;
+@property (nonatomic, assign) BOOL fullscreen;
+
+/** the color of the scrubber in fullscreen */
+@property (nonatomic, strong) UIColor *scrubberFillColor;
 
 /**
  Changes the visibility of the controls, can be animated with a fade.
  */
 - (void)setControlsVisible:(BOOL)controlsVisible animated:(BOOL)animated;
+
+/** Updates the UI to reflect the current time */
+- (void)updateWithCurrentTime:(NSTimeInterval)currentTime duration:(NSTimeInterval)duration;
+- (void)updateWithPlaybackStatus:(BOOL)isPlaying;
 
 @end
