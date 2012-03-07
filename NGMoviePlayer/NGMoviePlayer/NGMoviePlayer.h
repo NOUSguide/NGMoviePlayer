@@ -22,10 +22,15 @@
 @property (nonatomic, copy) NSURL *URL;
 /** flag to indicate if the player is currently playing */
 @property (nonatomic, readonly, getter = isPlaying) BOOL playing;
+/** flag that indicates whether the player is currently scrubbing */
+@property (nonatomic, assign, readonly, getter = isScrubbing) BOOL scrubbing;
 /** The delegate of the player */
 @property (nonatomic, ng_weak) id<NGMoviePlayerDelegate> delegate;
 /** The gravity of the video */
 @property (nonatomic, assign) NGMoviePlayerVideoGravity videoGravity;
+
+/** AirPlay is only supported on >= iOS 5, defaults to YES */
+@property (nonatomic, assign) BOOL airPlayActive;
 
 /** current playback time of the player */
 @property (nonatomic, assign) NSTimeInterval currentTime;
