@@ -20,6 +20,7 @@
 		9B0455861506482A007F8E7C /* NGMoviePlayerVideoGravity.h in Headers */ = {isa = PBXBuildFile; fileRef = 9B0455851506482A007F8E7C /* NGMoviePlayerVideoGravity.h */; };
 		9B04558915064DAE007F8E7C /* NGMoviePlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 9B04558715064DAD007F8E7C /* NGMoviePlayer.h */; };
 		9B04558A15064DAE007F8E7C /* NGMoviePlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B04558815064DAE007F8E7C /* NGMoviePlayer.m */; };
+		9B73C730150E86C400A4069A /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B73C72F150E86C400A4069A /* MediaPlayer.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		9B04558715064DAD007F8E7C /* NGMoviePlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NGMoviePlayer.h; sourceTree = "<group>"; };
 		9B04558815064DAE007F8E7C /* NGMoviePlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NGMoviePlayer.m; sourceTree = "<group>"; };
 		9B0455951507545E007F8E7C /* NGMoviePlayer.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = NGMoviePlayer.bundle; path = Resources/NGMoviePlayer.bundle; sourceTree = "<group>"; };
+		9B73C72F150E86C400A4069A /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,6 +49,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B73C730150E86C400A4069A /* MediaPlayer.framework in Frameworks */,
 				9B04557C15064499007F8E7C /* UIKit.framework in Frameworks */,
 				9B04557A15064493007F8E7C /* QuartzCore.framework in Frameworks */,
 				9B0455781506448D007F8E7C /* AVFoundation.framework in Frameworks */,
@@ -80,6 +83,7 @@
 			children = (
 				9B0455771506448D007F8E7C /* AVFoundation.framework */,
 				9B04550D150640BA007F8E7C /* Foundation.framework */,
+				9B73C72F150E86C400A4069A /* MediaPlayer.framework */,
 				9B04557915064493007F8E7C /* QuartzCore.framework */,
 				9B04557B15064499007F8E7C /* UIKit.framework */,
 			);
@@ -161,7 +165,7 @@
 		9B045501150640BA007F8E7C /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0430;
 				ORGANIZATIONNAME = "NOUS Wissensmanagement GmbH";
 			};
 			buildConfigurationList = 9B045504150640BA007F8E7C /* Build configuration list for PBXProject "NGMoviePlayer" */;

@@ -36,7 +36,11 @@
 @property (nonatomic, assign) NSTimeInterval currentTime;
 @property (nonatomic, readonly) NSTimeInterval duration;
 
+- (id)init;
+- (id)initWithURL:(NSURL *)URL;
+
 - (void)play;
 - (void)pause;
+
 
 @end

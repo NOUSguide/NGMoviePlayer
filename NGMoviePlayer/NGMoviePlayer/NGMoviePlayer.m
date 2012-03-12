@@ -35,7 +35,8 @@ static char playerAirPlayVideoActiveContext;
 
 - (void)beginScrubbing;
 - (void)endScrubbing;
-- (void)scrubToTime:(NSTimeInterval)time;
+
+- (void)togglePlaybackState;
 
 // player is ready to play
 - (void)doneLoadingAsset:(AVAsset *)asset withKeys:(NSArray *)keys;
@@ -61,13 +62,20 @@ static char playerAirPlayVideoActiveContext;
 #pragma mark - Lifecycle
 ////////////////////////////////////////////////////////////////////////
 
-- (id)init {
+- (id)initWithURL:(NSURL *)URL {
     if ((self = [super init])) {
         _seekToZeroBeforePlay = YES;
         _airPlayActive = YES;
+        
+        // calling setter here on purpose
+        self.URL = URL;
     }
     
     return self;
+}
+
+- (id)init {
+    return [self initWithURL:nil];
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -79,7 +87,15 @@ static char playerAirPlayVideoActiveContext;
 }
 
 - (void)pause {
-    
+    [self.player pause];
+}
+
+- (void)togglePlaybackState {
+    if (self.playing) {
+        [self pause];
+    } else {
+        [self play]; 
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -113,15 +129,17 @@ static char playerAirPlayVideoActiveContext;
         _URL = URL;
         [self didChangeValueForKey:@"URL"];
         
-        // Create Asset, and load
-        [self setAsset:[AVURLAsset URLAssetWithURL:URL options:nil]];
-        NSArray *keys = [NSArray arrayWithObjects:@"tracks", @"playable", nil];
-        
-        [self.asset loadValuesAsynchronouslyForKeys:keys completionHandler:^{
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self doneLoadingAsset:self.asset withKeys:keys];
-            });
-        }];
+        if (URL != nil) {
+            // Create Asset, and load
+            [self setAsset:[AVURLAsset URLAssetWithURL:URL options:nil]];
+            NSArray *keys = [NSArray arrayWithObjects:@"tracks", @"playable", nil];
+            
+            [self.asset loadValuesAsynchronouslyForKeys:keys completionHandler:^{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self doneLoadingAsset:self.asset withKeys:keys];
+                });
+            }];
+        }
     }
 }
 
@@ -138,7 +156,7 @@ static char playerAirPlayVideoActiveContext;
 }
 
 - (BOOL)isPlaying {
-    return self.player.rate != 0.f;
+    return self.player != nil && self.player.rate != 0.f;
 }
 
 - (void)setVideoGravity:(NGMoviePlayerVideoGravity)videoGravity {
@@ -152,7 +170,17 @@ static char playerAirPlayVideoActiveContext;
 - (void)setCurrentTime:(NSTimeInterval)currentTime {
     CMTime time = CMTimeMakeWithSeconds(currentTime, NSEC_PER_SEC);
     
-    [self.player seekToTime:time];
+    // completion handler only supported in iOS 5
+    if ([self.player respondsToSelector:@selector(seekToTime:completionHandler:)]) {
+        [self.player seekToTime:time
+              completionHandler:^(BOOL finished) {
+                  if (finished) {
+                      [self.playerView updateWithCurrentTime:self.currentTime duration:self.duration];
+                  }
+              }];
+    } else {
+        [self.player seekToTime:time];
+    }
 }
 
 - (NSTimeInterval)currentTime {
@@ -201,15 +229,50 @@ static char playerAirPlayVideoActiveContext;
         if (_delegateFlags.didChangeStatus) {
             [self.delegate player:self didChangeStatus:status];
         }
-    } else if (context == &playerItemDurationContext) {
+    } 
+    
+    else if (context == &playerItemDurationContext) {
+        [self.playerView updateWithCurrentTime:self.currentTime duration:self.duration];
+    } 
+    
+    else if (context == &playerCurrentItemContext) {
+        AVPlayerItem *newPlayerItem = [change objectForKey:NSKeyValueChangeNewKey];
         
-    } else if (context == &playerCurrentItemContext) {
+        if (newPlayerItem == (id)[NSNull null]) {
+            [self stopObservingPlayerTimeChanges];
+            // TODO: Disable buttons & scrubber
+        } else {
+            [self.playerView updateWithPlaybackStatus:self.playing];
+            [self startObservingPlayerTimeChanges];
+        }
+    } 
+    
+    else if (context == &playerRateContext) {
+        [self.playerView updateWithPlaybackStatus:self.playing];
         
-    } else if (context == &playerRateContext) {
-        
-    } else if (context == &playerAirPlayVideoActiveContext) {
-        
-    } else {
+        if (_delegateFlags.didChangePlaybackRate) {
+            [self.delegate player:self didChangePlaybackRate:self.player.rate];
+        }
+    } 
+    
+    else if (context == &playerAirPlayVideoActiveContext) {
+        if ([self.player respondsToSelector:@selector(airPlayVideoActive)]) {
+            BOOL airPlayVideoActive = self.player.airPlayVideoActive;
+            
+            if (airPlayVideoActive) {
+                //[self addSubview:self.airPlayActiveView];
+                //self.airPlayActiveView.frame = self.bounds;
+            } else {
+                //[self.airPlayActiveView removeFromSuperview];
+            }
+            
+            if (_delegateFlags.didChangeAirPlay) {
+                [self.delegate player:self didChangeAirPlayActive:airPlayVideoActive];
+            }
+        }
+    } 
+    
+    else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
 }
@@ -245,15 +308,6 @@ static char playerAirPlayVideoActiveContext;
     self.player.rate = _rateToRestoreAfterScrubbing;
     _rateToRestoreAfterScrubbing = 0.f;
     [self startObservingPlayerTimeChanges];
-}
-
-- (void)scrubToTime:(NSTimeInterval)time {
-    [self.player seekToTime:CMTimeMakeWithSeconds(self.scrubberControlSlider.value, NSEC_PER_SEC) 
-          completionHandler:^(BOOL finished) {
-              if (finished) {
-                  [self.playerView updateWithCurrentTime:self.currentTime duration:self.duration];
-              }
-          }];
 }
 
 ////////////////////////////////////////////////////////////////////////

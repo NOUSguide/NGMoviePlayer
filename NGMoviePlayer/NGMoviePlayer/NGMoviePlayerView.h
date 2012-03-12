@@ -11,6 +11,7 @@
 
 
 @class NGMoviePlayerLayerView;
+@class NGSlider;
 
 
 @interface NGMoviePlayerView : UIView
@@ -20,6 +21,7 @@
 
 /** The view that contains the controls and fades in/out */
 @property (nonatomic, strong, readonly) UIView *controlsView;
+@property (nonatomic, strong) NGSlider *scrubber;
 
 /** flag that indicates whether the player controls are currently visible. changes are made non-animated */
 @property (nonatomic, assign) BOOL controlsVisible;
