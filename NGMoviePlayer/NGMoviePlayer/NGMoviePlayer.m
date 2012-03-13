@@ -600,10 +600,8 @@ static char playerAirPlayVideoActiveContext;
     
     if (action == NGMoviePlayerControlActionBeginSkippingBackwards) {
         self.currentTime -= self.timeToSkip++;
-        NSLog(@"back");
     } else if (action == NGMoviePlayerControlActionBeginSkippingForwards) {
         self.currentTime += self.timeToSkip++;
-        NSLog(@"forward");
     }
 }
 

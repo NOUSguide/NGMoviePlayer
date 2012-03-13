@@ -13,6 +13,7 @@ static char playerLayerReadyForDisplayContext;
 @interface NGMoviePlayerView () <UIGestureRecognizerDelegate> {
     BOOL _statusBarVisible;
     BOOL _readyForDisplayTriggered;
+    BOOL _shouldHideControls;
 }
 
 @property (nonatomic, strong, readwrite) NGMoviePlayerControlView *controlsView;  // re-defined as read/write
@@ -165,6 +166,8 @@ static char playerLayerReadyForDisplayContext;
 
 - (void)updateWithPlaybackStatus:(BOOL)isPlaying {
     [self.controlsView updateButtonsWithPlaybackStatus:isPlaying];
+    
+    _shouldHideControls = isPlaying;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -242,7 +245,9 @@ static char playerLayerReadyForDisplayContext;
 }
 
 - (void)fadeOutControls {
-    [self setControlsVisible:NO animated:YES];
+    if (_shouldHideControls) {
+        [self setControlsVisible:NO animated:YES];
+    }
 }
 
 - (void)handleSingleTap:(UITapGestureRecognizer *)tap {
