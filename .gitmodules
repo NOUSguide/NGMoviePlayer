@@ -1,3 +1,6 @@
 [submodule "PSPushPopPressView"]
 	path = PSPushPopPressView
 	url = git@github.com:NOUSguide/PSPushPopPressView.git
+[submodule "NGVolumeControl"]
+	path = NGVolumeControl
+	url = https://github.com/NOUSguide/NGVolumeControl.git

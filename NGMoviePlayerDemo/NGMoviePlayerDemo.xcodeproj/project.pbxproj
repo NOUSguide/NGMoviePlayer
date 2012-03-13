@@ -22,6 +22,7 @@
 		9B73C788150F4A0300A4069A /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B73C787150F4A0300A4069A /* CoreMedia.framework */; };
 		9B73C78A150F4A2F00A4069A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B73C789150F4A2F00A4069A /* QuartzCore.framework */; };
 		9BE34D44150F9438001CE6CD /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BE34D43150F9438001CE6CD /* AudioToolbox.framework */; };
+		9BE34D52150F982D001CE6CD /* NGVolumeControl.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9BE34D51150F982D001CE6CD /* NGVolumeControl.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +64,7 @@
 		9B73C787150F4A0300A4069A /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		9B73C789150F4A2F00A4069A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		9BE34D43150F9438001CE6CD /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		9BE34D51150F982D001CE6CD /* NGVolumeControl.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = NGVolumeControl.bundle; path = ../NGVolumeControl/NGVolumeControl/Resources/NGVolumeControl.bundle; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -154,6 +156,7 @@
 		9B045596150754CD007F8E7C /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				9BE34D51150F982D001CE6CD /* NGVolumeControl.bundle */,
 				9B045597150754DD007F8E7C /* NGMoviePlayer.bundle */,
 			);
 			name = Resources;
@@ -239,6 +242,7 @@
 			files = (
 				9B04555A1506418C007F8E7C /* InfoPlist.strings in Resources */,
 				9B045598150754DD007F8E7C /* NGMoviePlayer.bundle in Resources */,
+				9BE34D52150F982D001CE6CD /* NGVolumeControl.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

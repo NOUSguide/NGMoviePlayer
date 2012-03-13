@@ -1,4 +1,5 @@
 #import "NGMoviePlayerView.h"
+#import "NGVolumeControl.h"
 #import "NGMoviePlayerLayerView.h"
 #import "NGMoviePlayerControlView.h"
 #import "NGMoviePlayerControlActionDelegate.h"
@@ -18,9 +19,6 @@
 @property (nonatomic, strong) UIButton *playButton;
 @property (nonatomic, strong) NGMoviePlayerLayerView *playerLayerView;
 @property (nonatomic, strong) UIWindow *externalWindow;
-
-@property (nonatomic, strong) UITapGestureRecognizer *singleTapGestureRecognizer;
-@property (nonatomic, strong) UITapGestureRecognizer *doubleTapGestureRecognizer;
 
 - (void)setup;
 - (void)fadeOutControls;
@@ -43,8 +41,6 @@
 @synthesize playerLayerView = _playerLayerView;
 @synthesize placeholderView = _placeholderView;
 @synthesize externalWindow = _externalWindow;
-@synthesize singleTapGestureRecognizer = _singleTapGestureRecognizer;
-@synthesize doubleTapGestureRecognizer = _doubleTapGestureRecognizer;
 
 ////////////////////////////////////////////////////////////////////////
 #pragma mark - Lifecycle
@@ -53,6 +49,7 @@
 - (id)initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
         self.clipsToBounds = YES;
+        self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         self.backgroundColor = [UIColor blackColor];
         
         [self setup];
@@ -97,6 +94,8 @@
         
         if (controlsVisible) {
             [self bringSubviewToFront:self.controlsView];
+        } else {
+            [self.controlsView.volumeControl setExpanded:NO animated:YES];
         }
         
         [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(fadeOutControls) object:nil];
@@ -151,6 +150,8 @@
             [[UIApplication sharedApplication] setStatusBarHidden:!_statusBarVisible withAnimation:UIStatusBarAnimationFade];
         }
     }
+    
+    self.controlsVisible = NO;
 }
 
 - (NGMoviePlayerControlStyle)controlStyle {
@@ -244,16 +245,27 @@
     [_placeholderView addSubview:_playButton];
     [self addSubview:_placeholderView];
     
-    // Gesture Recognizer
-    _doubleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleDoubleTap:)];
-    _doubleTapGestureRecognizer.numberOfTapsRequired = 2;
-    _doubleTapGestureRecognizer.delegate = self;
-    [self addGestureRecognizer:_doubleTapGestureRecognizer];
+    // Gesture Recognizer for self
+    UITapGestureRecognizer *doubleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleDoubleTap:)];
+    doubleTapGestureRecognizer.numberOfTapsRequired = 2;
+    doubleTapGestureRecognizer.delegate = self;
+    [self addGestureRecognizer:doubleTapGestureRecognizer];
     
-    _singleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
-    [_singleTapGestureRecognizer requireGestureRecognizerToFail:_doubleTapGestureRecognizer];
-    _singleTapGestureRecognizer.delegate = self;
-    [self addGestureRecognizer:_singleTapGestureRecognizer];
+    UITapGestureRecognizer *singleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
+    [singleTapGestureRecognizer requireGestureRecognizerToFail:doubleTapGestureRecognizer];
+    singleTapGestureRecognizer.delegate = self;
+    [self addGestureRecognizer:singleTapGestureRecognizer];
+    
+    // Gesture Recognizer for controlsView
+    doubleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleDoubleTap:)];
+    doubleTapGestureRecognizer.numberOfTapsRequired = 2;
+    doubleTapGestureRecognizer.delegate = self;
+    [self.controlsView addGestureRecognizer:doubleTapGestureRecognizer];
+    
+    singleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
+    [singleTapGestureRecognizer requireGestureRecognizerToFail:doubleTapGestureRecognizer];
+    singleTapGestureRecognizer.delegate = self;
+    [self.controlsView addGestureRecognizer:singleTapGestureRecognizer];
 }
 
 - (void)fadeOutControls {

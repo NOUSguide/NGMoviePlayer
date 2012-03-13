@@ -28,11 +28,9 @@
 @property (nonatomic, ng_weak) id<NGMoviePlayerDelegate> delegate;
 /** The gravity of the video */
 @property (nonatomic, assign) NGMoviePlayerVideoGravity videoGravity;
-/** The control state */
-@property (nonatomic, assign, getter = isFullscreen) BOOL fullscreen;
 
 /** AirPlay is only supported on >= iOS 5, defaults to YES */
-@property (nonatomic, assign) BOOL airPlayActive;
+@property (nonatomic, assign, getter = isAirPlayActive) BOOL airPlayActive;
 /** flag to indicate whether the video autoplays when it's ready loading, defaults to NO */
 @property (nonatomic, assign) BOOL autostartWhenReady;
 
@@ -52,5 +50,9 @@
 - (void)play;
 - (void)pause;
 
+/**
+ Convenience method to set frame of view and add to superview
+ */
+- (void)addToSuperview:(UIView *)view withFrame:(CGRect)frame;
 
 @end

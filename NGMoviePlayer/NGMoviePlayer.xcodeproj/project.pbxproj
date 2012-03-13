@@ -25,7 +25,25 @@
 		9B73C736150F38B000A4069A /* NGMoviePlayerControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B73C734150F38B000A4069A /* NGMoviePlayerControlView.m */; };
 		9B73C786150F49F500A4069A /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B73C785150F49F500A4069A /* CoreMedia.framework */; };
 		9BE34D41150F941D001CE6CD /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BE34D40150F941D001CE6CD /* AudioToolbox.framework */; };
+		9BE34D50150F96E5001CE6CD /* libNGVolumeControl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BE34D4D150F96C9001CE6CD /* libNGVolumeControl.a */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		9BE34D4C150F96C9001CE6CD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9BE34D45150F96C9001CE6CD /* NGVolumeControl.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9BCC745F14FCCE8D004F30FF;
+			remoteInfo = NGVolumeControl;
+		};
+		9BE34D4E150F96DE001CE6CD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9BE34D45150F96C9001CE6CD /* NGVolumeControl.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 9BCC745E14FCCE8D004F30FF;
+			remoteInfo = NGVolumeControl;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		9B04550A150640BA007F8E7C /* libNGMoviePlayer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libNGMoviePlayer.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -53,6 +71,7 @@
 		9B73C785150F49F500A4069A /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		9B73C78B150F5D7300A4069A /* NGMoviePlayerControlActionDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NGMoviePlayerControlActionDelegate.h; sourceTree = "<group>"; };
 		9BE34D40150F941D001CE6CD /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		9BE34D45150F96C9001CE6CD /* NGVolumeControl.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = NGVolumeControl.xcodeproj; path = ../NGVolumeControl/NGVolumeControl/NGVolumeControl.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +79,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9BE34D50150F96E5001CE6CD /* libNGVolumeControl.a in Frameworks */,
 				9BE34D41150F941D001CE6CD /* AudioToolbox.framework in Frameworks */,
 				9B73C786150F49F500A4069A /* CoreMedia.framework in Frameworks */,
 				9B73C730150E86C400A4069A /* MediaPlayer.framework in Frameworks */,
@@ -95,12 +115,13 @@
 			isa = PBXGroup;
 			children = (
 				9BE34D40150F941D001CE6CD /* AudioToolbox.framework */,
-				9B73C785150F49F500A4069A /* CoreMedia.framework */,
 				9B0455771506448D007F8E7C /* AVFoundation.framework */,
+				9B73C785150F49F500A4069A /* CoreMedia.framework */,
 				9B04550D150640BA007F8E7C /* Foundation.framework */,
 				9B73C72F150E86C400A4069A /* MediaPlayer.framework */,
 				9B04557915064493007F8E7C /* QuartzCore.framework */,
 				9B04557B15064499007F8E7C /* UIKit.framework */,
+				9BE34D45150F96C9001CE6CD /* NGVolumeControl.xcodeproj */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -144,6 +165,14 @@
 			name = Resources;
 			sourceTree = "<group>";
 		};
+		9BE34D46150F96C9001CE6CD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9BE34D4D150F96C9001CE6CD /* libNGVolumeControl.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -174,6 +203,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				9BE34D4F150F96DE001CE6CD /* PBXTargetDependency */,
 			);
 			name = NGMoviePlayer;
 			productName = NGMoviePlayer;
@@ -199,12 +229,28 @@
 			mainGroup = 9B0454FF150640BA007F8E7C;
 			productRefGroup = 9B04550B150640BA007F8E7C /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 9BE34D46150F96C9001CE6CD /* Products */;
+					ProjectRef = 9BE34D45150F96C9001CE6CD /* NGVolumeControl.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				9B045509150640BA007F8E7C /* NGMoviePlayer */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		9BE34D4D150F96C9001CE6CD /* libNGVolumeControl.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libNGVolumeControl.a;
+			remoteRef = 9BE34D4C150F96C9001CE6CD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXSourcesBuildPhase section */
 		9B045506150640BA007F8E7C /* Sources */ = {
@@ -220,6 +266,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		9BE34D4F150F96DE001CE6CD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = NGVolumeControl;
+			targetProxy = 9BE34D4E150F96DE001CE6CD /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		9B045515150640BA007F8E7C /* Debug */ = {
@@ -241,6 +295,7 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "../NGVolumeControl/**";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				SDKROOT = iphoneos;
 			};
@@ -258,6 +313,7 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "../NGVolumeControl/**";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;

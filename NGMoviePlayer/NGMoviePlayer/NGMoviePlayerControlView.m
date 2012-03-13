@@ -9,6 +9,7 @@
 #import "NGMoviePlayerControlView.h"
 #import "NGMoviePlayerControlActionDelegate.h"
 #import "NGSlider.h"
+#import "NGVolumeControl.h"
 
 @interface NGMoviePlayerControlView ()
 
@@ -34,6 +35,8 @@
 - (void)handleScrubbingValueChanged:(id)sender;
 - (void)handleEndScrubbing:(id)sender;
 
+- (void)handleVolumeChanged:(id)sender;
+
 @end
 
 @implementation NGMoviePlayerControlView
@@ -51,6 +54,7 @@
 @synthesize zoomButton = _zoomButton;
 @synthesize currentTimeLabel = _currentTimeLabel;
 @synthesize remainingTimeLabel = _remainingTimeLabel;
+@synthesize volumeControl = _volumeControl;
 
 ////////////////////////////////////////////////////////////////////////
 #pragma mark - Lifecycle
@@ -78,6 +82,13 @@
         }
         [_bottomControlsView addSubview:_volumeView];
         
+        _volumeControl = [[NGVolumeControl alloc] initWithFrame:CGRectZero];
+        _volumeControl.expandDirection = NGVolumeControlExpandDirectionDown;
+        [_volumeControl addTarget:self action:@selector(handleVolumeChanged:) forControlEvents:UIControlEventValueChanged];
+        // volume control needs to get added to self instead of bottomControlView because otherwise the expanded slider
+        // doesn't receive any touch events
+        [self addSubview:_volumeControl];
+        
         _rewindButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _rewindButton.frame = CGRectMake(10.f, 10.f, 20.f, 20.f);
         _rewindButton.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
@@ -99,7 +110,7 @@
         [_bottomControlsView addSubview:_forwardButton];
         
         _playPauseButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _playPauseButton.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
+        _playPauseButton.contentMode = UIViewContentModeCenter;
         _playPauseButton.showsTouchWhenHighlighted = YES;
         [_playPauseButton addTarget:self action:@selector(handlePlayPauseButtonPress:) forControlEvents:UIControlEventTouchUpInside];
         [_bottomControlsView addSubview:_playPauseButton];
@@ -113,8 +124,8 @@
         [_bottomControlsView addSubview:_scrubber];
         
         _zoomButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _zoomButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin;
         _zoomButton.showsTouchWhenHighlighted = YES;
+        _zoomButton.contentMode = UIViewContentModeCenter;
         [_zoomButton addTarget:self action:@selector(handleZoomButtonPress:) forControlEvents:UIControlEventTouchUpInside];
         [_bottomControlsView addSubview:_zoomButton];
         
@@ -170,15 +181,17 @@
         self.rewindButton.hidden = YES;
         self.forwardButton.hidden = YES;
         
-        self.currentTimeLabel.frame = CGRectMake(30.f, 8.f, 55.f, 25.f);
+        self.playPauseButton.frame = CGRectMake(0.f, 0.f, controlsViewHeight, controlsViewHeight);
+        
+        self.currentTimeLabel.frame = CGRectMake(20.f, 0.f, 55.f, controlsViewHeight);
         self.currentTimeLabel.textAlignment = UITextAlignmentRight;
         
-        self.remainingTimeLabel.frame = CGRectMake(self.bottomControlsView.bounds.size.width-85.f, 8.f, 55.f, 25.f);
+        self.remainingTimeLabel.frame = CGRectMake(self.bottomControlsView.bounds.size.width-75.f, 0.f, 55.f, controlsViewHeight);
         self.remainingTimeLabel.textAlignment = UITextAlignmentLeft;
         
-        self.playPauseButton.frame = CGRectMake(10.f, 10.f, 20.f, 20.f);
-        self.scrubber.frame = CGRectMake(90.f, 9.f, self.bottomControlsView.bounds.size.width-180.f, 24.f);
-        self.zoomButton.frame = CGRectMake(self.bottomControlsView.bounds.size.width-30.f, 12.f, 29.f, 16.f);
+        self.scrubber.frame = CGRectMake(80.f, 0.f, self.bottomControlsView.bounds.size.width-160.f, controlsViewHeight);
+        self.zoomButton.frame = CGRectMake(self.bottomControlsView.bounds.size.width - controlsViewHeight, 0.f, controlsViewHeight, controlsViewHeight);
+        self.volumeControl.frame = CGRectMake(self.bottomControlsView.bounds.size.width-controlsViewHeight, 0.f, controlsViewHeight,controlsViewHeight);
         [self.zoomButton setImage:[UIImage imageNamed:@"NGMoviePlayer.bundle/zoomOut"] forState:UIControlStateNormal];
     }
 }
@@ -283,9 +296,9 @@
         UIGraphicsEndImageContext();
         [scrubber setThumbImage:image forState:UIControlStateNormal];
     } else {
-        [scrubber setMinimumTrackImage:[[UIImage imageNamed:@"NGMoviePlayer.bundle/scrubberFilled"] resizableImageWithCapInsets:UIEdgeInsetsMake(0.f, 4.f, 0.f, 0.f)] 
+        [scrubber setMinimumTrackImage:[[UIImage imageNamed:@"NGMoviePlayer.bundle/scrubberFilled"] stretchableImageWithLeftCapWidth:4.f topCapHeight:0.f] 
                               forState:UIControlStateNormal];
-        [scrubber setMaximumTrackImage:[[UIImage imageNamed:@"NGMoviePlayer.bundle/scrubberUnfilled"] resizableImageWithCapInsets:UIEdgeInsetsMake(0.f, 4.f, 0.f, 0.f)] 
+        [scrubber setMaximumTrackImage:[[UIImage imageNamed:@"NGMoviePlayer.bundle/scrubberUnfilled"] stretchableImageWithLeftCapWidth:4.f topCapHeight:0.f] 
                               forState:UIControlStateNormal];
         [scrubber setThumbImage:[UIImage imageNamed:@"NGMoviePlayer.bundle/scrubberKnob"] 
                        forState:UIControlStateNormal];
@@ -327,6 +340,10 @@
 
 - (void)handleEndScrubbing:(id)sender {
     [self.delegate moviePlayerControl:sender didPerformAction:NGMoviePlayerControlActionEndScrubbing];
+}
+
+- (void)handleVolumeChanged:(id)sender {
+    [self.delegate moviePlayerControl:sender didPerformAction:NGMoviePlayerControlActionVolumeChanged];
 }
 
 @end

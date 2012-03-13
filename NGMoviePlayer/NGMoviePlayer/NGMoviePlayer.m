@@ -41,8 +41,6 @@ static char playerAirPlayVideoActiveContext;
 @property (nonatomic, assign) NSTimeInterval timeToSkip;
 @property (nonatomic, ng_weak) NSTimer *skippingTimer;
 
-- (void)ignoreSystemMuteSwitch;
-
 - (void)startObservingPlayerTimeChanges;
 - (void)stopObservingPlayerTimeChanges;
 
@@ -170,6 +168,15 @@ static char playerAirPlayVideoActiveContext;
 }
 
 ////////////////////////////////////////////////////////////////////////
+#pragma mark - NGMoviePlayer View
+////////////////////////////////////////////////////////////////////////
+
+- (void)addToSuperview:(UIView *)view withFrame:(CGRect)frame {
+    self.view.frame = frame;
+    [view addSubview:self.view];
+}
+
+////////////////////////////////////////////////////////////////////////
 #pragma mark - NGMoviePlayer Properties
 ////////////////////////////////////////////////////////////////////////
 
@@ -277,20 +284,6 @@ static char playerAirPlayVideoActiveContext;
 
 - (NSTimeInterval)duration {
     return CMTimeGetSeconds(self.CMDuration);
-}
-
-- (void)setFullscreen:(BOOL)fullscreen {
-    if (fullscreen) {
-        self.view.controlStyle = NGMoviePlayerControlStyleFullscreen;
-    } else {
-        self.view.controlStyle = NGMoviePlayerControlStyleInline;
-    }
-    
-    self.view.controlsVisible = NO;
-}
-
-- (BOOL)isFullscreen {
-    return self.view.controlStyle == NGMoviePlayerControlStyleFullscreen;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -464,7 +457,12 @@ static char playerAirPlayVideoActiveContext;
         }
             
         case NGMoviePlayerControlActionToggleZoomState: {
-            self.fullscreen = !self.fullscreen;
+            if (self.view.controlStyle == NGMoviePlayerControlStyleInline) {
+                self.view.controlStyle = NGMoviePlayerControlStyleFullscreen;
+            } else {
+                self.view.controlStyle = NGMoviePlayerControlStyleInline;
+            }
+            
             [self.view restartFadeOutControlsViewTimer];
             
             if (_delegateFlags.didChangeControlStyle) {
@@ -502,6 +500,11 @@ static char playerAirPlayVideoActiveContext;
         case NGMoviePlayerControlActionEndScrubbing:
         case NGMoviePlayerControlActionEndSkipping: {
             [self endScrubbing];
+            [self.view restartFadeOutControlsViewTimer];
+            break;
+        }
+            
+        case NGMoviePlayerControlActionVolumeChanged: {
             [self.view restartFadeOutControlsViewTimer];
             break;
         }

@@ -11,7 +11,7 @@
 
 @protocol NGMoviePlayerControlActionDelegate;
 @class NGSlider;
-
+@class NGVolumeControl;
 
 @interface NGMoviePlayerControlView : UIView
 
@@ -25,6 +25,8 @@
 
 /** the slider indicating the current playback time */
 @property (nonatomic, strong, readonly) NGSlider *scrubber;
+/** the super-fancy volume control */
+@property (nonatomic, strong) NGVolumeControl *volumeControl;
 
 /** the color of the scrubber in fullscreen */
 @property (nonatomic, strong) UIColor *scrubberFillColor;
