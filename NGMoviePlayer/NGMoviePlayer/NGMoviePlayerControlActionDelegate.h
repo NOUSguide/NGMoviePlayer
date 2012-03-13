@@ -7,6 +7,7 @@
 //
 
 typedef enum {
+    NGMoviePlayerControlActionStartToPlay,
     NGMoviePlayerControlActionTogglePlayPause,
     NGMoviePlayerControlActionToggleZoomState,
     NGMoviePlayerControlActionBeginSkippingBackwards,
@@ -18,7 +19,7 @@ typedef enum {
 } NGMoviePlayerControlAction;
 
 
-@protocol NGMoviePlayerControlViewDelegate <NSObject>
+@protocol NGMoviePlayerControlActionDelegate <NSObject>
 
 - (void)moviePlayerControl:(id)control didPerformAction:(NGMoviePlayerControlAction)action;
 

@@ -7,7 +7,7 @@
 //
 
 #import "NGMoviePlayerControlView.h"
-#import "NGMoviePlayerControlViewDelegate.h"
+#import "NGMoviePlayerControlActionDelegate.h"
 #import "NGSlider.h"
 
 @interface NGMoviePlayerControlView ()

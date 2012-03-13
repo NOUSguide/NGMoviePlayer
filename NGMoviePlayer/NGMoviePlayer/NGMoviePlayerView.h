@@ -10,28 +10,33 @@
 //  Copyright (c) 2011 Doubleint. All rights reserved.
 
 #import "NGMoviePlayerControlStyle.h"
+#import "NGWeak.h"
 
 @class NGMoviePlayerLayerView;
 @class NGMoviePlayerControlView;
-
+@protocol NGMoviePlayerControlActionDelegate;
 
 @interface NGMoviePlayerView : UIView
+
+@property (nonatomic, ng_weak) id<NGMoviePlayerControlActionDelegate> delegate;
 
 /** The wrapped player layer */
 @property (nonatomic, readonly) AVPlayerLayer *playerLayer;
 
 /** The view that contains the controls and fades in/out */
 @property (nonatomic, strong, readonly) NGMoviePlayerControlView *controlsView;
+/** The placeholder view that gets shown before the movie plays */
+@property (nonatomic, strong) UIView *placeholderView;
 
 /** flag that indicates whether the player controls are currently visible. changes are made non-animated */
 @property (nonatomic, assign) BOOL controlsVisible;
 /** Controls whether the player controls are currently in fullscreen- or inlinestyle */
 @property (nonatomic, assign) NGMoviePlayerControlStyle controlStyle;
 
-/**
- Changes the visibility of the controls, can be animated with a fade.
- */
+/** Changes the visibility of the controls, can be animated with a fade */
 - (void)setControlsVisible:(BOOL)controlsVisible animated:(BOOL)animated;
+/** Hides the placeholder view with the play button */
+- (void)hidePlaceholderViewAnimated:(BOOL)animated;
 
 - (void)stopFadeOutControlsViewTimer;
 - (void)restartFadeOutControlsViewTimer;

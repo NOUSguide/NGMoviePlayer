@@ -3,7 +3,7 @@
 #import "NGMoviePlayerControlView.h"
 #import "NGSlider.h"
 #import "NGMoviePlayerLayerView.h"
-#import "NGMoviePlayerControlViewDelegate.h"
+#import "NGMoviePlayerControlActionDelegate.h"
 
 
 #define kNGInitialTimeToSkip                    10.     // this value gets added the first time (seconds)
@@ -16,7 +16,7 @@ static char playerCurrentItemContext;
 static char playerRateContext;
 static char playerAirPlayVideoActiveContext;
 
-@interface NGMoviePlayer () <NGMoviePlayerControlViewDelegate> {
+@interface NGMoviePlayer () <NGMoviePlayerControlActionDelegate> {
     // flags for methods implemented in the delegate
     struct {
         unsigned int didChangeStatus:1;
@@ -124,6 +124,7 @@ static char playerAirPlayVideoActiveContext;
         _seekToZeroBeforePlay = NO;
     }
     
+    [self.view hidePlaceholderViewAnimated:YES];
     [self.player play];
 }
 
@@ -171,7 +172,7 @@ static char playerAirPlayVideoActiveContext;
         }
         
         self.view.playerLayer.player = player;
-        self.view.controlsView.delegate = self;
+        self.view.delegate = self;
     }
 }
 
@@ -281,7 +282,7 @@ static char playerAirPlayVideoActiveContext;
             case AVPlayerStatusReadyToPlay: {
                 // TODO: Enable buttons & scrubber
                 if (!self.scrubbing) {
-                    [self play];
+                    //[self play];
                 }
                 
                 break;
@@ -417,7 +418,13 @@ static char playerAirPlayVideoActiveContext;
 - (void)moviePlayerControl:(id)control didPerformAction:(NGMoviePlayerControlAction)action {
     [self.view stopFadeOutControlsViewTimer];
     
-    switch (action) {        
+    switch (action) {
+        case NGMoviePlayerControlActionStartToPlay: {
+            [self play];
+            [self.view restartFadeOutControlsViewTimer];
+            break;
+        }
+            
         case NGMoviePlayerControlActionTogglePlayPause: {
             [self togglePlaybackState];
             [self.view restartFadeOutControlsViewTimer];

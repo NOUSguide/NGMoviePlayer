@@ -32,7 +32,7 @@
     [super viewDidLoad];
 
     self.view.backgroundColor = [UIColor blackColor];
-    self.moviePlayer = [[NGMoviePlayer alloc] initWithURL:[NSURL URLWithString:@"http://office.nousguide.com/streaming/qa.m3u8"]];
+    self.moviePlayer = [[NGMoviePlayer alloc] initWithURL:[NSURL URLWithString:@"http://office.nousguide.com/streaming/q3.mp4"]];
     self.containerView = [[UIView alloc] initWithFrame:self.view.bounds];
     self.containerView.backgroundColor = [UIColor underPageBackgroundColor];
     self.containerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -51,11 +51,6 @@
     [self.view addSubview:self.containerView];
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    
-    [self.moviePlayer play];
-}
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return YES;

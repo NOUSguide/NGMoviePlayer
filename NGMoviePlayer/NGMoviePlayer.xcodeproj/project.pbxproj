@@ -50,7 +50,7 @@
 		9B73C734150F38B000A4069A /* NGMoviePlayerControlView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NGMoviePlayerControlView.m; sourceTree = "<group>"; };
 		9B73C77F150F496C00A4069A /* NGWeak.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NGWeak.h; sourceTree = "<group>"; };
 		9B73C785150F49F500A4069A /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
-		9B73C78B150F5D7300A4069A /* NGMoviePlayerControlViewDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NGMoviePlayerControlViewDelegate.h; sourceTree = "<group>"; };
+		9B73C78B150F5D7300A4069A /* NGMoviePlayerControlActionDelegate.h */ = {isa = PBXFileReference; path = NGMoviePlayerControlActionDelegate.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,7 +110,7 @@
 				9B045513150640BA007F8E7C /* NGMoviePlayerView.m */,
 				9B73C733150F38B000A4069A /* NGMoviePlayerControlView.h */,
 				9B73C734150F38B000A4069A /* NGMoviePlayerControlView.m */,
-				9B73C78B150F5D7300A4069A /* NGMoviePlayerControlViewDelegate.h */,
+				9B73C78B150F5D7300A4069A /* NGMoviePlayerControlActionDelegate.h */,
 				9B73C732150F37E000A4069A /* NGMoviePlayerControlStyle.h */,
 				9B04558115064569007F8E7C /* NGMoviePlayerDelegate.h */,
 				9B04557D150644EE007F8E7C /* NGMoviePlayerLayerView.h */,
