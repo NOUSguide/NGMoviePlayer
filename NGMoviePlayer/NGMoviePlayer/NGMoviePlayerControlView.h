@@ -7,11 +7,18 @@
 //
 
 #import "NGMoviePlayerControlStyle.h"
+#import "NGWeak.h"
 
+@protocol NGMoviePlayerControlViewDelegate;
 @class NGSlider;
 
 
 @interface NGMoviePlayerControlView : UIView
+
+@property (nonatomic, ng_weak) id<NGMoviePlayerControlViewDelegate> delegate;
+
+@property (nonatomic, strong) UIView *topControlsView;
+@property (nonatomic, strong) UIView *bottomControlsView;
 
 /** Controls whether the player controls are currently in fullscreen- or inlinestyle */
 @property (nonatomic, assign) NGMoviePlayerControlStyle controlStyle;

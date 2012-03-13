@@ -7,12 +7,11 @@
 //
 
 #import "NGMoviePlayerControlView.h"
+#import "NGMoviePlayerControlViewDelegate.h"
 #import "NGSlider.h"
 
 @interface NGMoviePlayerControlView ()
 
-@property (nonatomic, strong) UIView *topControlsView;
-@property (nonatomic, strong) UIView *bottomControlsView;
 @property (nonatomic, strong) UIButton *playPauseButton;
 @property (nonatomic, strong) UIButton *rewindButton;
 @property (nonatomic, strong) UIButton *forwardButton;
@@ -24,10 +23,16 @@
 - (CGFloat)controlsViewHeightForControlStyle:(NGMoviePlayerControlStyle)controlStyle;
 - (void)setupScrubber:(NGSlider *)scrubber controlStyle:(NGMoviePlayerControlStyle)controlStyle;
 
+- (void)handlePlayPauseButtonPress:(id)sender;
+- (void)handleRewindButtonPress:(id)sender;
+- (void)handleForwardButtonPress:(id)sender;
+- (void)handleZoomButtonPress:(id)sender;
+
 @end
 
 @implementation NGMoviePlayerControlView
 
+@synthesize delegate = _delegate;
 @synthesize controlStyle = _controlStyle;
 @synthesize scrubber = _scrubber;
 @synthesize scrubberFillColor = _scrubberFillColor;
@@ -90,7 +95,7 @@
         _playPauseButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _playPauseButton.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
         _playPauseButton.showsTouchWhenHighlighted = YES;
-        [_playPauseButton addTarget:self action:@selector(playPause:) forControlEvents:UIControlEventTouchUpInside];
+        [_playPauseButton addTarget:self action:@selector(handlePlayPauseButtonPress:) forControlEvents:UIControlEventTouchUpInside];
         [_bottomControlsView addSubview:_playPauseButton];
         
         _scrubber = [[NGSlider alloc] initWithFrame:CGRectZero];
@@ -104,7 +109,7 @@
         _zoomButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _zoomButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin;
         _zoomButton.showsTouchWhenHighlighted = YES;
-        [_zoomButton addTarget:self action:@selector(zoomButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        [_zoomButton addTarget:self action:@selector(handleZoomButtonPress:) forControlEvents:UIControlEventTouchUpInside];
         [_bottomControlsView addSubview:_zoomButton];
         
         _currentTimeLabel = [[UILabel alloc] initWithFrame:CGRectZero];
@@ -122,6 +127,8 @@
         _remainingTimeLabel.textAlignment = UITextAlignmentLeft;
         _remainingTimeLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
         [_bottomControlsView addSubview:_remainingTimeLabel];
+        
+        [self setupScrubber:_scrubber controlStyle:_controlStyle];
     }
     
     return self;
@@ -174,6 +181,15 @@
 #pragma mark - NGMoviePlayerControlView
 ////////////////////////////////////////////////////////////////////////
 
+- (void)setControlStyle:(NGMoviePlayerControlStyle)controlStyle {
+    if (controlStyle != _controlStyle) {
+        _controlStyle = controlStyle;
+        
+        [self setupScrubber:self.scrubber controlStyle:controlStyle];
+        [self setNeedsLayout];
+    }
+}
+
 - (void)updateScrubberWithCurrentTime:(NSInteger)currentTime duration:(NSInteger)duration {
     NSInteger seconds = currentTime % 60;
     NSInteger minutes = currentTime / 60;
@@ -206,7 +222,7 @@
 }
 
 - (void)updateButtonsWithPlaybackStatus:(BOOL)isPlaying {
-    UIImage *image = isPlaying ? [UIImage imageNamed:@"NGMoviePlayer.bundle/play"] : [UIImage imageNamed:@"NGMoviePlayer.bundle/pause"];
+    UIImage *image = isPlaying ? [UIImage imageNamed:@"NGMoviePlayer.bundle/pause"] : [UIImage imageNamed:@"NGMoviePlayer.bundle/play"];
     
     [self.playPauseButton setImage:image forState:UIControlStateNormal];
 }
@@ -261,14 +277,30 @@
         UIGraphicsEndImageContext();
         [scrubber setThumbImage:image forState:UIControlStateNormal];
     } else {
-        [scrubber setMinimumTrackImage:[[UIImage imageNamed:@"NGMoviePlayer/scrubberFilled"] resizableImageWithCapInsets:UIEdgeInsetsMake(0.f, 4.f, 0.f, 0.f)] 
+        [scrubber setMinimumTrackImage:[[UIImage imageNamed:@"NGMoviePlayer.bundle/scrubberFilled"] resizableImageWithCapInsets:UIEdgeInsetsMake(0.f, 4.f, 0.f, 0.f)] 
                               forState:UIControlStateNormal];
-        [scrubber setMaximumTrackImage:[[UIImage imageNamed:@"NGMoviePlayer/scrubberUnfilled"] resizableImageWithCapInsets:UIEdgeInsetsMake(0.f, 4.f, 0.f, 0.f)] 
+        [scrubber setMaximumTrackImage:[[UIImage imageNamed:@"NGMoviePlayer.bundle/scrubberUnfilled"] resizableImageWithCapInsets:UIEdgeInsetsMake(0.f, 4.f, 0.f, 0.f)] 
                               forState:UIControlStateNormal];
-        [scrubber setThumbImage:[UIImage imageNamed:@"NGMoviePlayer/scrubberKnob"] 
+        [scrubber setThumbImage:[UIImage imageNamed:@"NGMoviePlayer.bundle/scrubberKnob"] 
                        forState:UIControlStateNormal];
         
     }
+}
+
+- (void)handlePlayPauseButtonPress:(id)sender {
+    [self.delegate moviePlayerControl:sender didPerformAction:NGMoviePlayerControlActionTogglePlayPause];
+}
+
+- (void)handleRewindButtonPress:(id)sender {
+    [self.delegate moviePlayerControl:sender didPerformAction:NGMoviePlayerControlActionSkipBackwards];
+}
+
+- (void)handleForwardButtonPress:(id)sender {
+    [self.delegate moviePlayerControl:sender didPerformAction:NGMoviePlayerControlActionSkipForwards];
+}
+
+- (void)handleZoomButtonPress:(id)sender {
+    [self.delegate moviePlayerControl:sender didPerformAction:NGMoviePlayerControlActionToggleZoomState];
 }
 
 @end

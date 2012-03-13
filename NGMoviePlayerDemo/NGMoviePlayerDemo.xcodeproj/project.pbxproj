@@ -15,6 +15,12 @@
 		9B0455601506418C007F8E7C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B04555F1506418C007F8E7C /* AppDelegate.m */; };
 		9B045571150641B0007F8E7C /* libNGMoviePlayer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B04556E150641A3007F8E7C /* libNGMoviePlayer.a */; };
 		9B045598150754DD007F8E7C /* NGMoviePlayer.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9B045597150754DD007F8E7C /* NGMoviePlayer.bundle */; };
+		9B73C774150F46DF00A4069A /* PSPushPopPressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B73C75B150F46DF00A4069A /* PSPushPopPressView.m */; };
+		9B73C77E150F471B00A4069A /* NGMoviePlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B73C77D150F471B00A4069A /* NGMoviePlayerViewController.m */; };
+		9B73C782150F49AC00A4069A /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B73C781150F49AC00A4069A /* AVFoundation.framework */; };
+		9B73C784150F49B500A4069A /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B73C783150F49B500A4069A /* MediaPlayer.framework */; };
+		9B73C788150F4A0300A4069A /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B73C787150F4A0300A4069A /* CoreMedia.framework */; };
+		9B73C78A150F4A2F00A4069A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B73C789150F4A2F00A4069A /* QuartzCore.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +53,14 @@
 		9B04555F1506418C007F8E7C /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		9B045566150641A2007F8E7C /* NGMoviePlayer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = NGMoviePlayer.xcodeproj; path = ../NGMoviePlayer/NGMoviePlayer.xcodeproj; sourceTree = "<group>"; };
 		9B045597150754DD007F8E7C /* NGMoviePlayer.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = NGMoviePlayer.bundle; path = ../NGMoviePlayer/Resources/NGMoviePlayer.bundle; sourceTree = "<group>"; };
+		9B73C75A150F46DF00A4069A /* PSPushPopPressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSPushPopPressView.h; sourceTree = "<group>"; };
+		9B73C75B150F46DF00A4069A /* PSPushPopPressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSPushPopPressView.m; sourceTree = "<group>"; };
+		9B73C77C150F471B00A4069A /* NGMoviePlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NGMoviePlayerViewController.h; sourceTree = "<group>"; };
+		9B73C77D150F471B00A4069A /* NGMoviePlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NGMoviePlayerViewController.m; sourceTree = "<group>"; };
+		9B73C781150F49AC00A4069A /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		9B73C783150F49B500A4069A /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		9B73C787150F4A0300A4069A /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		9B73C789150F4A2F00A4069A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +68,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B73C78A150F4A2F00A4069A /* QuartzCore.framework in Frameworks */,
+				9B73C788150F4A0300A4069A /* CoreMedia.framework in Frameworks */,
+				9B73C784150F49B500A4069A /* MediaPlayer.framework in Frameworks */,
+				9B73C782150F49AC00A4069A /* AVFoundation.framework in Frameworks */,
 				9B045571150641B0007F8E7C /* libNGMoviePlayer.a in Frameworks */,
 				9B0455501506418C007F8E7C /* UIKit.framework in Frameworks */,
 				9B0455521506418C007F8E7C /* Foundation.framework in Frameworks */,
@@ -85,10 +103,15 @@
 		9B04554E1506418C007F8E7C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				9B045566150641A2007F8E7C /* NGMoviePlayer.xcodeproj */,
-				9B04554F1506418C007F8E7C /* UIKit.framework */,
-				9B0455511506418C007F8E7C /* Foundation.framework */,
+				9B73C781150F49AC00A4069A /* AVFoundation.framework */,
 				9B0455531506418C007F8E7C /* CoreGraphics.framework */,
+				9B73C787150F4A0300A4069A /* CoreMedia.framework */,
+				9B0455511506418C007F8E7C /* Foundation.framework */,
+				9B73C783150F49B500A4069A /* MediaPlayer.framework */,
+				9B73C789150F4A2F00A4069A /* QuartzCore.framework */,
+				9B04554F1506418C007F8E7C /* UIKit.framework */,
+				9B045566150641A2007F8E7C /* NGMoviePlayer.xcodeproj */,
+				9B73C740150F46DF00A4069A /* PSPushPopPressView */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -98,6 +121,8 @@
 			children = (
 				9B04555E1506418C007F8E7C /* AppDelegate.h */,
 				9B04555F1506418C007F8E7C /* AppDelegate.m */,
+				9B73C77C150F471B00A4069A /* NGMoviePlayerViewController.h */,
+				9B73C77D150F471B00A4069A /* NGMoviePlayerViewController.m */,
 				9B0455561506418C007F8E7C /* Supporting Files */,
 			);
 			path = NGMoviePlayerDemo;
@@ -128,6 +153,16 @@
 				9B045597150754DD007F8E7C /* NGMoviePlayer.bundle */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		9B73C740150F46DF00A4069A /* PSPushPopPressView */ = {
+			isa = PBXGroup;
+			children = (
+				9B73C75A150F46DF00A4069A /* PSPushPopPressView.h */,
+				9B73C75B150F46DF00A4069A /* PSPushPopPressView.m */,
+			);
+			name = PSPushPopPressView;
+			path = ../PSPushPopPressView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -212,6 +247,8 @@
 			files = (
 				9B04555C1506418C007F8E7C /* main.m in Sources */,
 				9B0455601506418C007F8E7C /* AppDelegate.m in Sources */,
+				9B73C774150F46DF00A4069A /* PSPushPopPressView.m in Sources */,
+				9B73C77E150F471B00A4069A /* NGMoviePlayerViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,6 +1,8 @@
 #import "NGMoviePlayer.h"
 #import "NGMoviePlayerView.h"
+#import "NGMoviePlayerControlView.h"
 #import "NGMoviePlayerLayerView.h"
+#import "NGMoviePlayerControlViewDelegate.h"
 
 
 static char playerItemStatusContext;
@@ -9,7 +11,7 @@ static char playerCurrentItemContext;
 static char playerRateContext;
 static char playerAirPlayVideoActiveContext;
 
-@interface NGMoviePlayer () {
+@interface NGMoviePlayer () <NGMoviePlayerControlViewDelegate> {
     // flags for methods implemented in the delegate
     struct {
         unsigned int didChangeStatus:1;
@@ -17,6 +19,7 @@ static char playerAirPlayVideoActiveContext;
 		unsigned int didChangeAirPlay:1;
 		unsigned int didFinishPlayback:1;
         unsigned int didFailToLoadURL:1;
+        unsigned int didChangeControlStyle:1;
 	} _delegateFlags;
     
     BOOL _seekToZeroBeforePlay;
@@ -49,7 +52,7 @@ static char playerAirPlayVideoActiveContext;
 
 @dynamic player;
 
-@synthesize playerView = _playerView;
+@synthesize view = _view;
 @synthesize URL = _URL;
 @synthesize scrubbing = _scrubbing;
 @synthesize delegate = _delegate;
@@ -66,6 +69,7 @@ static char playerAirPlayVideoActiveContext;
     if ((self = [super init])) {
         _seekToZeroBeforePlay = YES;
         _airPlayActive = YES;
+        _rateToRestoreAfterScrubbing = 1.;
         
         // calling setter here on purpose
         self.URL = URL;
@@ -78,12 +82,36 @@ static char playerAirPlayVideoActiveContext;
     return [self initWithURL:nil];
 }
 
+- (void)dealloc {
+    AVPlayer *player = _view.playerLayer.player;
+    
+    _delegate = nil;
+    _view.controlsView.delegate = nil;
+    
+    [self stopObservingPlayerTimeChanges];
+    [player pause];
+    
+    [player removeObserver:self forKeyPath:@"rate"];
+    [player removeObserver:self forKeyPath:@"currentItem"];
+	[_playerItem removeObserver:self forKeyPath:@"status"];
+    [_playerItem removeObserver:self forKeyPath:@"duration"];
+    
+    if ([player respondsToSelector:@selector(allowsAirPlayVideo)]) {
+        [player removeObserver:self forKeyPath:@"airPlayVideoActive"];
+    }
+}
+
 ////////////////////////////////////////////////////////////////////////
 #pragma mark - NGMoviePlayer Video Playback
 ////////////////////////////////////////////////////////////////////////
 
 - (void)play {
+    if (_seekToZeroBeforePlay) {
+        [self.player seekToTime:kCMTimeZero];
+        _seekToZeroBeforePlay = NO;
+    }
     
+    [self.player play];
 }
 
 - (void)pause {
@@ -102,24 +130,35 @@ static char playerAirPlayVideoActiveContext;
 #pragma mark - NGMoviePlayer Properties
 ////////////////////////////////////////////////////////////////////////
 
+- (NGMoviePlayerView *)view {
+    if (_view == nil) {
+        _view = [[NGMoviePlayerView alloc] initWithFrame:CGRectZero];
+    }
+    
+    return _view;
+}
+
 - (AVPlayer *)player {
-    return self.playerView.playerLayer.player;
+    return self.view.playerLayer.player;
 }
 
 - (void)setPlayer:(AVPlayer *)player {
-    if (player != self.playerView.playerLayer.player) {
-        [self.playerView.playerLayer setPlayer:player];
-        
+    if (player != self.view.playerLayer.player) {
         // Support AirPlay?
         if (self.airPlayActive && [player respondsToSelector:@selector(allowsAirPlayVideo)]) {
             [player setAllowsAirPlayVideo:YES];
             [player setUsesAirPlayVideoWhileAirPlayScreenIsActive:YES];
+            
+            [self.view.playerLayer.player removeObserver:self forKeyPath:@"airPlayVideoActive"];
             
             [player addObserver:self
                      forKeyPath:@"airPlayVideoActive"
                         options:(NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew)
                         context:&playerAirPlayVideoActiveContext];
         }
+        
+        self.view.playerLayer.player = player;
+        self.view.controlsView.delegate = self;
     }
 }
 
@@ -152,6 +191,7 @@ static char playerAirPlayVideoActiveContext;
         _delegateFlags.didChangeAirPlay = [delegate respondsToSelector:@selector(player:didChangeAirPlayActive:)];
         _delegateFlags.didFinishPlayback = [delegate respondsToSelector:@selector(playbackDidFinishWithPlayer:)];
         _delegateFlags.didFailToLoadURL = [delegate respondsToSelector:@selector(player:didFailToLoadURL:)];
+        _delegateFlags.didChangeControlStyle = [delegate respondsToSelector:@selector(player:didChangeControlStyle:)];
     }
 }
 
@@ -160,11 +200,13 @@ static char playerAirPlayVideoActiveContext;
 }
 
 - (void)setVideoGravity:(NGMoviePlayerVideoGravity)videoGravity {
-    self.playerView.playerLayer.videoGravity = NGAVLayerVideoGravityFromNGMoviePlayerVideoGravity(videoGravity);
+    self.view.playerLayer.videoGravity = NGAVLayerVideoGravityFromNGMoviePlayerVideoGravity(videoGravity);
+    // BUG: otherwise the video gravity doesn't change immediately
+    self.view.playerLayer.bounds = self.view.playerLayer.bounds;
 }
 
 - (NGMoviePlayerVideoGravity)videoGravity {
-    return NGMoviePlayerVideoGravityFromAVLayerVideoGravity(self.playerView.playerLayer.videoGravity);
+    return NGMoviePlayerVideoGravityFromAVLayerVideoGravity(self.view.playerLayer.videoGravity);
 }
 
 - (void)setCurrentTime:(NSTimeInterval)currentTime {
@@ -175,7 +217,7 @@ static char playerAirPlayVideoActiveContext;
         [self.player seekToTime:time
               completionHandler:^(BOOL finished) {
                   if (finished) {
-                      [self.playerView updateWithCurrentTime:self.currentTime duration:self.duration];
+                      [self.view updateWithCurrentTime:self.currentTime duration:self.duration];
                   }
               }];
     } else {
@@ -191,6 +233,20 @@ static char playerAirPlayVideoActiveContext;
     return CMTimeGetSeconds(self.CMDuration);
 }
 
+- (void)setFullscreen:(BOOL)fullscreen {
+    if (fullscreen) {
+        self.view.controlStyle = NGMoviePlayerControlStyleFullscreen;
+    } else {
+        self.view.controlStyle = NGMoviePlayerControlStyleInline;
+    }
+    
+    self.view.controlsVisible = NO;
+}
+
+- (BOOL)isFullscreen {
+    return self.view.controlStyle == NGMoviePlayerControlStyleFullscreen;
+}
+
 ////////////////////////////////////////////////////////////////////////
 #pragma mark - KVO
 ////////////////////////////////////////////////////////////////////////
@@ -199,12 +255,10 @@ static char playerAirPlayVideoActiveContext;
     if (context == &playerItemStatusContext) {
         AVPlayerStatus status = [[change objectForKey:NSKeyValueChangeNewKey] integerValue];
         
-        [self.playerView updateWithPlaybackStatus:self.playing];
-        
         switch (status) {
             case AVPlayerStatusUnknown: {
                 [self stopObservingPlayerTimeChanges];
-                [self.playerView updateWithCurrentTime:self.currentTime duration:self.duration];
+                [self.view updateWithCurrentTime:self.currentTime duration:self.duration];
                 // TODO: Disable buttons & scrubber
                 break;
             }
@@ -220,11 +274,13 @@ static char playerAirPlayVideoActiveContext;
                 
             case AVPlayerStatusFailed: {
                 [self stopObservingPlayerTimeChanges];
-                [self.playerView updateWithCurrentTime:self.currentTime duration:self.duration];
+                [self.view updateWithCurrentTime:self.currentTime duration:self.duration];
                 // TODO: Disable buttons & scrubber
                 break;
             }
         }
+        
+        [self.view updateWithPlaybackStatus:self.playing];
         
         if (_delegateFlags.didChangeStatus) {
             [self.delegate player:self didChangeStatus:status];
@@ -232,7 +288,7 @@ static char playerAirPlayVideoActiveContext;
     } 
     
     else if (context == &playerItemDurationContext) {
-        [self.playerView updateWithCurrentTime:self.currentTime duration:self.duration];
+        [self.view updateWithCurrentTime:self.currentTime duration:self.duration];
     } 
     
     else if (context == &playerCurrentItemContext) {
@@ -242,13 +298,13 @@ static char playerAirPlayVideoActiveContext;
             [self stopObservingPlayerTimeChanges];
             // TODO: Disable buttons & scrubber
         } else {
-            [self.playerView updateWithPlaybackStatus:self.playing];
+            [self.view updateWithPlaybackStatus:self.playing];
             [self startObservingPlayerTimeChanges];
         }
     } 
     
     else if (context == &playerRateContext) {
-        [self.playerView updateWithPlaybackStatus:self.playing];
+        [self.view updateWithPlaybackStatus:self.playing];
         
         if (_delegateFlags.didChangePlaybackRate) {
             [self.delegate player:self didChangePlaybackRate:self.player.rate];
@@ -284,7 +340,7 @@ static char playerAirPlayVideoActiveContext;
 - (void)playerItemDidPlayToEndTime:(NSNotification *)notification {
     [self.player pause];
     _seekToZeroBeforePlay = YES;
-    [self.playerView setControlsVisible:YES animated:YES];
+    [self.view setControlsVisible:YES animated:YES];
     
     if (_delegateFlags.didFinishPlayback) {
         [self.delegate playbackDidFinishWithPlayer:self];
@@ -308,6 +364,53 @@ static char playerAirPlayVideoActiveContext;
     self.player.rate = _rateToRestoreAfterScrubbing;
     _rateToRestoreAfterScrubbing = 0.f;
     [self startObservingPlayerTimeChanges];
+}
+
+////////////////////////////////////////////////////////////////////////
+#pragma mark - NGMoviePlayerControlViewDelegate
+////////////////////////////////////////////////////////////////////////
+
+- (void)moviePlayerControl:(id)control didPerformAction:(NGMoviePlayerControlAction)action {
+    [self.view restartFadeOutControlsViewTimer];
+    
+    switch (action) {        
+        case NGMoviePlayerControlActionTogglePlayPause: {
+            [self togglePlaybackState];
+            break;
+        }
+            
+        case NGMoviePlayerControlActionToggleZoomState: {
+            if (_delegateFlags.didChangeControlStyle) {
+                self.fullscreen = !self.fullscreen;
+                [self.delegate player:self didChangeControlStyle:self.view.controlStyle];
+            }
+            break;
+        }
+            
+        case NGMoviePlayerControlActionSkipBackwards: {
+            break;
+        }
+            
+        case NGMoviePlayerControlActionSkipForwards: {
+            break;
+        }
+            
+        case NGMoviePlayerControlActionBeginScrubbing: {
+            break;
+        }
+            
+        case NGMoviePlayerControlActionScrubbingValueChanged: {
+            break;
+        }
+            
+        case NGMoviePlayerControlActionEndScrubbing: {
+            break;
+        }
+            
+        default:
+            break;
+            
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -339,18 +442,18 @@ static char playerAirPlayVideoActiveContext;
     }
     
     // Check if all keys are OK
-	for (NSString *key in keys) {
-		NSError *error = nil;
-		AVKeyValueStatus status = [asset statusOfValueForKey:key error:&error];
+    for (NSString *key in keys) {
+        NSError *error = nil;
+        AVKeyValueStatus status = [asset statusOfValueForKey:key error:&error];
         
-		if (status == AVKeyValueStatusFailed || status == AVKeyValueStatusCancelled) {
+        if (status == AVKeyValueStatusFailed || status == AVKeyValueStatusCancelled) {
             if (_delegateFlags.didFailToLoadURL) {
                 [self.delegate player:self didFailToLoadURL:self.URL];
             }
             
-			return;
-		}
-	}
+            return;
+        }
+    }
     
     // Remove observer from old playerItem and create new one
     if (self.playerItem) {
@@ -367,13 +470,13 @@ static char playerAirPlayVideoActiveContext;
     // Observe status, ok -> play
     [self.playerItem addObserver:self
                       forKeyPath:@"status"
-                         options:(NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew)
+                         options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
                          context:&playerItemStatusContext];
     
     // Durationchange
     [self.playerItem addObserver:self
                       forKeyPath:@"duration"
-                         options:(NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew)
+                         options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
                          context:&playerItemDurationContext];
     
     [[NSNotificationCenter defaultCenter] addObserver:self 
@@ -390,13 +493,13 @@ static char playerAirPlayVideoActiveContext;
         // Observe currentItem, catch the -replaceCurrentItemWithPlayerItem:
         [self.player addObserver:self
                       forKeyPath:@"currentItem"
-                         options:(NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew)
+                         options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
                          context:&playerCurrentItemContext];
         
         // Observe rate, play/pause-button?
         [self.player addObserver:self
                       forKeyPath:@"rate"
-                         options:(NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew)
+                         options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
                          context:&playerRateContext];
         
     }
@@ -404,7 +507,7 @@ static char playerAirPlayVideoActiveContext;
     // New playerItem?
     if (self.player.currentItem != self.playerItem) {
         [self.player replaceCurrentItemWithPlayerItem:self.playerItem];
-        [self.playerView updateWithPlaybackStatus:self.playing];
+        [self.view updateWithPlaybackStatus:self.playing];
     }
 }
 
@@ -417,8 +520,8 @@ static char playerAirPlayVideoActiveContext;
                                                                            __strong NGMoviePlayer *strongSelf = weakSelf;
                                                                            
                                                                            if (strongSelf != nil) {
-                                                                               if (CMTIME_IS_VALID(strongSelf.player.currentTime) && CMTIME_IS_VALID(strongSelf.duration)) {
-                                                                                   [strongSelf.playerView updateWithCurrentTime:strongSelf.currentTime duration:strongSelf.duration];
+                                                                               if (CMTIME_IS_VALID(strongSelf.player.currentTime) && CMTIME_IS_VALID(strongSelf.CMDuration)) {
+                                                                                   [strongSelf.view updateWithCurrentTime:strongSelf.currentTime duration:strongSelf.duration];
                                                                                }
                                                                            }
                                                                        }];

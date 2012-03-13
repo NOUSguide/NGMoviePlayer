@@ -43,3 +43,16 @@ NS_INLINE NGMoviePlayerVideoGravity NGMoviePlayerVideoGravityFromAVLayerVideoGra
     // default
     return NGMoviePlayerVideoGravityResizeAspect;
 }
+
+NS_INLINE NSString* NGAVLayerVideoGravityNext(NSString *gravity) {
+    if ([gravity isEqualToString:AVLayerVideoGravityResizeAspect]) {
+        return AVLayerVideoGravityResizeAspectFill;
+    }
+    
+    if ([gravity isEqualToString:AVLayerVideoGravityResizeAspectFill]) {
+        return AVLayerVideoGravityResize;
+    }
+    
+    // default
+    return AVLayerVideoGravityResizeAspect;
+}

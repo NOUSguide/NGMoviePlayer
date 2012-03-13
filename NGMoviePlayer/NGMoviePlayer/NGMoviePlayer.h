@@ -7,16 +7,16 @@
 //
 
 #import "NGMoviePlayerDelegate.h"
+#import "NGMoviePlayerView.h"
 #import "NGMoviePlayerVideoGravity.h"
-
-@class NGMoviePlayerView;
+#import "NGWeak.h"
 
 @interface NGMoviePlayer : NSObject
 
 /** The wrapped AVPlayer object */
 @property (nonatomic, strong, readonly) AVPlayer *player;
 /** The player view */
-@property (nonatomic, strong, readonly) NGMoviePlayerView *playerView;
+@property (nonatomic, strong, readonly) NGMoviePlayerView *view;
 
 /** The URL of the video to play, start player by setting the URL */
 @property (nonatomic, copy) NSURL *URL;
@@ -28,6 +28,8 @@
 @property (nonatomic, ng_weak) id<NGMoviePlayerDelegate> delegate;
 /** The gravity of the video */
 @property (nonatomic, assign) NGMoviePlayerVideoGravity videoGravity;
+/** The control state */
+@property (nonatomic, assign, getter = isFullscreen) BOOL fullscreen;
 
 /** AirPlay is only supported on >= iOS 5, defaults to YES */
 @property (nonatomic, assign) BOOL airPlayActive;

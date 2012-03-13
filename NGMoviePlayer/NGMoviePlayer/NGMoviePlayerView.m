@@ -1,15 +1,16 @@
 #import "NGMoviePlayerView.h"
 #import "NGMoviePlayerLayerView.h"
 #import "NGMoviePlayerControlView.h"
+#import "NGMoviePlayerVideoGravity.h"
 
-
-#define kNGFadeDuration             0.4
+#define kNGFadeDuration                     0.4
+#define kNGControlVisibilityDuration        4.
 
 
 static char playerLayerReadyForDisplayContext;
 
 
-@interface NGMoviePlayerView () {
+@interface NGMoviePlayerView () <UIGestureRecognizerDelegate> {
     BOOL _statusBarVisible;
     BOOL _readyForDisplayTriggered;
 }
@@ -19,8 +20,14 @@ static char playerLayerReadyForDisplayContext;
 @property (nonatomic, strong) UIView *placeholderView;
 @property (nonatomic, strong) UIWindow *externalWindow;
 
+@property (nonatomic, strong) UITapGestureRecognizer *singleTapGestureRecognizer;
+@property (nonatomic, strong) UITapGestureRecognizer *doubleTapGestureRecognizer;
+
 - (void)setup;
-- (void)updateUI;
+- (void)fadeOutControls;
+
+- (void)handleSingleTap:(UITapGestureRecognizer *)tap;
+- (void)handleDoubleTap:(UITapGestureRecognizer *)tap;
 
 @end
 
@@ -34,6 +41,8 @@ static char playerLayerReadyForDisplayContext;
 @synthesize playerLayerView = _playerLayerView;
 @synthesize placeholderView = _placeholderView;
 @synthesize externalWindow = _externalWindow;
+@synthesize singleTapGestureRecognizer = _singleTapGestureRecognizer;
+@synthesize doubleTapGestureRecognizer = _doubleTapGestureRecognizer;
 
 ////////////////////////////////////////////////////////////////////////
 #pragma mark - Lifecycle
@@ -59,6 +68,7 @@ static char playerLayerReadyForDisplayContext;
 }
 
 - (void)dealloc {
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(fadeOutControls) object:nil];
     [self.playerLayer removeObserver:self forKeyPath:@"readyForDisplay"];
 }
 
@@ -73,6 +83,7 @@ static char playerLayerReadyForDisplayContext;
         if (ready && !_readyForDisplayTriggered) {
             _readyForDisplayTriggered = YES;
             
+            [self setControlsVisible:YES animated:YES];
             // fade out placeholderView
             [UIView animateWithDuration:1.
                              animations:^{
@@ -92,10 +103,10 @@ static char playerLayerReadyForDisplayContext;
 ////////////////////////////////////////////////////////////////////////
 
 /*- (void)layoutSubviews {
-    [super layoutSubviews];
-    
-    
-}*/
+ [super layoutSubviews];
+ 
+ 
+ }*/
 
 ////////////////////////////////////////////////////////////////////////
 #pragma mark - NGMoviePlayerView Properties
@@ -115,12 +126,15 @@ static char playerLayerReadyForDisplayContext;
             [self bringSubviewToFront:self.controlsView];
         }
         
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(fadeOutControls) object:nil];
         [UIView animateWithDuration:animated ? kNGFadeDuration : 0.
                               delay:0.
                             options:UIViewAnimationOptionCurveEaseInOut
                          animations:^{        
                              self.controlsView.alpha = controlsVisible ? 1.f : 0.f;
-                         } completion:nil];
+                         } completion:^(BOOL finished) {
+                             [self restartFadeOutControlsViewTimer];
+                         }];
         
         if (self.controlStyle == NGMoviePlayerControlStyleFullscreen) {
             [[UIApplication sharedApplication] setStatusBarHidden:(!controlsVisible) withAnimation:UIStatusBarAnimationFade];
@@ -163,6 +177,30 @@ static char playerLayerReadyForDisplayContext;
     [self.controlsView updateButtonsWithPlaybackStatus:isPlaying];
 }
 
+- (void)restartFadeOutControlsViewTimer {
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(fadeOutControls) object:nil];
+    [self performSelector:@selector(fadeOutControls) withObject:nil afterDelay:kNGControlVisibilityDuration];
+}
+
+////////////////////////////////////////////////////////////////////////
+#pragma mark - UIGestureRecognizerDelegate
+////////////////////////////////////////////////////////////////////////
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
+    if (self.controlsVisible) {
+        NSArray *controls = [NSArray arrayWithObjects:self.controlsView.topControlsView, self.controlsView.bottomControlsView, nil];
+        
+        // We dont want to to hide the controls when we tap em
+        for (UIView *view in controls) {
+            if (CGRectContainsPoint(view.frame, [touch locationInView:self])) {
+                return NO;
+            }
+        }
+    }
+    
+    return YES;
+}
+
 ////////////////////////////////////////////////////////////////////////
 #pragma mark - Private
 ////////////////////////////////////////////////////////////////////////
@@ -192,6 +230,37 @@ static char playerLayerReadyForDisplayContext;
                        forKeyPath:@"readyForDisplay"
                           options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
                           context:&playerLayerReadyForDisplayContext];
+    
+    // Gesture Recognizer
+    _doubleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleDoubleTap:)];
+    _doubleTapGestureRecognizer.numberOfTapsRequired = 2;
+    _doubleTapGestureRecognizer.delegate = self;
+    [self addGestureRecognizer:_doubleTapGestureRecognizer];
+    
+    _singleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
+    [_singleTapGestureRecognizer requireGestureRecognizerToFail:_doubleTapGestureRecognizer];
+    _singleTapGestureRecognizer.delegate = self;
+    [self addGestureRecognizer:_singleTapGestureRecognizer];
+}
+
+- (void)fadeOutControls {
+    [self setControlsVisible:NO animated:YES];
+}
+
+- (void)handleSingleTap:(UITapGestureRecognizer *)tap {
+    if ((tap.state & UIGestureRecognizerStateRecognized) == UIGestureRecognizerStateRecognized) {
+        // Toggle control visibility on single tap
+        [self setControlsVisible:!self.controlsVisible animated:YES];
+    }
+}
+
+- (void)handleDoubleTap:(UITapGestureRecognizer *)tap {
+    if ((tap.state & UIGestureRecognizerStateRecognized) == UIGestureRecognizerStateRecognized) {
+        // Toggle video gravity on double tap
+        self.playerLayer.videoGravity = NGAVLayerVideoGravityNext(self.playerLayer.videoGravity);
+        // BUG: otherwise the video gravity doesn't change immediately
+        self.playerLayer.bounds = self.playerLayer.bounds;
+    }
 }
 
 @end

@@ -23,6 +23,7 @@
 		9B73C730150E86C400A4069A /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B73C72F150E86C400A4069A /* MediaPlayer.framework */; };
 		9B73C735150F38B000A4069A /* NGMoviePlayerControlView.h in Headers */ = {isa = PBXBuildFile; fileRef = 9B73C733150F38B000A4069A /* NGMoviePlayerControlView.h */; };
 		9B73C736150F38B000A4069A /* NGMoviePlayerControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B73C734150F38B000A4069A /* NGMoviePlayerControlView.m */; };
+		9B73C786150F49F500A4069A /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B73C785150F49F500A4069A /* CoreMedia.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +48,9 @@
 		9B73C732150F37E000A4069A /* NGMoviePlayerControlStyle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NGMoviePlayerControlStyle.h; sourceTree = "<group>"; };
 		9B73C733150F38B000A4069A /* NGMoviePlayerControlView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NGMoviePlayerControlView.h; sourceTree = "<group>"; };
 		9B73C734150F38B000A4069A /* NGMoviePlayerControlView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NGMoviePlayerControlView.m; sourceTree = "<group>"; };
+		9B73C77F150F496C00A4069A /* NGWeak.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NGWeak.h; sourceTree = "<group>"; };
+		9B73C785150F49F500A4069A /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		9B73C78B150F5D7300A4069A /* NGMoviePlayerControlViewDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NGMoviePlayerControlViewDelegate.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +58,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B73C786150F49F500A4069A /* CoreMedia.framework in Frameworks */,
 				9B73C730150E86C400A4069A /* MediaPlayer.framework in Frameworks */,
 				9B04557C15064499007F8E7C /* UIKit.framework in Frameworks */,
 				9B04557A15064493007F8E7C /* QuartzCore.framework in Frameworks */,
@@ -86,6 +91,7 @@
 		9B04550C150640BA007F8E7C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9B73C785150F49F500A4069A /* CoreMedia.framework */,
 				9B0455771506448D007F8E7C /* AVFoundation.framework */,
 				9B04550D150640BA007F8E7C /* Foundation.framework */,
 				9B73C72F150E86C400A4069A /* MediaPlayer.framework */,
@@ -104,6 +110,7 @@
 				9B045513150640BA007F8E7C /* NGMoviePlayerView.m */,
 				9B73C733150F38B000A4069A /* NGMoviePlayerControlView.h */,
 				9B73C734150F38B000A4069A /* NGMoviePlayerControlView.m */,
+				9B73C78B150F5D7300A4069A /* NGMoviePlayerControlViewDelegate.h */,
 				9B73C732150F37E000A4069A /* NGMoviePlayerControlStyle.h */,
 				9B04558115064569007F8E7C /* NGMoviePlayerDelegate.h */,
 				9B04557D150644EE007F8E7C /* NGMoviePlayerLayerView.h */,
@@ -120,6 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				9B045511150640BA007F8E7C /* Prefix.pch */,
+				9B73C77F150F496C00A4069A /* NGWeak.h */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
