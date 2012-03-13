@@ -21,6 +21,7 @@
 		9B73C784150F49B500A4069A /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B73C783150F49B500A4069A /* MediaPlayer.framework */; };
 		9B73C788150F4A0300A4069A /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B73C787150F4A0300A4069A /* CoreMedia.framework */; };
 		9B73C78A150F4A2F00A4069A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B73C789150F4A2F00A4069A /* QuartzCore.framework */; };
+		9BE34D44150F9438001CE6CD /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BE34D43150F9438001CE6CD /* AudioToolbox.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +62,7 @@
 		9B73C783150F49B500A4069A /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		9B73C787150F4A0300A4069A /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		9B73C789150F4A2F00A4069A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		9BE34D43150F9438001CE6CD /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +70,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9BE34D44150F9438001CE6CD /* AudioToolbox.framework in Frameworks */,
 				9B73C78A150F4A2F00A4069A /* QuartzCore.framework in Frameworks */,
 				9B73C788150F4A0300A4069A /* CoreMedia.framework in Frameworks */,
 				9B73C784150F49B500A4069A /* MediaPlayer.framework in Frameworks */,
@@ -103,6 +106,7 @@
 		9B04554E1506418C007F8E7C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9BE34D43150F9438001CE6CD /* AudioToolbox.framework */,
 				9B73C781150F49AC00A4069A /* AVFoundation.framework */,
 				9B0455531506418C007F8E7C /* CoreGraphics.framework */,
 				9B73C787150F4A0300A4069A /* CoreMedia.framework */,
@@ -192,7 +196,7 @@
 		9B0455421506418C007F8E7C /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0430;
 				ORGANIZATIONNAME = "NOUS Wissensmanagement GmbH";
 			};
 			buildConfigurationList = 9B0455451506418C007F8E7C /* Build configuration list for PBXProject "NGMoviePlayerDemo" */;

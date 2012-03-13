@@ -41,6 +41,8 @@ static char playerAirPlayVideoActiveContext;
 @property (nonatomic, assign) NSTimeInterval timeToSkip;
 @property (nonatomic, ng_weak) NSTimer *skippingTimer;
 
+- (void)ignoreSystemMuteSwitch;
+
 - (void)startObservingPlayerTimeChanges;
 - (void)stopObservingPlayerTimeChanges;
 
@@ -67,6 +69,7 @@ static char playerAirPlayVideoActiveContext;
 @synthesize scrubbing = _scrubbing;
 @synthesize delegate = _delegate;
 @synthesize airPlayActive = _airPlayActive;
+@synthesize autostartWhenReady = _autostartWhenReady;
 @synthesize asset = _asset;
 @synthesize playerItem = _playerItem;
 @synthesize playerTimeObserver = _playerTimeObserver;
@@ -74,11 +77,33 @@ static char playerAirPlayVideoActiveContext;
 @synthesize skippingTimer = _skippingTimer;
 
 ////////////////////////////////////////////////////////////////////////
+#pragma mark - Class Methods
+////////////////////////////////////////////////////////////////////////
+
++ (void)ignoreSystemMuteSwitch {
+    AudioSessionInitialize (NULL, NULL, NULL, NULL);
+    AudioSessionSetActive(true);
+    
+    UInt32 sessionCategory = kAudioSessionCategory_MediaPlayback;
+    AudioSessionSetProperty(kAudioSessionProperty_AudioCategory, sizeof(sessionCategory),&sessionCategory);
+}
+
++ (void)initialize {
+    if (self == [NGMoviePlayer class]) {
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            [self ignoreSystemMuteSwitch];
+        });
+    }
+}
+
+////////////////////////////////////////////////////////////////////////
 #pragma mark - Lifecycle
 ////////////////////////////////////////////////////////////////////////
 
 - (id)initWithURL:(NSURL *)URL {
     if ((self = [super init])) {
+        _autostartWhenReady = NO;
         _seekToZeroBeforePlay = YES;
         _airPlayActive = YES;
         _rateToRestoreAfterScrubbing = 1.;
@@ -119,13 +144,17 @@ static char playerAirPlayVideoActiveContext;
 ////////////////////////////////////////////////////////////////////////
 
 - (void)play {
-    if (_seekToZeroBeforePlay) {
-        [self.player seekToTime:kCMTimeZero];
-        _seekToZeroBeforePlay = NO;
+    if (self.player.status == AVPlayerStatusReadyToPlay) {
+        if (_seekToZeroBeforePlay) {
+            [self.player seekToTime:kCMTimeZero];
+            _seekToZeroBeforePlay = NO;
+        }
+        
+        [self.view hidePlaceholderViewAnimated:YES];
+        [self.player play];
+    } else {
+        _autostartWhenReady = YES;
     }
-    
-    [self.view hidePlaceholderViewAnimated:YES];
-    [self.player play];
 }
 
 - (void)pause {
@@ -147,6 +176,7 @@ static char playerAirPlayVideoActiveContext;
 - (NGMoviePlayerView *)view {
     if (_view == nil) {
         _view = [[NGMoviePlayerView alloc] initWithFrame:CGRectZero];
+        _view.delegate = self;
     }
     
     return _view;
@@ -282,7 +312,9 @@ static char playerAirPlayVideoActiveContext;
             case AVPlayerStatusReadyToPlay: {
                 // TODO: Enable buttons & scrubber
                 if (!self.scrubbing) {
-                    //[self play];
+                    if (self.autostartWhenReady) {
+                        [self play];
+                    }
                 }
                 
                 break;

@@ -24,6 +24,7 @@
 		9B73C735150F38B000A4069A /* NGMoviePlayerControlView.h in Headers */ = {isa = PBXBuildFile; fileRef = 9B73C733150F38B000A4069A /* NGMoviePlayerControlView.h */; };
 		9B73C736150F38B000A4069A /* NGMoviePlayerControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B73C734150F38B000A4069A /* NGMoviePlayerControlView.m */; };
 		9B73C786150F49F500A4069A /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B73C785150F49F500A4069A /* CoreMedia.framework */; };
+		9BE34D41150F941D001CE6CD /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BE34D40150F941D001CE6CD /* AudioToolbox.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,7 +51,8 @@
 		9B73C734150F38B000A4069A /* NGMoviePlayerControlView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NGMoviePlayerControlView.m; sourceTree = "<group>"; };
 		9B73C77F150F496C00A4069A /* NGWeak.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NGWeak.h; sourceTree = "<group>"; };
 		9B73C785150F49F500A4069A /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
-		9B73C78B150F5D7300A4069A /* NGMoviePlayerControlActionDelegate.h */ = {isa = PBXFileReference; path = NGMoviePlayerControlActionDelegate.h; sourceTree = "<group>"; };
+		9B73C78B150F5D7300A4069A /* NGMoviePlayerControlActionDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NGMoviePlayerControlActionDelegate.h; sourceTree = "<group>"; };
+		9BE34D40150F941D001CE6CD /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +60,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9BE34D41150F941D001CE6CD /* AudioToolbox.framework in Frameworks */,
 				9B73C786150F49F500A4069A /* CoreMedia.framework in Frameworks */,
 				9B73C730150E86C400A4069A /* MediaPlayer.framework in Frameworks */,
 				9B04557C15064499007F8E7C /* UIKit.framework in Frameworks */,
@@ -91,6 +94,7 @@
 		9B04550C150640BA007F8E7C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9BE34D40150F941D001CE6CD /* AudioToolbox.framework */,
 				9B73C785150F49F500A4069A /* CoreMedia.framework */,
 				9B0455771506448D007F8E7C /* AVFoundation.framework */,
 				9B04550D150640BA007F8E7C /* Foundation.framework */,

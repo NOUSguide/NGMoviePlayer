@@ -33,10 +33,18 @@
 
 /** AirPlay is only supported on >= iOS 5, defaults to YES */
 @property (nonatomic, assign) BOOL airPlayActive;
+/** flag to indicate whether the video autoplays when it's ready loading, defaults to NO */
+@property (nonatomic, assign) BOOL autostartWhenReady;
 
 /** current playback time of the player */
 @property (nonatomic, assign) NSTimeInterval currentTime;
 @property (nonatomic, readonly) NSTimeInterval duration;
+
+/**
+ Sets the audio session to MediaPlayback and thefore ignores the system mute switch,
+ is called by default
+ */
++ (void)ignoreSystemMuteSwitch;
 
 - (id)init;
 - (id)initWithURL:(NSURL *)URL;
