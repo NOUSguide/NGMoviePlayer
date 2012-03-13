@@ -283,6 +283,14 @@
 }
 
 - (void)handlePlayButtonPress:(id)sender {
+    UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    activityView.hidesWhenStopped = YES;
+    activityView.center = self.playButton.center;
+    activityView.autoresizingMask = self.playButton.autoresizingMask;
+    [self.playButton.superview addSubview:activityView];
+    [self.playButton removeFromSuperview];
+    [activityView startAnimating];
+    
     [self.delegate moviePlayerControl:sender didPerformAction:NGMoviePlayerControlActionStartToPlay];
 }
 
