@@ -21,6 +21,8 @@
 		9B04558915064DAE007F8E7C /* NGMoviePlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 9B04558715064DAD007F8E7C /* NGMoviePlayer.h */; };
 		9B04558A15064DAE007F8E7C /* NGMoviePlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B04558815064DAE007F8E7C /* NGMoviePlayer.m */; };
 		9B73C730150E86C400A4069A /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B73C72F150E86C400A4069A /* MediaPlayer.framework */; };
+		9B73C735150F38B000A4069A /* NGMoviePlayerControlView.h in Headers */ = {isa = PBXBuildFile; fileRef = 9B73C733150F38B000A4069A /* NGMoviePlayerControlView.h */; };
+		9B73C736150F38B000A4069A /* NGMoviePlayerControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B73C734150F38B000A4069A /* NGMoviePlayerControlView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +44,9 @@
 		9B04558815064DAE007F8E7C /* NGMoviePlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NGMoviePlayer.m; sourceTree = "<group>"; };
 		9B0455951507545E007F8E7C /* NGMoviePlayer.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = NGMoviePlayer.bundle; path = Resources/NGMoviePlayer.bundle; sourceTree = "<group>"; };
 		9B73C72F150E86C400A4069A /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		9B73C732150F37E000A4069A /* NGMoviePlayerControlStyle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NGMoviePlayerControlStyle.h; sourceTree = "<group>"; };
+		9B73C733150F38B000A4069A /* NGMoviePlayerControlView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NGMoviePlayerControlView.h; sourceTree = "<group>"; };
+		9B73C734150F38B000A4069A /* NGMoviePlayerControlView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NGMoviePlayerControlView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,12 +100,15 @@
 			children = (
 				9B04558715064DAD007F8E7C /* NGMoviePlayer.h */,
 				9B04558815064DAE007F8E7C /* NGMoviePlayer.m */,
-				9B04558115064569007F8E7C /* NGMoviePlayerDelegate.h */,
 				9B045512150640BA007F8E7C /* NGMoviePlayerView.h */,
 				9B045513150640BA007F8E7C /* NGMoviePlayerView.m */,
-				9B0455851506482A007F8E7C /* NGMoviePlayerVideoGravity.h */,
+				9B73C733150F38B000A4069A /* NGMoviePlayerControlView.h */,
+				9B73C734150F38B000A4069A /* NGMoviePlayerControlView.m */,
+				9B73C732150F37E000A4069A /* NGMoviePlayerControlStyle.h */,
+				9B04558115064569007F8E7C /* NGMoviePlayerDelegate.h */,
 				9B04557D150644EE007F8E7C /* NGMoviePlayerLayerView.h */,
 				9B04557E150644EE007F8E7C /* NGMoviePlayerLayerView.m */,
+				9B0455851506482A007F8E7C /* NGMoviePlayerVideoGravity.h */,
 				9B0455721506421D007F8E7C /* NGSlider.h */,
 				9B0455731506421D007F8E7C /* NGSlider.m */,
 				9B045510150640BA007F8E7C /* Supporting Files */,
@@ -136,6 +144,7 @@
 				9B04558215064569007F8E7C /* NGMoviePlayerDelegate.h in Headers */,
 				9B0455861506482A007F8E7C /* NGMoviePlayerVideoGravity.h in Headers */,
 				9B04558915064DAE007F8E7C /* NGMoviePlayer.h in Headers */,
+				9B73C735150F38B000A4069A /* NGMoviePlayerControlView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -194,6 +203,7 @@
 				9B0455751506421D007F8E7C /* NGSlider.m in Sources */,
 				9B045580150644EE007F8E7C /* NGMoviePlayerLayerView.m in Sources */,
 				9B04558A15064DAE007F8E7C /* NGMoviePlayer.m in Sources */,
+				9B73C736150F38B000A4069A /* NGMoviePlayerControlView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
