@@ -1,8 +1,13 @@
 #import "NGMoviePlayer.h"
 #import "NGMoviePlayerView.h"
 #import "NGMoviePlayerControlView.h"
+#import "NGSlider.h"
 #import "NGMoviePlayerLayerView.h"
 #import "NGMoviePlayerControlViewDelegate.h"
+
+
+#define kNGInitialTimeToSkip                    10.     // this value gets added the first time (seconds)
+#define kNGRepeatedTimeToSkipStartValue          5.     // this is the starting value the gets added repeatedly while user presses button (increases over time)
 
 
 static char playerItemStatusContext;
@@ -33,11 +38,16 @@ static char playerAirPlayVideoActiveContext;
 @property (nonatomic, readonly) CMTime CMDuration;
 @property (nonatomic, strong) id playerTimeObserver;
 
+@property (nonatomic, assign) NSTimeInterval timeToSkip;
+@property (nonatomic, ng_weak) NSTimer *skippingTimer;
+
 - (void)startObservingPlayerTimeChanges;
 - (void)stopObservingPlayerTimeChanges;
 
 - (void)beginScrubbing;
 - (void)endScrubbing;
+
+- (void)skipTimerFired:(NSTimer *)timer;
 
 - (void)togglePlaybackState;
 
@@ -60,6 +70,8 @@ static char playerAirPlayVideoActiveContext;
 @synthesize asset = _asset;
 @synthesize playerItem = _playerItem;
 @synthesize playerTimeObserver = _playerTimeObserver;
+@synthesize timeToSkip = _timeToSkip;
+@synthesize skippingTimer = _skippingTimer;
 
 ////////////////////////////////////////////////////////////////////////
 #pragma mark - Lifecycle
@@ -85,6 +97,7 @@ static char playerAirPlayVideoActiveContext;
 - (void)dealloc {
     AVPlayer *player = _view.playerLayer.player;
     
+    [_skippingTimer invalidate];
     _delegate = nil;
     _view.controlsView.delegate = nil;
     
@@ -210,18 +223,20 @@ static char playerAirPlayVideoActiveContext;
 }
 
 - (void)setCurrentTime:(NSTimeInterval)currentTime {
-    CMTime time = CMTimeMakeWithSeconds(currentTime, NSEC_PER_SEC);
-    
-    // completion handler only supported in iOS 5
-    if ([self.player respondsToSelector:@selector(seekToTime:completionHandler:)]) {
-        [self.player seekToTime:time
-              completionHandler:^(BOOL finished) {
-                  if (finished) {
-                      [self.view updateWithCurrentTime:self.currentTime duration:self.duration];
-                  }
-              }];
-    } else {
-        [self.player seekToTime:time];
+    if (currentTime >= 0. && currentTime <= self.duration) {
+        CMTime time = CMTimeMakeWithSeconds(currentTime, NSEC_PER_SEC);
+        
+        // completion handler only supported in iOS 5
+        if ([self.player respondsToSelector:@selector(seekToTime:completionHandler:)]) {
+            [self.player seekToTime:time
+                  completionHandler:^(BOOL finished) {
+                      if (finished) {
+                          [self.view updateWithCurrentTime:self.currentTime duration:self.duration];
+                      }
+                  }];
+        } else {
+            [self.player seekToTime:time];
+        }
     }
 }
 
@@ -348,7 +363,7 @@ static char playerAirPlayVideoActiveContext;
 }
 
 ////////////////////////////////////////////////////////////////////////
-#pragma mark - Scrubbing
+#pragma mark - Scrubbing/Skipping
 ////////////////////////////////////////////////////////////////////////
 
 - (void)beginScrubbing {
@@ -363,7 +378,36 @@ static char playerAirPlayVideoActiveContext;
     self.scrubbing = NO;
     self.player.rate = _rateToRestoreAfterScrubbing;
     _rateToRestoreAfterScrubbing = 0.f;
+    
+    [self.skippingTimer invalidate];
+    self.skippingTimer = nil;
     [self startObservingPlayerTimeChanges];
+}
+
+- (void)beginSkippingBackwards {
+    [self beginScrubbing];
+    
+    self.currentTime -= kNGInitialTimeToSkip;
+    self.timeToSkip = kNGRepeatedTimeToSkipStartValue;
+    
+    self.skippingTimer = [NSTimer scheduledTimerWithTimeInterval:1.0
+                                                          target:self
+                                                        selector:@selector(skipTimerFired:)
+                                                        userInfo:[NSNumber numberWithInt:NGMoviePlayerControlActionBeginSkippingBackwards]
+                                                         repeats:YES];
+}
+
+- (void)beginSkippingForwards {
+    [self beginScrubbing];
+    
+    self.currentTime += kNGInitialTimeToSkip;
+    self.timeToSkip = kNGRepeatedTimeToSkipStartValue;
+    
+    self.skippingTimer = [NSTimer scheduledTimerWithTimeInterval:1.0
+                                                          target:self
+                                                        selector:@selector(skipTimerFired:)
+                                                        userInfo:[NSNumber numberWithInt:NGMoviePlayerControlActionBeginSkippingForwards]
+                                                         repeats:YES];
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -371,39 +415,55 @@ static char playerAirPlayVideoActiveContext;
 ////////////////////////////////////////////////////////////////////////
 
 - (void)moviePlayerControl:(id)control didPerformAction:(NGMoviePlayerControlAction)action {
-    [self.view restartFadeOutControlsViewTimer];
+    [self.view stopFadeOutControlsViewTimer];
     
     switch (action) {        
         case NGMoviePlayerControlActionTogglePlayPause: {
             [self togglePlaybackState];
+            [self.view restartFadeOutControlsViewTimer];
             break;
         }
             
         case NGMoviePlayerControlActionToggleZoomState: {
+            self.fullscreen = !self.fullscreen;
+            [self.view restartFadeOutControlsViewTimer];
+            
             if (_delegateFlags.didChangeControlStyle) {
-                self.fullscreen = !self.fullscreen;
                 [self.delegate player:self didChangeControlStyle:self.view.controlStyle];
             }
             break;
         }
             
-        case NGMoviePlayerControlActionSkipBackwards: {
+        case NGMoviePlayerControlActionBeginSkippingBackwards: {
+            [self beginSkippingBackwards];
             break;
         }
             
-        case NGMoviePlayerControlActionSkipForwards: {
+        case NGMoviePlayerControlActionBeginSkippingForwards: {
+            [self beginSkippingForwards];
             break;
         }
             
         case NGMoviePlayerControlActionBeginScrubbing: {
+            [self beginScrubbing];
             break;
         }
             
         case NGMoviePlayerControlActionScrubbingValueChanged: {
+            if ([control isKindOfClass:[NGSlider class]]) {
+                NGSlider *slider = (NGSlider *)control;
+                
+                float value = slider.value;
+                [self setCurrentTime:value];
+            }
+            
             break;
         }
             
-        case NGMoviePlayerControlActionEndScrubbing: {
+        case NGMoviePlayerControlActionEndScrubbing:
+        case NGMoviePlayerControlActionEndSkipping: {
+            [self endScrubbing];
+            [self.view restartFadeOutControlsViewTimer];
             break;
         }
             
@@ -532,6 +592,18 @@ static char playerAirPlayVideoActiveContext;
     if (self.playerTimeObserver != nil) {
         [self.player removeTimeObserver:self.playerTimeObserver];
         self.playerTimeObserver = nil;
+    }
+}
+
+- (void)skipTimerFired:(NSTimer *)timer {
+    NGMoviePlayerControlAction action = [timer.userInfo intValue];
+    
+    if (action == NGMoviePlayerControlActionBeginSkippingBackwards) {
+        self.currentTime -= self.timeToSkip++;
+        NSLog(@"back");
+    } else if (action == NGMoviePlayerControlActionBeginSkippingForwards) {
+        self.currentTime += self.timeToSkip++;
+        NSLog(@"forward");
     }
 }
 

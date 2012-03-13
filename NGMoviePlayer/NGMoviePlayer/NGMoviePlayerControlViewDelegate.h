@@ -9,11 +9,12 @@
 typedef enum {
     NGMoviePlayerControlActionTogglePlayPause,
     NGMoviePlayerControlActionToggleZoomState,
-    NGMoviePlayerControlActionSkipBackwards,
-    NGMoviePlayerControlActionSkipForwards,
+    NGMoviePlayerControlActionBeginSkippingBackwards,
+    NGMoviePlayerControlActionBeginSkippingForwards,
     NGMoviePlayerControlActionBeginScrubbing,
     NGMoviePlayerControlActionScrubbingValueChanged,
-    NGMoviePlayerControlActionEndScrubbing
+    NGMoviePlayerControlActionEndScrubbing,
+    NGMoviePlayerControlActionEndSkipping
 } NGMoviePlayerControlAction;
 
 

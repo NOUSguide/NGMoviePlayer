@@ -33,6 +33,7 @@
  */
 - (void)setControlsVisible:(BOOL)controlsVisible animated:(BOOL)animated;
 
+- (void)stopFadeOutControlsViewTimer;
 - (void)restartFadeOutControlsViewTimer;
 
 /** Updates the UI to reflect the current time */

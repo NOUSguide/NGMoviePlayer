@@ -99,16 +99,6 @@ static char playerLayerReadyForDisplayContext;
 }
 
 ////////////////////////////////////////////////////////////////////////
-#pragma mark - UIView
-////////////////////////////////////////////////////////////////////////
-
-/*- (void)layoutSubviews {
- [super layoutSubviews];
- 
- 
- }*/
-
-////////////////////////////////////////////////////////////////////////
 #pragma mark - NGMoviePlayerView Properties
 ////////////////////////////////////////////////////////////////////////
 
@@ -177,8 +167,16 @@ static char playerLayerReadyForDisplayContext;
     [self.controlsView updateButtonsWithPlaybackStatus:isPlaying];
 }
 
-- (void)restartFadeOutControlsViewTimer {
+////////////////////////////////////////////////////////////////////////
+#pragma mark - Controls
+////////////////////////////////////////////////////////////////////////
+
+- (void)stopFadeOutControlsViewTimer {
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(fadeOutControls) object:nil];
+}
+
+- (void)restartFadeOutControlsViewTimer {
+    [self stopFadeOutControlsViewTimer];
     [self performSelector:@selector(fadeOutControls) withObject:nil afterDelay:kNGControlVisibilityDuration];
 }
 

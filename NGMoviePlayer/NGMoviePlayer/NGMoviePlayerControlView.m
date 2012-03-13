@@ -24,9 +24,15 @@
 - (void)setupScrubber:(NGSlider *)scrubber controlStyle:(NGMoviePlayerControlStyle)controlStyle;
 
 - (void)handlePlayPauseButtonPress:(id)sender;
-- (void)handleRewindButtonPress:(id)sender;
-- (void)handleForwardButtonPress:(id)sender;
+- (void)handleRewindButtonTouchDown:(id)sender;
+- (void)handleRewindButtonTouchUp:(id)sender;
+- (void)handleForwardButtonTouchDown:(id)sender;
+- (void)handleForwardButtonTouchUp:(id)sender;
 - (void)handleZoomButtonPress:(id)sender;
+
+- (void)handleBeginScrubbing:(id)sender;
+- (void)handleScrubbingValueChanged:(id)sender;
+- (void)handleEndScrubbing:(id)sender;
 
 @end
 
@@ -77,9 +83,9 @@
         _rewindButton.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
         _rewindButton.showsTouchWhenHighlighted = YES;
         [_rewindButton setImage:[UIImage imageNamed:@"NGMoviePlayer.bundle/rewind"] forState:UIControlStateNormal];
-        [_rewindButton addTarget:self action:@selector(beginSkippingBackwards:) forControlEvents:UIControlEventTouchDown];
-        [_rewindButton addTarget:self action:@selector(endSkipping:) forControlEvents:UIControlEventTouchUpInside];
-        [_rewindButton addTarget:self action:@selector(endSkipping:) forControlEvents:UIControlEventTouchUpOutside];
+        [_rewindButton addTarget:self action:@selector(handleRewindButtonTouchDown:) forControlEvents:UIControlEventTouchDown];
+        [_rewindButton addTarget:self action:@selector(handleRewindButtonTouchUp:) forControlEvents:UIControlEventTouchUpInside];
+        [_rewindButton addTarget:self action:@selector(handleRewindButtonTouchUp:) forControlEvents:UIControlEventTouchUpOutside];
         [_bottomControlsView addSubview:_rewindButton];
         
         _forwardButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -87,9 +93,9 @@
         _forwardButton.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
         _forwardButton.showsTouchWhenHighlighted = YES;
         [_forwardButton setImage:[UIImage imageNamed:@"NGMoviePlayer.bundle/forward"] forState:UIControlStateNormal];
-        [_forwardButton addTarget:self action:@selector(beginSkippingForward:) forControlEvents:UIControlEventTouchDown];
-        [_forwardButton addTarget:self action:@selector(endSkipping:) forControlEvents:UIControlEventTouchUpInside];
-        [_forwardButton addTarget:self action:@selector(endSkipping:) forControlEvents:UIControlEventTouchUpOutside];
+        [_forwardButton addTarget:self action:@selector(handleForwardButtonTouchDown:) forControlEvents:UIControlEventTouchDown];
+        [_forwardButton addTarget:self action:@selector(handleForwardButtonTouchUp:) forControlEvents:UIControlEventTouchUpInside];
+        [_forwardButton addTarget:self action:@selector(handleForwardButtonTouchUp:) forControlEvents:UIControlEventTouchUpOutside];
         [_bottomControlsView addSubview:_forwardButton];
         
         _playPauseButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -100,10 +106,10 @@
         
         _scrubber = [[NGSlider alloc] initWithFrame:CGRectZero];
         _scrubber.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        [_scrubber addTarget:self action:@selector(beginScrubbing:) forControlEvents:UIControlEventTouchDown];
-        [_scrubber addTarget:self action:@selector(scrub:) forControlEvents:UIControlEventValueChanged];
-        [_scrubber addTarget:self action:@selector(endScrubbing:) forControlEvents:UIControlEventTouchUpInside];
-        [_scrubber addTarget:self action:@selector(endScrubbing:) forControlEvents:UIControlEventTouchUpOutside];
+        [_scrubber addTarget:self action:@selector(handleBeginScrubbing:) forControlEvents:UIControlEventTouchDown];
+        [_scrubber addTarget:self action:@selector(handleScrubbingValueChanged:) forControlEvents:UIControlEventValueChanged];
+        [_scrubber addTarget:self action:@selector(handleEndScrubbing:) forControlEvents:UIControlEventTouchUpInside];
+        [_scrubber addTarget:self action:@selector(handleEndScrubbing:) forControlEvents:UIControlEventTouchUpOutside];
         [_bottomControlsView addSubview:_scrubber];
         
         _zoomButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -291,16 +297,36 @@
     [self.delegate moviePlayerControl:sender didPerformAction:NGMoviePlayerControlActionTogglePlayPause];
 }
 
-- (void)handleRewindButtonPress:(id)sender {
-    [self.delegate moviePlayerControl:sender didPerformAction:NGMoviePlayerControlActionSkipBackwards];
+- (void)handleRewindButtonTouchDown:(id)sender {
+    [self.delegate moviePlayerControl:sender didPerformAction:NGMoviePlayerControlActionBeginSkippingBackwards];
 }
 
-- (void)handleForwardButtonPress:(id)sender {
-    [self.delegate moviePlayerControl:sender didPerformAction:NGMoviePlayerControlActionSkipForwards];
+- (void)handleRewindButtonTouchUp:(id)sender {
+    [self.delegate moviePlayerControl:sender didPerformAction:NGMoviePlayerControlActionEndSkipping];
+}
+
+- (void)handleForwardButtonTouchDown:(id)sender {
+    [self.delegate moviePlayerControl:sender didPerformAction:NGMoviePlayerControlActionBeginSkippingForwards];
+}
+
+- (void)handleForwardButtonTouchUp:(id)sender {
+    [self.delegate moviePlayerControl:sender didPerformAction:NGMoviePlayerControlActionEndSkipping];
 }
 
 - (void)handleZoomButtonPress:(id)sender {
     [self.delegate moviePlayerControl:sender didPerformAction:NGMoviePlayerControlActionToggleZoomState];
+}
+
+- (void)handleBeginScrubbing:(id)sender {
+    [self.delegate moviePlayerControl:sender didPerformAction:NGMoviePlayerControlActionBeginScrubbing];
+}
+
+- (void)handleScrubbingValueChanged:(id)sender {
+    [self.delegate moviePlayerControl:sender didPerformAction:NGMoviePlayerControlActionScrubbingValueChanged];
+}
+
+- (void)handleEndScrubbing:(id)sender {
+    [self.delegate moviePlayerControl:sender didPerformAction:NGMoviePlayerControlActionEndScrubbing];
 }
 
 @end
