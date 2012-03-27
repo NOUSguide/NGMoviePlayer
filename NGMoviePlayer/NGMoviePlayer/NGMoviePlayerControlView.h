@@ -10,7 +10,7 @@
 #import "NGWeak.h"
 
 @protocol NGMoviePlayerControlActionDelegate;
-@class NGSlider;
+@class NGScrubber;
 @class NGVolumeControl;
 
 @interface NGMoviePlayerControlView : UIView
@@ -24,7 +24,7 @@
 @property (nonatomic, assign) NGMoviePlayerControlStyle controlStyle;
 
 /** the slider indicating the current playback time */
-@property (nonatomic, strong, readonly) NGSlider *scrubber;
+@property (nonatomic, strong, readonly) NGScrubber *scrubber;
 /** the super-fancy volume control */
 @property (nonatomic, strong) NGVolumeControl *volumeControl;
 

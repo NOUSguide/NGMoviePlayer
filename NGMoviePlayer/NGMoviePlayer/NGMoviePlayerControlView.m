@@ -8,8 +8,9 @@
 
 #import "NGMoviePlayerControlView.h"
 #import "NGMoviePlayerControlActionDelegate.h"
-#import "NGSlider.h"
+#import "NGScrubber.h"
 #import "NGVolumeControl.h"
+#import "NGMoviePlayerFunctions.h"
 
 @interface NGMoviePlayerControlView ()
 
@@ -22,7 +23,7 @@
 @property (nonatomic, strong) UILabel *remainingTimeLabel;
 
 - (CGFloat)controlsViewHeightForControlStyle:(NGMoviePlayerControlStyle)controlStyle;
-- (void)setupScrubber:(NGSlider *)scrubber controlStyle:(NGMoviePlayerControlStyle)controlStyle;
+- (void)setupScrubber:(NGScrubber *)scrubber controlStyle:(NGMoviePlayerControlStyle)controlStyle;
 
 - (void)handlePlayPauseButtonPress:(id)sender;
 - (void)handleRewindButtonTouchDown:(id)sender;
@@ -64,7 +65,7 @@
     if ((self = [super initWithFrame:frame])) {
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         
-        _scrubberFillColor = [UIColor purpleColor];
+        _scrubberFillColor = [UIColor lightGrayColor];
         
         _topControlsView = [[UIView alloc] initWithFrame:CGRectZero];
         _topControlsView.backgroundColor = [UIColor colorWithWhite:0.f alpha:0.4f];
@@ -74,16 +75,15 @@
         _bottomControlsView.backgroundColor = [UIColor colorWithWhite:0.f alpha:0.4f];
         [self addSubview:_bottomControlsView];
         
-        _volumeView = [[MPVolumeView alloc] initWithFrame:CGRectMake(_bottomControlsView.bounds.size.width-80.f, 10.f, 29.f, 20.f)];
-        _volumeView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        // iOS 4.2 up
-        if ([_volumeView respondsToSelector:@selector(setShowsVolumeSlider:)]) {
+        // We use the MPVolumeView just for displaying the AirPlay icon
+        if ([AVPlayer instancesRespondToSelector:@selector(allowsAirPlayVideo)]) {
+            _volumeView = [[MPVolumeView alloc] initWithFrame:CGRectMake(_bottomControlsView.bounds.size.width-80.f, 10.f, 29.f, 20.f)];
+            _volumeView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
             _volumeView.showsVolumeSlider = NO;
+            [_bottomControlsView addSubview:_volumeView];
         }
-        [_bottomControlsView addSubview:_volumeView];
         
         _volumeControl = [[NGVolumeControl alloc] initWithFrame:CGRectZero];
-        _volumeControl.expandDirection = NGVolumeControlExpandDirectionDown;
         [_volumeControl addTarget:self action:@selector(handleVolumeChanged:) forControlEvents:UIControlEventValueChanged];
         // volume control needs to get added to self instead of bottomControlView because otherwise the expanded slider
         // doesn't receive any touch events
@@ -115,7 +115,7 @@
         [_playPauseButton addTarget:self action:@selector(handlePlayPauseButtonPress:) forControlEvents:UIControlEventTouchUpInside];
         [_bottomControlsView addSubview:_playPauseButton];
         
-        _scrubber = [[NGSlider alloc] initWithFrame:CGRectZero];
+        _scrubber = [[NGScrubber alloc] initWithFrame:CGRectZero];
         _scrubber.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         [_scrubber addTarget:self action:@selector(handleBeginScrubbing:) forControlEvents:UIControlEventTouchDown];
         [_scrubber addTarget:self action:@selector(handleScrubbingValueChanged:) forControlEvents:UIControlEventValueChanged];
@@ -127,7 +127,7 @@
         _zoomButton.showsTouchWhenHighlighted = YES;
         _zoomButton.contentMode = UIViewContentModeCenter;
         [_zoomButton addTarget:self action:@selector(handleZoomButtonPress:) forControlEvents:UIControlEventTouchUpInside];
-        [_bottomControlsView addSubview:_zoomButton];
+        [_topControlsView addSubview:_zoomButton];
         
         _currentTimeLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         _currentTimeLabel.backgroundColor = [UIColor clearColor];
@@ -175,7 +175,8 @@
         
         self.playPauseButton.frame = CGRectMake(50.f, 10.f, 20.f, 20.f);
         self.scrubber.frame = CGRectMake(0.f, 40.f, self.bottomControlsView.bounds.size.width, 20.f);
-        self.zoomButton.frame = CGRectMake(self.bottomControlsView.bounds.size.width-30.f, 12.f, 29.f, 16.f);
+        self.volumeControl.frame = CGRectMake(self.bounds.size.width-40.f, self.bottomControlsView.frame.origin.y, 40.f,40.f);
+        self.zoomButton.frame = CGRectMake(self.topControlsView.bounds.size.width - controlsViewHeight, 0.f, controlsViewHeight, controlsViewHeight);
         [self.zoomButton setImage:[UIImage imageNamed:@"NGMoviePlayer.bundle/zoomIn"] forState:UIControlStateNormal];
     } else {
         self.rewindButton.hidden = YES;
@@ -190,8 +191,8 @@
         self.remainingTimeLabel.textAlignment = UITextAlignmentLeft;
         
         self.scrubber.frame = CGRectMake(80.f, 0.f, self.bottomControlsView.bounds.size.width-160.f, controlsViewHeight);
-        self.zoomButton.frame = CGRectMake(self.bottomControlsView.bounds.size.width - controlsViewHeight, 0.f, controlsViewHeight, controlsViewHeight);
-        self.volumeControl.frame = CGRectMake(self.bottomControlsView.bounds.size.width-controlsViewHeight, 0.f, controlsViewHeight,controlsViewHeight);
+        self.volumeControl.frame = CGRectMake(self.bounds.size.width-controlsViewHeight, self.bottomControlsView.frame.origin.y, controlsViewHeight,controlsViewHeight);
+        self.zoomButton.frame = CGRectMake(self.topControlsView.bounds.size.width - controlsViewHeight, 0.f, controlsViewHeight, controlsViewHeight);
         [self.zoomButton setImage:[UIImage imageNamed:@"NGMoviePlayer.bundle/zoomOut"] forState:UIControlStateNormal];
     }
 }
@@ -210,30 +211,8 @@
 }
 
 - (void)updateScrubberWithCurrentTime:(NSInteger)currentTime duration:(NSInteger)duration {
-    NSInteger seconds = currentTime % 60;
-    NSInteger minutes = currentTime / 60;
-    NSInteger hours = minutes / 60;
-    
-    NSInteger currentDurationSeconds = duration-currentTime;
-    NSInteger durationSeconds = currentDurationSeconds % 60;
-    NSInteger durationMinutes = currentDurationSeconds / 60;
-    NSInteger durationHours = durationMinutes / 60;
-    
-    if (durationSeconds < 0) {
-        durationSeconds = 0;
-    }
-    
-    if (hours > 0) {
-        [self.currentTimeLabel setText:[NSString stringWithFormat:@"%02d:%02d:%02d", hours, minutes, seconds]];
-    } else {
-        [self.currentTimeLabel setText:[NSString stringWithFormat:@"%d:%02d", minutes, seconds]];
-    }
-    
-    if (durationHours > 0) {
-        [self.remainingTimeLabel setText:[NSString stringWithFormat:@"-%02d:%02d:%02d", durationHours, durationMinutes, durationSeconds]];
-    } else {
-        [self.remainingTimeLabel setText:[NSString stringWithFormat:@"-%d:%02d", durationMinutes, durationSeconds]];
-    }
+    self.currentTimeLabel.text = NGMoviePlayerGetTimeFormatted(currentTime);
+    self.remainingTimeLabel.text = NGMoviePlayerGetRemainingTimeFormatted(currentTime, duration);
     
     [self.scrubber setMinimumValue:0.];
     [self.scrubber setMaximumValue:duration];
@@ -258,52 +237,48 @@
     }
 }
 
-- (void)setupScrubber:(NGSlider *)scrubber controlStyle:(NGMoviePlayerControlStyle)controlStyle {
-    scrubber.alpha = 0.75f;
+- (void)setupScrubber:(NGScrubber *)scrubber controlStyle:(NGMoviePlayerControlStyle)controlStyle {
+    CGFloat height = 20.f;
     
-    if (controlStyle == NGMoviePlayerControlStyleFullscreen) {
-        //Build a rect of appropriate size at origin 0,0
-        CGRect fillRect = CGRectMake(0.f,0.f,1.f,20.f);
-        
-        //Create a context of the appropriate size
-        UIGraphicsBeginImageContext(CGSizeMake(1.f, 20.f));
-        CGContextRef currentContext = UIGraphicsGetCurrentContext();
-        //Set the fill color
-        CGContextSetFillColorWithColor(currentContext, self.scrubberFillColor.CGColor);
-        //Fill the color
-        CGContextFillRect(currentContext, fillRect);
-        //Snap the picture and close the context
-        UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        [scrubber setMinimumTrackImage:image forState:UIControlStateNormal];
-        
-        //Create a context of the appropriate size
-        UIGraphicsBeginImageContext(CGSizeMake(1.f, 20.f));
-        currentContext = UIGraphicsGetCurrentContext();
-        //Set the fill color
-        CGContextSetFillColorWithColor(currentContext, [UIColor colorWithWhite:1.f alpha:.2f].CGColor);
-        //Fill the color
-        CGContextFillRect(currentContext, fillRect);
-        //Snap the picture and close the context
-        image = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        [scrubber setMaximumTrackImage:image forState:UIControlStateNormal];
-        
-        //Create a context of the appropriate size
-        UIGraphicsBeginImageContext(CGSizeMake(1, 1));
-        //Snap the picture and close the context
-        image = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        [scrubber setThumbImage:image forState:UIControlStateNormal];
+    if (controlStyle == NGMoviePlayerControlStyleFullscreen) {        
+        [scrubber setThumbImage:[UIImage imageNamed:@"NGMoviePlayer.bundle/scrubberKnobFullscreen"] 
+                       forState:UIControlStateNormal];
     } else {
-        [scrubber setMinimumTrackImage:[[UIImage imageNamed:@"NGMoviePlayer.bundle/scrubberFilled"] stretchableImageWithLeftCapWidth:4.f topCapHeight:0.f] 
+        height = 10.f;
+        /*[scrubber setMinimumTrackImage:[[UIImage imageNamed:@"NGMoviePlayer.bundle/scrubberFilled"] stretchableImageWithLeftCapWidth:4.f topCapHeight:0.f] 
                               forState:UIControlStateNormal];
         [scrubber setMaximumTrackImage:[[UIImage imageNamed:@"NGMoviePlayer.bundle/scrubberUnfilled"] stretchableImageWithLeftCapWidth:4.f topCapHeight:0.f] 
-                              forState:UIControlStateNormal];
+                              forState:UIControlStateNormal];*/
         [scrubber setThumbImage:[UIImage imageNamed:@"NGMoviePlayer.bundle/scrubberKnob"] 
                        forState:UIControlStateNormal];
-        
     }
+    
+    //Build a rect of appropriate size at origin 0,0
+    CGRect fillRect = CGRectMake(0.f,0.f,1.f,height);
+    
+    //Create a context of the appropriate size
+    UIGraphicsBeginImageContext(CGSizeMake(1.f, height));
+    CGContextRef currentContext = UIGraphicsGetCurrentContext();
+    //Set the fill color
+    CGContextSetFillColorWithColor(currentContext, self.scrubberFillColor.CGColor);
+    //Fill the color
+    CGContextFillRect(currentContext, fillRect);
+    //Snap the picture and close the context
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    [scrubber setMinimumTrackImage:image forState:UIControlStateNormal];
+    
+    //Create a context of the appropriate size
+    UIGraphicsBeginImageContext(CGSizeMake(1.f, height));
+    currentContext = UIGraphicsGetCurrentContext();
+    //Set the fill color
+    CGContextSetFillColorWithColor(currentContext, [UIColor colorWithWhite:1.f alpha:.2f].CGColor);
+    //Fill the color
+    CGContextFillRect(currentContext, fillRect);
+    //Snap the picture and close the context
+    image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    [scrubber setMaximumTrackImage:image forState:UIControlStateNormal];
 }
 
 - (void)handlePlayPauseButtonPress:(id)sender {

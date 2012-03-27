@@ -36,7 +36,10 @@
 
 /** current playback time of the player */
 @property (nonatomic, assign) NSTimeInterval currentTime;
+/** total duration of played video */
 @property (nonatomic, readonly) NSTimeInterval duration;
+/** currently downloaded duration which is already playable */
+@property (nonatomic, readonly) NSTimeInterval playableDuration;
 
 /**
  Sets the audio session to MediaPlayback and thefore ignores the system mute switch,

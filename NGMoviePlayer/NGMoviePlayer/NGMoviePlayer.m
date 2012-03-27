@@ -1,7 +1,7 @@
 #import "NGMoviePlayer.h"
 #import "NGMoviePlayerView.h"
 #import "NGMoviePlayerControlView.h"
-#import "NGSlider.h"
+#import "NGScrubber.h"
 #import "NGMoviePlayerLayerView.h"
 #import "NGMoviePlayerControlActionDelegate.h"
 
@@ -286,6 +286,15 @@ static char playerAirPlayVideoActiveContext;
     return CMTimeGetSeconds(self.CMDuration);
 }
 
+- (NSTimeInterval)playableDuration {
+    NSArray *loadedTimeRanges = [self.player.currentItem loadedTimeRanges];
+    CMTimeRange timeRange = [[loadedTimeRanges objectAtIndex:0] CMTimeRangeValue];
+    Float64 startSeconds = CMTimeGetSeconds(timeRange.start);
+    Float64 durationSeconds = CMTimeGetSeconds(timeRange.duration);
+    
+    return (NSTimeInterval)(startSeconds + durationSeconds);
+}
+
 ////////////////////////////////////////////////////////////////////////
 #pragma mark - KVO
 ////////////////////////////////////////////////////////////////////////
@@ -487,8 +496,8 @@ static char playerAirPlayVideoActiveContext;
         }
             
         case NGMoviePlayerControlActionScrubbingValueChanged: {
-            if ([control isKindOfClass:[NGSlider class]]) {
-                NGSlider *slider = (NGSlider *)control;
+            if ([control isKindOfClass:[NGScrubber class]]) {
+                NGScrubber *slider = (NGScrubber *)control;
                 
                 float value = slider.value;
                 [self setCurrentTime:value];
@@ -624,6 +633,7 @@ static char playerAirPlayVideoActiveContext;
                                                                            if (strongSelf != nil) {
                                                                                if (CMTIME_IS_VALID(strongSelf.player.currentTime) && CMTIME_IS_VALID(strongSelf.CMDuration)) {
                                                                                    [strongSelf.view updateWithCurrentTime:strongSelf.currentTime duration:strongSelf.duration];
+                                                                                   strongSelf.view.controlsView.scrubber.playableValue = strongSelf.playableDuration;
                                                                                }
                                                                            }
                                                                        }];

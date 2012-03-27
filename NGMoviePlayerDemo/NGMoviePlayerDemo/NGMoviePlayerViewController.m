@@ -32,7 +32,7 @@
     [super viewDidLoad];
     
     self.view.backgroundColor = [UIColor blackColor];
-    self.moviePlayer = [[NGMoviePlayer alloc] initWithURL:[NSURL URLWithString:@"http://office.nousguide.com/streaming/q3.mp4"]];
+    self.moviePlayer = [[NGMoviePlayer alloc] initWithURL:[NSURL URLWithString:@"http://office.nousguide.com/streaming/q3.m3u8"]];
     self.containerView = [[UIView alloc] initWithFrame:self.view.bounds];
     self.containerView.backgroundColor = [UIColor underPageBackgroundColor];
     self.containerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -106,7 +106,10 @@
 - (void)pushPopPressViewDidAnimateToOriginalFrame:(PSPushPopPressView *)pushPopPressView {
     // update autoresizing mask to adapt to width only
     pushPopPressView.autoresizingMask = UIViewAutoresizingNone;
-    [self.moviePlayer.view setControlsVisible:YES animated:YES];
+    
+    if (self.moviePlayer.view.placeholderView.alpha == 0.f) {
+        [self.moviePlayer.view setControlsVisible:YES animated:YES];
+    }
 }
 
 - (void)pushPopPressViewWillAnimateToFullscreenWindowFrame:(PSPushPopPressView *)pushPopPressView duration:(NSTimeInterval)duration {
@@ -117,7 +120,10 @@
     // update autoresizing mask to adapt to borders
     pushPopPressView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     
-    [self.moviePlayer.view setControlsVisible:YES animated:YES];    
+    if (self.moviePlayer.view.placeholderView.alpha == 0.f) {
+        [self.moviePlayer.view setControlsVisible:YES animated:YES];    
+    }
+    
     [pushPopPressView layoutIfNeeded];
 }
 

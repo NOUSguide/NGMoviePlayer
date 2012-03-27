@@ -229,7 +229,7 @@
     [self addSubview:_controlsView];
     
     // Placeholder
-    _placeholderView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"NGMoviePlayer.bundle/playerBackground"]];
+    _placeholderView = [[UIView alloc] initWithFrame:self.bounds];//[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"NGMoviePlayer.bundle/playerBackground"]];
     _placeholderView.frame = self.bounds;
     _placeholderView.userInteractionEnabled = YES;
     _placeholderView.contentMode = UIViewContentModeScaleAspectFill;

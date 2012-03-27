@@ -1,26 +1,113 @@
-#import "NGSlider.h"
+#import "NGScrubber.h"
+#import "NGMoviePlayerFunctions.h"
 
-@interface NGSlider () {
+////////////////////////////////////////////////////////////////////////
+#pragma mark - Private UIView rendering the popup showing slider value
+////////////////////////////////////////////////////////////////////////
+
+@interface MNESliderValuePopupView : UIView  
+
+@property (nonatomic) NSTimeInterval time;
+@property (nonatomic, retain) UIFont *font;
+@property (nonatomic, retain) NSString *text;
+
+@end
+
+@implementation MNESliderValuePopupView
+
+@synthesize time = _time;
+@synthesize font = _font;
+@synthesize text = _text;
+
+- (id)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    if (self) {
+        self.font = [UIFont boldSystemFontOfSize:17];
+    }
+    return self;
+}
+
+- (void)drawRect:(CGRect)rect {
+    // Set the fill color
+	[[UIColor colorWithWhite:0.2 alpha:0.8] setFill];
+    
+    // Create the path for the rounded rectangle
+    CGRect roundedRect = CGRectMake(self.bounds.origin.x, self.bounds.origin.y, self.bounds.size.width, floorf(self.bounds.size.height * 0.8));
+    UIBezierPath *roundedRectPath = [UIBezierPath bezierPathWithRoundedRect:roundedRect cornerRadius:6.0];
+    
+    // Create the arrow path
+    UIBezierPath *arrowPath = [UIBezierPath bezierPath];
+    CGFloat midX = CGRectGetMidX(self.bounds);
+    CGPoint p0 = CGPointMake(midX, CGRectGetMaxY(self.bounds));
+    [arrowPath moveToPoint:p0];
+    [arrowPath addLineToPoint:CGPointMake((midX - 10.0), CGRectGetMaxY(roundedRect))];
+    [arrowPath addLineToPoint:CGPointMake((midX + 10.0), CGRectGetMaxY(roundedRect))];
+    [arrowPath closePath];
+    
+    // Attach the arrow path to the rounded rect
+    [roundedRectPath appendPath:arrowPath];
+    [roundedRectPath fill];
+    
+    // Draw the text
+    if (self.text) {
+        [[UIColor colorWithWhite:1 alpha:0.8] set];
+        CGSize s = [_text sizeWithFont:self.font];
+        CGFloat yOffset = (roundedRect.size.height - s.height) / 2;
+        CGRect textRect = CGRectMake(roundedRect.origin.x, yOffset, roundedRect.size.width, s.height);
+        
+        [_text drawInRect:textRect 
+                 withFont:self.font 
+            lineBreakMode:UILineBreakModeWordWrap 
+                alignment:UITextAlignmentCenter];    
+    }
+}
+
+- (void)setTime:(NSTimeInterval)time {
+    if (_time != time) {
+        _time = time;
+        self.text = NGMoviePlayerGetTimeFormatted(time);
+        
+        [self setNeedsDisplay];
+    }
+}
+
+@end
+
+
+////////////////////////////////////////////////////////////////////////
+#pragma mark - Private Class Extension
+////////////////////////////////////////////////////////////////////////
+
+@interface NGScrubber () {
     CGPoint _beganTrackingLocation;
     float _realPositionValue;
+    MNESliderValuePopupView *valuePopupView; 
 }
 
 @property (atomic, assign, readwrite) float scrubbingSpeed;
 @property (atomic, assign) CGPoint beganTrackingLocation;
+@property (nonatomic, strong) UIView *playableView;
 
 - (NSUInteger)indexOfLowerScrubbingSpeed:(NSArray*)scrubbingSpeedPositions forOffset:(CGFloat)verticalOffset;
 - (NSArray *)defaultScrubbingSpeeds;
 - (NSArray *)defaultScrubbingSpeedChangePositions;
 
+- (void)constructSlider;
+- (void)fadePopupViewInAndOut:(BOOL)aFadeIn;
+- (void)positionAndUpdatePopupView;
+
 @end
 
 
-@implementation NGSlider
+@implementation NGScrubber
 
 @synthesize scrubbingSpeed = _scrubbingSpeed;
 @synthesize scrubbingSpeeds = _scrubbingSpeeds;
 @synthesize scrubbingSpeedChangePositions = _scrubbingSpeedChangePositions;
 @synthesize beganTrackingLocation = _beganTrackingLocation;
+@synthesize playableValue = _playableValue;
+@synthesize playableValueColor = _playableValueColor;
+@synthesize playableView = _playableView;
 
 ////////////////////////////////////////////////////////////////////////
 #pragma mark - Lifecycle
@@ -31,6 +118,15 @@
         self.scrubbingSpeeds = [self defaultScrubbingSpeeds];
         self.scrubbingSpeedChangePositions = [self defaultScrubbingSpeedChangePositions];
         self.scrubbingSpeed = [[self.scrubbingSpeeds objectAtIndex:0] floatValue];
+        
+        _playableValueColor = [UIColor colorWithWhite:1.f alpha:0.9f];
+        
+        _playableView = [[UIView alloc] initWithFrame:CGRectZero];
+        _playableView.userInteractionEnabled = NO;
+        _playableView.backgroundColor = _playableValueColor;
+        [self addSubview:_playableView];
+        
+        [self constructSlider];
     }
     
     return self;
@@ -51,6 +147,7 @@
         }
         
         self.scrubbingSpeed = [[self.scrubbingSpeeds objectAtIndex:0] floatValue];
+        [self constructSlider];
     }
     
     return self;
@@ -87,6 +184,14 @@
         self.beganTrackingLocation = CGPointMake(thumbRect.origin.x + thumbRect.size.width / 2.0f, 
 												 thumbRect.origin.y + thumbRect.size.height / 2.0f); 
         _realPositionValue = self.value;
+        
+        // Fade in and update the popup view
+        CGPoint touchPoint = [touch locationInView:self];
+        // Check if the knob is touched. Only in this case show the popup-view
+        if(CGRectContainsPoint(CGRectInset(thumbRect, -12.0, -12.0), touchPoint)) {
+            [self positionAndUpdatePopupView];
+            [self fadePopupViewInAndOut:YES]; 
+        }
     }
     
     return beginTracking;
@@ -126,6 +231,8 @@
         if (self.continuous) {
             [self sendActionsForControlEvents:UIControlEventValueChanged];
         }
+        
+        [self positionAndUpdatePopupView];
     }
     
     return self.tracking;
@@ -135,6 +242,34 @@
     if (self.tracking) {
         self.scrubbingSpeed = [[self.scrubbingSpeeds objectAtIndex:0] floatValue];
         [self sendActionsForControlEvents:UIControlEventValueChanged];
+    }
+    
+    [self fadePopupViewInAndOut:NO];
+}
+
+////////////////////////////////////////////////////////////////////////
+#pragma mark - NGScrubber
+////////////////////////////////////////////////////////////////////////
+
+- (void)setPlayableValue:(float)playableValue {
+    if (playableValue != _playableValue) {
+        _playableValue = playableValue;
+        
+        float valueDifference = self.maximumValue - self.minimumValue;
+        float percentage = playableValue / valueDifference;
+        CGRect trackRect = [self trackRectForBounds:self.bounds];
+        
+        trackRect.size.width *= percentage;
+        trackRect = CGRectIntegral(trackRect);
+        
+        self.playableView.frame = trackRect;
+    }
+}
+
+- (void)setPlayableValueColor:(UIColor *)playableValueColor {
+    if (playableValueColor != _playableValueColor) {
+        _playableValueColor = playableValueColor;
+        self.playableView.backgroundColor = playableValueColor;
     }
 }
 
@@ -172,6 +307,30 @@
             [NSNumber numberWithFloat:100.0f],
             [NSNumber numberWithFloat:150.0f],
             nil];
+}
+
+- (void)constructSlider {
+    valuePopupView = [[MNESliderValuePopupView alloc] initWithFrame:CGRectZero];
+    valuePopupView.backgroundColor = [UIColor clearColor];
+    valuePopupView.alpha = 0.0;
+    [self addSubview:valuePopupView];
+}
+
+- (void)fadePopupViewInAndOut:(BOOL)fadeIn {
+    [UIView animateWithDuration:0.4
+                     animations:^{
+                         valuePopupView.alpha = fadeIn ? 1.f : 0.f;
+                     }];
+}
+
+- (void)positionAndUpdatePopupView {
+    CGRect thumbRect = [self thumbRectForBounds:self.bounds 
+                                      trackRect:[self trackRectForBounds:self.bounds]
+                                          value:self.value];
+    CGRect popupRect = CGRectOffset(thumbRect, 0, -floorf(thumbRect.size.height * 1.5));
+    
+    valuePopupView.frame = CGRectInset(popupRect, -20, -10);
+    valuePopupView.time = self.value;
 }
 
 @end

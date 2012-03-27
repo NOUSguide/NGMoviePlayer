@@ -9,10 +9,13 @@
 //  ARCified and cleaned up by Philip Messlehner and Matthias Tretter
 
 
-@interface NGSlider : UISlider
+@interface NGScrubber : UISlider
 
 @property (atomic, assign, readonly) float scrubbingSpeed;
 @property (atomic, strong) NSArray *scrubbingSpeeds;
 @property (atomic, strong) NSArray *scrubbingSpeedChangePositions;
+
+@property (nonatomic, assign) float playableValue;
+@property (nonatomic, strong) UIColor *playableValueColor;
 
 @end
