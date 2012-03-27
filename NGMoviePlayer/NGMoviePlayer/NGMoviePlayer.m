@@ -272,20 +272,21 @@ static char playerAirPlayVideoActiveContext;
 }
 
 - (void)setCurrentTime:(NSTimeInterval)currentTime {
-    if (currentTime >= 0. && currentTime <= self.duration) {
-        CMTime time = CMTimeMakeWithSeconds(currentTime, NSEC_PER_SEC);
-        
-        // completion handler only supported in iOS 5
-        if ([self.player respondsToSelector:@selector(seekToTime:completionHandler:)]) {
-            [self.player seekToTime:time
-                  completionHandler:^(BOOL finished) {
-                      if (finished) {
-                          [self.view updateWithCurrentTime:self.currentTime duration:self.duration];
-                      }
-                  }];
-        } else {
-            [self.player seekToTime:time];
-        }
+    currentTime = MAX(currentTime,0.);
+    currentTime = MIN(currentTime,self.duration);
+    
+    CMTime time = CMTimeMakeWithSeconds(currentTime, NSEC_PER_SEC);
+    
+    // completion handler only supported in iOS 5
+    if ([self.player respondsToSelector:@selector(seekToTime:completionHandler:)]) {
+        [self.player seekToTime:time
+              completionHandler:^(BOOL finished) {
+                  if (finished) {
+                      [self.view updateWithCurrentTime:self.currentTime duration:self.duration];
+                  }
+              }];
+    } else {
+        [self.player seekToTime:time];
     }
 }
 
