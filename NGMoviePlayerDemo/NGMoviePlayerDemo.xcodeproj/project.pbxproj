@@ -65,6 +65,7 @@
 		9B73C789150F4A2F00A4069A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		9BE34D43150F9438001CE6CD /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		9BE34D51150F982D001CE6CD /* NGVolumeControl.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = NGVolumeControl.bundle; path = ../NGVolumeControl/NGVolumeControl/Resources/NGVolumeControl.bundle; sourceTree = "<group>"; };
+		9BFF8CE81521CF810028D3A2 /* HCI.m4v */ = {isa = PBXFileReference; lastKnownFileType = file; path = HCI.m4v; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -156,6 +157,7 @@
 		9B045596150754CD007F8E7C /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				9BFF8CE81521CF810028D3A2 /* HCI.m4v */,
 				9BE34D51150F982D001CE6CD /* NGVolumeControl.bundle */,
 				9B045597150754DD007F8E7C /* NGMoviePlayer.bundle */,
 			);

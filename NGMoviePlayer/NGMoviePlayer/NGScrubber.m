@@ -20,16 +20,16 @@
 @synthesize text = _text;
 
 - (id)initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
-    if (self) {
+    if ((self = [super initWithFrame:frame])) {
         self.font = [UIFont boldSystemFontOfSize:17];
     }
+    
     return self;
 }
 
 - (void)drawRect:(CGRect)rect {
     // Set the fill color
-	[[UIColor colorWithWhite:0.2 alpha:0.8] setFill];
+	[[UIColor colorWithWhite:0.2f alpha:0.8f] setFill];
     
     // Create the path for the rounded rectangle
     CGRect roundedRect = CGRectMake(self.bounds.origin.x, self.bounds.origin.y, self.bounds.size.width, floorf(self.bounds.size.height * 0.8));
@@ -50,7 +50,7 @@
     
     // Draw the text
     if (self.text) {
-        [[UIColor colorWithWhite:1 alpha:0.8] set];
+        [[UIColor colorWithWhite:1.f alpha:0.8f] set];
         CGSize s = [_text sizeWithFont:self.font];
         CGFloat yOffset = (roundedRect.size.height - s.height) / 2;
         CGRect textRect = CGRectMake(roundedRect.origin.x, yOffset, roundedRect.size.width, s.height);
@@ -220,8 +220,7 @@
 		CGFloat thumbAdjustment = 0.0f;
         
         if (((self.beganTrackingLocation.y < currentLocation.y) && (currentLocation.y < previousLocation.y)) ||
-            ((self.beganTrackingLocation.y > currentLocation.y) && (currentLocation.y > previousLocation.y)) )
-        {
+            ((self.beganTrackingLocation.y > currentLocation.y) && (currentLocation.y > previousLocation.y)) ) {
             // We are getting closer to the slider, go closer to the real location
 			thumbAdjustment = (_realPositionValue - self.value) / ( 1 + fabsf(currentLocation.y - self.beganTrackingLocation.y));
         }
@@ -254,16 +253,16 @@
 - (void)setPlayableValue:(float)playableValue {
     if (playableValue != _playableValue) {
         _playableValue = playableValue;
-        
-        float valueDifference = self.maximumValue - self.minimumValue;
-        float percentage = playableValue / valueDifference;
-        CGRect trackRect = [self trackRectForBounds:self.bounds];
-        
-        trackRect.size.width *= percentage;
-        trackRect = CGRectIntegral(trackRect);
-        
-        self.playableView.frame = trackRect;
     }
+    
+    float valueDifference = self.maximumValue - self.minimumValue;
+    float percentage = playableValue / valueDifference;
+    CGRect trackRect = [self trackRectForBounds:self.bounds];
+    
+    trackRect.size.width *= percentage;
+    trackRect = CGRectIntegral(trackRect);
+    
+    self.playableView.frame = trackRect;
 }
 
 - (void)setPlayableValueColor:(UIColor *)playableValueColor {

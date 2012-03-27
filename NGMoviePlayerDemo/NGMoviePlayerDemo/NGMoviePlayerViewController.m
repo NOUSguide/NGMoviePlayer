@@ -32,7 +32,7 @@
     [super viewDidLoad];
     
     self.view.backgroundColor = [UIColor blackColor];
-    self.moviePlayer = [[NGMoviePlayer alloc] initWithURL:[NSURL URLWithString:@"http://office.nousguide.com/streaming/q3.m3u8"]];
+    self.moviePlayer = [[NGMoviePlayer alloc] initWithURL:[NSURL URLWithString:@"http://movies.apple.com/media/us/iphone/2009/ads/apple-iphone3gs-ad-multi_people-us-20091123_640x360.mov"]];
     self.containerView = [[UIView alloc] initWithFrame:self.view.bounds];
     self.containerView.backgroundColor = [UIColor underPageBackgroundColor];
     self.containerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;

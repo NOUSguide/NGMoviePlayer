@@ -40,6 +40,7 @@ static char playerAirPlayVideoActiveContext;
 
 @property (nonatomic, assign) NSTimeInterval timeToSkip;
 @property (nonatomic, ng_weak) NSTimer *skippingTimer;
+@property (nonatomic, ng_weak) NSTimer *playableDurationTimer;
 
 - (void)startObservingPlayerTimeChanges;
 - (void)stopObservingPlayerTimeChanges;
@@ -48,6 +49,7 @@ static char playerAirPlayVideoActiveContext;
 - (void)endScrubbing;
 
 - (void)skipTimerFired:(NSTimer *)timer;
+- (void)updatePlayableDurationTimerFired:(NSTimer *)timer;
 
 - (void)togglePlaybackState;
 
@@ -73,6 +75,7 @@ static char playerAirPlayVideoActiveContext;
 @synthesize playerTimeObserver = _playerTimeObserver;
 @synthesize timeToSkip = _timeToSkip;
 @synthesize skippingTimer = _skippingTimer;
+@synthesize playableDurationTimer = _playableDurationTimer;
 
 ////////////////////////////////////////////////////////////////////////
 #pragma mark - Class Methods
@@ -121,6 +124,7 @@ static char playerAirPlayVideoActiveContext;
     AVPlayer *player = _view.playerLayer.player;
     
     [_skippingTimer invalidate];
+    [_playableDurationTimer invalidate];
     _delegate = nil;
     _view.controlsView.delegate = nil;
     
@@ -150,9 +154,16 @@ static char playerAirPlayVideoActiveContext;
         
         [self.view hidePlaceholderViewAnimated:YES];
         [self.player play];
+        [self.view setControlsVisible:YES animated:YES];
     } else {
         _autostartWhenReady = YES;
     }
+    
+    self.playableDurationTimer = [NSTimer scheduledTimerWithTimeInterval:1.
+                                                                  target:self
+                                                                selector:@selector(updatePlayableDurationTimerFired:)
+                                                                userInfo:nil
+                                                                 repeats:YES];
 }
 
 - (void)pause {
@@ -288,11 +299,16 @@ static char playerAirPlayVideoActiveContext;
 
 - (NSTimeInterval)playableDuration {
     NSArray *loadedTimeRanges = [self.player.currentItem loadedTimeRanges];
-    CMTimeRange timeRange = [[loadedTimeRanges objectAtIndex:0] CMTimeRangeValue];
-    Float64 startSeconds = CMTimeGetSeconds(timeRange.start);
-    Float64 durationSeconds = CMTimeGetSeconds(timeRange.duration);
     
-    return (NSTimeInterval)(startSeconds + durationSeconds);
+    if (loadedTimeRanges.count > 0) {
+        CMTimeRange timeRange = [[loadedTimeRanges objectAtIndex:0] CMTimeRangeValue];
+        Float64 startSeconds = CMTimeGetSeconds(timeRange.start);
+        Float64 durationSeconds = CMTimeGetSeconds(timeRange.duration);
+        
+        return (NSTimeInterval)(startSeconds + durationSeconds);
+    } else {
+        return 0.;
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -501,6 +517,7 @@ static char playerAirPlayVideoActiveContext;
                 
                 float value = slider.value;
                 [self setCurrentTime:value];
+                _seekToZeroBeforePlay = NO;
             }
             
             break;
@@ -510,6 +527,7 @@ static char playerAirPlayVideoActiveContext;
         case NGMoviePlayerControlActionEndSkipping: {
             [self endScrubbing];
             [self.view restartFadeOutControlsViewTimer];
+            _seekToZeroBeforePlay = NO;
             break;
         }
             
@@ -632,8 +650,8 @@ static char playerAirPlayVideoActiveContext;
                                                                            
                                                                            if (strongSelf != nil) {
                                                                                if (CMTIME_IS_VALID(strongSelf.player.currentTime) && CMTIME_IS_VALID(strongSelf.CMDuration)) {
-                                                                                   [strongSelf.view updateWithCurrentTime:strongSelf.currentTime duration:strongSelf.duration];
-                                                                                   strongSelf.view.controlsView.scrubber.playableValue = strongSelf.playableDuration;
+                                                                                   [strongSelf.view updateWithCurrentTime:strongSelf.currentTime 
+                                                                                                                 duration:strongSelf.duration];
                                                                                }
                                                                            }
                                                                        }];
@@ -655,6 +673,10 @@ static char playerAirPlayVideoActiveContext;
     } else if (action == NGMoviePlayerControlActionBeginSkippingForwards) {
         self.currentTime += self.timeToSkip++;
     }
+}
+
+- (void)updatePlayableDurationTimerFired:(NSTimer *)timer {
+    self.view.controlsView.playableDuration = self.playableDuration;
 }
 
 @end

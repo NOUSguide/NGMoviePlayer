@@ -210,7 +210,15 @@
     }
 }
 
-- (void)updateScrubberWithCurrentTime:(NSInteger)currentTime duration:(NSInteger)duration {
+- (void)setPlayableDuration:(NSTimeInterval)playableDuration {
+    self.scrubber.playableValue = playableDuration;
+}
+
+- (NSTimeInterval)playableDuration {
+    return self.scrubber.playableValue;
+}
+
+- (void)updateScrubberWithCurrentTime:(NSTimeInterval)currentTime duration:(NSTimeInterval)duration {
     self.currentTimeLabel.text = NGMoviePlayerGetTimeFormatted(currentTime);
     self.remainingTimeLabel.text = NGMoviePlayerGetRemainingTimeFormatted(currentTime, duration);
     
@@ -245,10 +253,7 @@
                        forState:UIControlStateNormal];
     } else {
         height = 10.f;
-        /*[scrubber setMinimumTrackImage:[[UIImage imageNamed:@"NGMoviePlayer.bundle/scrubberFilled"] stretchableImageWithLeftCapWidth:4.f topCapHeight:0.f] 
-                              forState:UIControlStateNormal];
-        [scrubber setMaximumTrackImage:[[UIImage imageNamed:@"NGMoviePlayer.bundle/scrubberUnfilled"] stretchableImageWithLeftCapWidth:4.f topCapHeight:0.f] 
-                              forState:UIControlStateNormal];*/
+
         [scrubber setThumbImage:[UIImage imageNamed:@"NGMoviePlayer.bundle/scrubberKnob"] 
                        forState:UIControlStateNormal];
     }
@@ -256,7 +261,7 @@
     //Build a rect of appropriate size at origin 0,0
     CGRect fillRect = CGRectMake(0.f,0.f,1.f,height);
     
-    //Create a context of the appropriate size
+    // create minimum track image
     UIGraphicsBeginImageContext(CGSizeMake(1.f, height));
     CGContextRef currentContext = UIGraphicsGetCurrentContext();
     //Set the fill color
@@ -268,7 +273,7 @@
     UIGraphicsEndImageContext();
     [scrubber setMinimumTrackImage:image forState:UIControlStateNormal];
     
-    //Create a context of the appropriate size
+    // create maximum track image
     UIGraphicsBeginImageContext(CGSizeMake(1.f, height));
     currentContext = UIGraphicsGetCurrentContext();
     //Set the fill color
@@ -279,6 +284,9 @@
     image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     [scrubber setMaximumTrackImage:image forState:UIControlStateNormal];
+    
+    // force re-draw of playable value of scrubber
+    scrubber.playableValue = scrubber.playableValue;
 }
 
 - (void)handlePlayPauseButtonPress:(id)sender {

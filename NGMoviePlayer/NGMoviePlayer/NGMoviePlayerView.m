@@ -9,9 +9,10 @@
 #define kNGControlVisibilityDuration        4.
 
 
+static char playerLayerReadyForDisplayContext;
+
 @interface NGMoviePlayerView () <UIGestureRecognizerDelegate> {
     BOOL _statusBarVisible;
-    BOOL _readyForDisplayTriggered;
     BOOL _shouldHideControls;
 }
 
@@ -67,7 +68,25 @@
 }
 
 - (void)dealloc {
+    AVPlayerLayer *playerLayer = (AVPlayerLayer *)[_playerLayerView layer];
+    
+    [playerLayer removeObserver:self forKeyPath:@"readyForDisplay"];
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(fadeOutControls) object:nil];
+}
+
+////////////////////////////////////////////////////////////////////////
+#pragma mark - NSObject KVO
+////////////////////////////////////////////////////////////////////////
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if (context == &playerLayerReadyForDisplayContext) {
+        [UIView animateWithDuration:kNGFadeDuration
+                         animations:^{
+                             self.playerLayerView.alpha = 1.f;
+                         }];
+    } else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -167,7 +186,7 @@
 ////////////////////////////////////////////////////////////////////////
 
 - (void)updateWithCurrentTime:(NSTimeInterval)currentTime duration:(NSTimeInterval)duration {
-    [self.controlsView updateScrubberWithCurrentTime:(NSInteger)ceilf(currentTime) duration:(NSInteger)ceilf(duration)];
+    [self.controlsView updateScrubberWithCurrentTime:currentTime duration:duration];
 }
 
 - (void)updateWithPlaybackStatus:(BOOL)isPlaying {
@@ -216,12 +235,17 @@
     self.controlStyle = NGMoviePlayerControlStyleInline;
     _controlsVisible = NO;
     _statusBarVisible = ![UIApplication sharedApplication].statusBarHidden;
-    _readyForDisplayTriggered = NO;
     
     // Player Layer
     _playerLayerView = [[NGMoviePlayerLayerView alloc] initWithFrame:self.bounds];
     _playerLayerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    _playerLayerView.alpha = 0.f;
     [self addSubview:_playerLayerView];
+    
+    [self.playerLayer addObserver:self
+                       forKeyPath:@"readyForDisplay"
+                          options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
+                          context:&playerLayerReadyForDisplayContext];
     
     // Controls
     _controlsView = [[NGMoviePlayerControlView alloc] initWithFrame:self.bounds];

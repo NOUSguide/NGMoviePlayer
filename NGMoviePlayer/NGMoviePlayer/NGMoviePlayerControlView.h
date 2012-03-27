@@ -25,6 +25,7 @@
 
 /** the slider indicating the current playback time */
 @property (nonatomic, strong, readonly) NGScrubber *scrubber;
+@property (nonatomic, assign) NSTimeInterval playableDuration;
 /** the super-fancy volume control */
 @property (nonatomic, strong) NGVolumeControl *volumeControl;
 
@@ -32,7 +33,7 @@
 @property (nonatomic, strong) UIColor *scrubberFillColor;
 
 
-- (void)updateScrubberWithCurrentTime:(NSInteger)currentTime duration:(NSInteger)duration;
+- (void)updateScrubberWithCurrentTime:(NSTimeInterval)currentTime duration:(NSTimeInterval)duration;
 - (void)updateButtonsWithPlaybackStatus:(BOOL)isPlaying;
 
 @end
