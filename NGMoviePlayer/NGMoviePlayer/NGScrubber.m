@@ -21,7 +21,7 @@
 
 - (id)initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
-        self.font = [UIFont boldSystemFontOfSize:17];
+        self.font = [UIFont boldSystemFontOfSize:15];
     }
     
     return self;
@@ -119,7 +119,7 @@
         self.scrubbingSpeedChangePositions = [self defaultScrubbingSpeedChangePositions];
         self.scrubbingSpeed = [[self.scrubbingSpeeds objectAtIndex:0] floatValue];
         
-        _playableValueColor = [UIColor colorWithWhite:1.f alpha:0.9f];
+        _playableValueColor = [UIColor colorWithWhite:0.9f alpha:0.7f];
         
         _playableView = [[UIView alloc] initWithFrame:CGRectZero];
         _playableView.userInteractionEnabled = NO;
@@ -326,9 +326,9 @@
     CGRect thumbRect = [self thumbRectForBounds:self.bounds 
                                       trackRect:[self trackRectForBounds:self.bounds]
                                           value:self.value];
-    CGRect popupRect = CGRectOffset(thumbRect, 0, -floorf(thumbRect.size.height * 1.5));
+    CGRect popupRect = CGRectOffset(thumbRect, 0.f, -floorf(thumbRect.size.height * 1.5f));
     
-    valuePopupView.frame = CGRectInset(popupRect, -20, -10);
+    valuePopupView.frame = CGRectInset(popupRect, -25.f, -10.f);
     valuePopupView.time = self.value;
 }
 

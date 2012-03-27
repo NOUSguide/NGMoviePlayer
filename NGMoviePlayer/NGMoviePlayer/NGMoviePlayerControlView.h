@@ -36,4 +36,7 @@
 - (void)updateScrubberWithCurrentTime:(NSTimeInterval)currentTime duration:(NSTimeInterval)duration;
 - (void)updateButtonsWithPlaybackStatus:(BOOL)isPlaying;
 
+- (void)addTopControlsViewControl:(UIView *)control;
+- (void)addBottomControlsViewControl:(UIView *)control;
+
 @end

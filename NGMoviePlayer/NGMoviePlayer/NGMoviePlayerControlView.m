@@ -132,6 +132,8 @@
         _currentTimeLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         _currentTimeLabel.backgroundColor = [UIColor clearColor];
         _currentTimeLabel.textColor = [UIColor whiteColor];
+        _currentTimeLabel.shadowColor = [UIColor blackColor];
+        _currentTimeLabel.shadowOffset = CGSizeMake(0.f, 1.f);
         _currentTimeLabel.font = [UIFont boldSystemFontOfSize:13.];
         _currentTimeLabel.textAlignment = UITextAlignmentRight;
         _currentTimeLabel.autoresizingMask = UIViewAutoresizingFlexibleRightMargin;
@@ -140,6 +142,8 @@
         _remainingTimeLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         _remainingTimeLabel.backgroundColor = [UIColor clearColor];
         _remainingTimeLabel.textColor = [UIColor whiteColor];
+        _remainingTimeLabel.shadowColor = [UIColor blackColor];
+        _remainingTimeLabel.shadowOffset = CGSizeMake(0.f, 1.f);
         _remainingTimeLabel.font = [UIFont boldSystemFontOfSize:13.];
         _remainingTimeLabel.textAlignment = UITextAlignmentLeft;
         _remainingTimeLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
@@ -160,7 +164,7 @@
     
     CGFloat controlsViewHeight = [self controlsViewHeightForControlStyle:self.controlStyle];
     
-    _topControlsView.frame = CGRectMake(0.f, 0.f, self.bounds.size.width, controlsViewHeight);
+    _topControlsView.frame = CGRectMake(0.f, 0.f, self.bounds.size.width, [self controlsViewHeightForControlStyle:NGMoviePlayerControlStyleInline]);
     _bottomControlsView.frame = CGRectMake(0.f, self.bounds.size.height-controlsViewHeight, self.bounds.size.width, controlsViewHeight);
     
     if (self.controlStyle == NGMoviePlayerControlStyleFullscreen) {
@@ -176,7 +180,8 @@
         self.playPauseButton.frame = CGRectMake(50.f, 10.f, 20.f, 20.f);
         self.scrubber.frame = CGRectMake(0.f, 40.f, self.bottomControlsView.bounds.size.width, 20.f);
         self.volumeControl.frame = CGRectMake(self.bounds.size.width-40.f, self.bottomControlsView.frame.origin.y, 40.f,40.f);
-        self.zoomButton.frame = CGRectMake(self.topControlsView.bounds.size.width - controlsViewHeight, 0.f, controlsViewHeight, controlsViewHeight);
+        self.zoomButton.frame = CGRectMake(self.topControlsView.bounds.size.width - _topControlsView.bounds.size.height, 0.f,
+                                           _topControlsView.bounds.size.height, _topControlsView.bounds.size.height);
         [self.zoomButton setImage:[UIImage imageNamed:@"NGMoviePlayer.bundle/zoomIn"] forState:UIControlStateNormal];
     } else {
         self.rewindButton.hidden = YES;
@@ -231,6 +236,14 @@
     UIImage *image = isPlaying ? [UIImage imageNamed:@"NGMoviePlayer.bundle/pause"] : [UIImage imageNamed:@"NGMoviePlayer.bundle/play"];
     
     [self.playPauseButton setImage:image forState:UIControlStateNormal];
+}
+
+- (void)addTopControlsViewControl:(UIView *)control {
+    // TODO: Add to topControlsView and automatically position
+}
+
+- (void)addBottomControlsViewControl:(UIView *)control {
+    // TODO: Add to bottomControlsView and automatically position
 }
 
 ////////////////////////////////////////////////////////////////////////
