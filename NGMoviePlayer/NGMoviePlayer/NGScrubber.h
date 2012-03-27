@@ -6,6 +6,7 @@
 //  Copyright (c) 2012 NOUS Wissensmanagement GmbH. All rights reserved.
 //
 //  This class is based on Ole Begemann's fantastic OBSlider: github.com/ole/OBSlider
+//  Popup with current value based on: http://blog.neuwert-media.com/2011/04/customized-uislider-with-visual-value-tracking/
 //  ARCified and cleaned up by Philip Messlehner and Matthias Tretter
 
 

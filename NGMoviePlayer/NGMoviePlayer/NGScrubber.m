@@ -5,7 +5,7 @@
 #pragma mark - Private UIView rendering the popup showing slider value
 ////////////////////////////////////////////////////////////////////////
 
-@interface MNESliderValuePopupView : UIView  
+@interface NGSliderValuePopupView : UIView  
 
 @property (nonatomic) NSTimeInterval time;
 @property (nonatomic, retain) UIFont *font;
@@ -13,7 +13,7 @@
 
 @end
 
-@implementation MNESliderValuePopupView
+@implementation NGSliderValuePopupView
 
 @synthesize time = _time;
 @synthesize font = _font;
@@ -81,7 +81,7 @@
 @interface NGScrubber () {
     CGPoint _beganTrackingLocation;
     float _realPositionValue;
-    MNESliderValuePopupView *valuePopupView; 
+    NGSliderValuePopupView *valuePopupView; 
 }
 
 @property (atomic, assign, readwrite) float scrubbingSpeed;
@@ -119,7 +119,7 @@
         self.scrubbingSpeedChangePositions = [self defaultScrubbingSpeedChangePositions];
         self.scrubbingSpeed = [[self.scrubbingSpeeds objectAtIndex:0] floatValue];
         
-        _playableValueColor = [UIColor colorWithWhite:0.9f alpha:0.7f];
+        _playableValueColor = [UIColor colorWithWhite:1.f alpha:0.7f];
         
         _playableView = [[UIView alloc] initWithFrame:CGRectZero];
         _playableView.userInteractionEnabled = NO;
@@ -309,7 +309,7 @@
 }
 
 - (void)constructSlider {
-    valuePopupView = [[MNESliderValuePopupView alloc] initWithFrame:CGRectZero];
+    valuePopupView = [[NGSliderValuePopupView alloc] initWithFrame:CGRectZero];
     valuePopupView.backgroundColor = [UIColor clearColor];
     valuePopupView.alpha = 0.0;
     [self addSubview:valuePopupView];
