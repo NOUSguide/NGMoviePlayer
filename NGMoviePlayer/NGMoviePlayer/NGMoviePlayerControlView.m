@@ -65,7 +65,7 @@
     if ((self = [super initWithFrame:frame])) {
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         
-        _scrubberFillColor = [UIColor lightGrayColor];
+        _scrubberFillColor = [UIColor grayColor];
         
         _topControlsView = [[UIView alloc] initWithFrame:CGRectZero];
         _topControlsView.backgroundColor = [UIColor colorWithWhite:0.f alpha:0.4f];

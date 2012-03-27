@@ -186,7 +186,9 @@ static char playerLayerReadyForDisplayContext;
 ////////////////////////////////////////////////////////////////////////
 
 - (void)updateWithCurrentTime:(NSTimeInterval)currentTime duration:(NSTimeInterval)duration {
-    [self.controlsView updateScrubberWithCurrentTime:currentTime duration:duration];
+    if (!isnan(currentTime) && !isnan(duration)) {
+        [self.controlsView updateScrubberWithCurrentTime:currentTime duration:duration];
+    }
 }
 
 - (void)updateWithPlaybackStatus:(BOOL)isPlaying {
