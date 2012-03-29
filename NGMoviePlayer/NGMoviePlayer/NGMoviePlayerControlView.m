@@ -12,6 +12,8 @@
 #import "NGVolumeControl.h"
 #import "NGMoviePlayerFunctions.h"
 
+#define kControlAlphaValue 0.6f
+
 @interface NGMoviePlayerControlView ()
 
 @property (nonatomic, strong) UIButton *playPauseButton;
@@ -68,11 +70,11 @@
         _scrubberFillColor = [UIColor grayColor];
         
         _topControlsView = [[UIView alloc] initWithFrame:CGRectZero];
-        _topControlsView.backgroundColor = [UIColor colorWithWhite:0.f alpha:0.4f];
+        _topControlsView.backgroundColor = [UIColor colorWithWhite:0.f alpha:kControlAlphaValue];
         [self addSubview:_topControlsView];
         
         _bottomControlsView = [[UIView alloc] initWithFrame:CGRectZero];
-        _bottomControlsView.backgroundColor = [UIColor colorWithWhite:0.f alpha:0.4f];
+        _bottomControlsView.backgroundColor = [UIColor colorWithWhite:0.f alpha:kControlAlphaValue];
         [self addSubview:_bottomControlsView];
         
         // We use the MPVolumeView just for displaying the AirPlay icon
@@ -167,7 +169,7 @@
     
     CGFloat controlsViewHeight = [self controlsViewHeightForControlStyle:self.controlStyle];
     
-    _topControlsView.frame = CGRectMake(0.f, 0.f, self.bounds.size.width, [self controlsViewHeightForControlStyle:NGMoviePlayerControlStyleInline]);
+    _topControlsView.frame = CGRectMake(0.f, 20.f, self.bounds.size.width, [self controlsViewHeightForControlStyle:NGMoviePlayerControlStyleInline]);
     _bottomControlsView.frame = CGRectMake(0.f, self.bounds.size.height-controlsViewHeight, self.bounds.size.width, controlsViewHeight);
     
     if (self.controlStyle == NGMoviePlayerControlStyleFullscreen) {
