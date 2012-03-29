@@ -81,10 +81,19 @@ static char playerLayerReadyForDisplayContext;
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if (context == &playerLayerReadyForDisplayContext) {
-        [UIView animateWithDuration:kNGFadeDuration
-                         animations:^{
-                             self.playerLayerView.alpha = 1.f;
-                         }];
+        BOOL readyForDisplay = [[change valueForKey:NSKeyValueChangeNewKey] boolValue];
+        
+        if (self.playerLayerView.layer.opacity == 0.f && readyForDisplay) {
+            CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"opacity"];
+            
+            animation.duration = kNGFadeDuration;
+            animation.fromValue = [NSNumber numberWithFloat:0.];
+            animation.toValue = [NSNumber numberWithFloat:1.];
+            animation.removedOnCompletion = NO;
+            
+            self.playerLayerView.layer.opacity = 1.f;
+            [self.playerLayerView.layer addAnimation:animation forKey:nil];
+        }
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }

@@ -159,6 +159,7 @@ static char playerAirPlayVideoActiveContext;
         _autostartWhenReady = YES;
     }
     
+    [self.playableDurationTimer invalidate];
     self.playableDurationTimer = [NSTimer scheduledTimerWithTimeInterval:1.
                                                                   target:self
                                                                 selector:@selector(updatePlayableDurationTimerFired:)
