@@ -19,8 +19,10 @@
 - (void)player:(NGMoviePlayer *)player didChangePlaybackRate:(float)rate;
 - (void)player:(NGMoviePlayer *)player didChangeAirPlayActive:(BOOL)airPlayVideoActive;
 - (void)player:(NGMoviePlayer *)player didChangeControlStyle:(NGMoviePlayerControlStyle)controlStyle;
-
-- (void)playbackDidFinishWithPlayer:(NGMoviePlayer *)player;
 - (void)player:(NGMoviePlayer *)player didFailToLoadURL:(NSURL *)URL;
+
+- (void)playbackDidStartWithPlayer:(NGMoviePlayer *)player;
+- (void)playbackDidPauseWithPlayer:(NGMoviePlayer *)player;
+- (void)playbackDidFinishWithPlayer:(NGMoviePlayer *)player;
 
 @end

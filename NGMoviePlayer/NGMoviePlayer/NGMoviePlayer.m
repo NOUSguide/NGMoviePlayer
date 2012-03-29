@@ -24,6 +24,8 @@ static char playerAirPlayVideoActiveContext;
 		unsigned int didChangeAirPlay:1;
 		unsigned int didFinishPlayback:1;
         unsigned int didFailToLoadURL:1;
+        unsigned int didStartToPlay:1;
+        unsigned int didPausePlayback:1;
         unsigned int didChangeControlStyle:1;
 	} _delegateFlags;
     
@@ -157,6 +159,10 @@ static char playerAirPlayVideoActiveContext;
         [self.view hidePlaceholderViewAnimated:YES];
         [self.player play];
         [self.view setControlsVisible:YES animated:YES];
+        
+        if (_delegateFlags.didStartToPlay) {
+            [self.delegate playbackDidStartWithPlayer:self];
+        }
     } else {
         _autostartWhenReady = YES;
     }
@@ -171,6 +177,10 @@ static char playerAirPlayVideoActiveContext;
 
 - (void)pause {
     [self.player pause];
+    
+    if (_delegateFlags.didPausePlayback) {
+        [self.delegate playbackDidPauseWithPlayer:self];
+    }
 }
 
 - (void)togglePlaybackState {
@@ -257,6 +267,8 @@ static char playerAirPlayVideoActiveContext;
         _delegateFlags.didFinishPlayback = [delegate respondsToSelector:@selector(playbackDidFinishWithPlayer:)];
         _delegateFlags.didFailToLoadURL = [delegate respondsToSelector:@selector(player:didFailToLoadURL:)];
         _delegateFlags.didChangeControlStyle = [delegate respondsToSelector:@selector(player:didChangeControlStyle:)];
+        _delegateFlags.didStartToPlay = [delegate respondsToSelector:@selector(playbackDidStartWithPlayer:)];
+        _delegateFlags.didPausePlayback = [delegate respondsToSelector:@selector(playbackDidPauseWithPlayer:)];
     }
 }
 
