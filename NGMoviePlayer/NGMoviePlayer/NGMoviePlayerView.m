@@ -8,6 +8,11 @@
 #define kNGFadeDuration                     0.4
 #define kNGControlVisibilityDuration        4.
 
+typedef enum {
+    NGMoviePlayerScreenStateDevice,
+    NGMoviePlayerScreenStateExternal
+} NGMoviePlayerScreenState;
+
 
 static char playerLayerReadyForDisplayContext;
 
@@ -21,9 +26,12 @@ static char playerLayerReadyForDisplayContext;
 @property (nonatomic, strong) UIButton *playButton;
 @property (nonatomic, strong) NGMoviePlayerLayerView *playerLayerView;
 @property (nonatomic, strong) UIWindow *externalWindow;
+@property (nonatomic, readonly) NGMoviePlayerScreenState screenState;
+@property (nonatomic, strong) UIView *externalScreenPlaceholder;
 
 - (void)setup;
 - (void)fadeOutControls;
+- (void)setupExternalWindowForScreen:(UIScreen *)screen;
 
 - (void)handleSingleTap:(UITapGestureRecognizer *)tap;
 - (void)handleDoubleTap:(UITapGestureRecognizer *)tap;
@@ -43,6 +51,7 @@ static char playerLayerReadyForDisplayContext;
 @synthesize playerLayerView = _playerLayerView;
 @synthesize placeholderView = _placeholderView;
 @synthesize externalWindow = _externalWindow;
+@synthesize externalScreenPlaceholder = _externalScreenPlaceholder;
 
 ////////////////////////////////////////////////////////////////////////
 #pragma mark - Lifecycle
@@ -193,6 +202,49 @@ static char playerLayerReadyForDisplayContext;
     return (AVPlayerLayer *)[self.playerLayerView layer];
 }
 
+- (NGMoviePlayerScreenState)screenState {
+    return self.externalWindow != nil ? NGMoviePlayerScreenStateExternal : NGMoviePlayerScreenStateDevice;
+}
+
+- (UIView *)externalScreenPlaceholder {
+    if(_externalScreenPlaceholder == nil) {
+        BOOL isIPad = [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad;
+        
+        _externalScreenPlaceholder = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"NGMoviePlayer.bundle/playerBackground"]];
+        _externalScreenPlaceholder.frame = self.bounds;
+        _externalScreenPlaceholder.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+        
+        UIView *airplayPlaceholderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, (isIPad ? 280 : 140))];
+        
+        UIImageView *airPlayImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:(isIPad ? @"NGMoviePlayer.bundle/wildcatNoContentVideos@2x" : @"NGMoviePlayer.bundle/wildcatNoContentVideos")]];
+        airPlayImageView.frame = CGRectMake((320-airPlayImageView.image.size.width)/2, 0, airPlayImageView.image.size.width, airPlayImageView.image.size.height);
+        [airplayPlaceholderView addSubview:airPlayImageView];
+        
+        UILabel *airPlayVideoLabel = [[UILabel alloc] initWithFrame:CGRectMake(29, airPlayImageView.frame.size.height + (isIPad ? 15 : 5), 262, 30)];
+        airPlayVideoLabel.font = [UIFont systemFontOfSize:(isIPad ? 26.0f : 20.0f)];
+        airPlayVideoLabel.textAlignment = UITextAlignmentCenter;
+        airPlayVideoLabel.backgroundColor = [UIColor clearColor];
+        airPlayVideoLabel.textColor = [UIColor darkGrayColor];
+        airPlayVideoLabel.text = @"VGA";
+        [airplayPlaceholderView addSubview:airPlayVideoLabel];
+        
+        UILabel *airPlayVideoDescriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, airPlayVideoLabel.frame.origin.y + (isIPad ? 35 : 20), 320, 30)];
+        airPlayVideoDescriptionLabel.font = [UIFont systemFontOfSize:(isIPad ? 14.0f : 10.0f)];
+        airPlayVideoDescriptionLabel.textAlignment = UITextAlignmentCenter;
+        airPlayVideoDescriptionLabel.backgroundColor = [UIColor clearColor];
+        airPlayVideoDescriptionLabel.textColor = [UIColor lightGrayColor];
+        airPlayVideoDescriptionLabel.text = @"Dieses Video wird über VGA wiedergegeben.";
+        [airplayPlaceholderView addSubview:airPlayVideoDescriptionLabel];
+        
+        airplayPlaceholderView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+        airplayPlaceholderView.center = _externalScreenPlaceholder.center;
+        
+        [_externalScreenPlaceholder addSubview:airplayPlaceholderView];
+    }
+    
+    return _externalScreenPlaceholder;
+}
+
 ////////////////////////////////////////////////////////////////////////
 #pragma mark - NGMoviePlayerView UI Update
 ////////////////////////////////////////////////////////////////////////
@@ -220,6 +272,62 @@ static char playerLayerReadyForDisplayContext;
 - (void)restartFadeOutControlsViewTimer {
     [self stopFadeOutControlsViewTimer];
     [self performSelector:@selector(fadeOutControls) withObject:nil afterDelay:kNGControlVisibilityDuration];
+}
+
+////////////////////////////////////////////////////////////////////////
+#pragma mark - External Screen (VGA)
+////////////////////////////////////////////////////////////////////////
+
+- (void)setupExternalWindowForScreen:(UIScreen *)screen {
+    if (screen != nil) {
+        self.externalWindow = [[UIWindow alloc] initWithFrame:screen.applicationFrame];
+        self.externalWindow.hidden = NO;
+        self.externalWindow.clipsToBounds = YES;
+        
+        if (screen.availableModes.count > 0) {
+            UIScreenMode *desiredMode = [screen.availableModes objectAtIndex:screen.availableModes.count-1];
+            screen.currentMode = desiredMode;
+        }
+        
+        self.externalWindow.screen = screen;
+        [self.externalWindow makeKeyAndVisible];
+    } else {
+        [self.externalWindow removeFromSuperview];
+        [self.externalWindow resignKeyWindow];
+        self.externalWindow.hidden = YES;
+        self.externalWindow = nil;
+    }
+}
+
+- (void)positionViewsForState:(NGMoviePlayerScreenState)screenState {
+    switch (screenState) {
+        case NGMoviePlayerScreenStateExternal: {
+            self.playerLayerView.frame = self.externalWindow.bounds;
+            [self.externalWindow addSubview:self.playerLayerView];
+            [self insertSubview:self.externalScreenPlaceholder belowSubview:self.placeholderView];
+            break;
+        }
+            
+        default:
+        case NGMoviePlayerScreenStateDevice: {
+            self.playerLayerView.frame = self.bounds;
+            [self insertSubview:self.playerLayerView belowSubview:self.placeholderView];
+            self.externalScreenPlaceholder = nil;
+            break;
+        }
+    }
+}
+
+- (void)externalScreenDidConnect:(NSNotification *)notification {
+    UIScreen *screen = [notification object];
+    
+    [self setupExternalWindowForScreen:screen];
+    [self positionViewsForState:self.screenState];
+}
+
+- (void)externalScreenDidDisconnect:(NSNotification *)notification {
+    [self setupExternalWindowForScreen:nil];
+    [self positionViewsForState:self.screenState];
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -255,7 +363,6 @@ static char playerLayerReadyForDisplayContext;
     _playerLayerView = [[NGMoviePlayerLayerView alloc] initWithFrame:self.bounds];
     _playerLayerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _playerLayerView.alpha = 0.f;
-    [self addSubview:_playerLayerView];
     
     [self.playerLayer addObserver:self
                        forKeyPath:@"readyForDisplay"
@@ -268,7 +375,7 @@ static char playerLayerReadyForDisplayContext;
     [self addSubview:_controlsView];
     
     // Placeholder
-    _placeholderView = [[UIView alloc] initWithFrame:self.bounds];//[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"NGMoviePlayer.bundle/playerBackground"]];
+    _placeholderView = [[UIView alloc] initWithFrame:self.bounds];
     _placeholderView.frame = self.bounds;
     _placeholderView.userInteractionEnabled = YES;
     _placeholderView.contentMode = UIViewContentModeScaleAspectFill;
@@ -305,17 +412,33 @@ static char playerLayerReadyForDisplayContext;
     [singleTapGestureRecognizer requireGestureRecognizerToFail:doubleTapGestureRecognizer];
     singleTapGestureRecognizer.delegate = self;
     [self.controlsView addGestureRecognizer:singleTapGestureRecognizer];
+    
+    // Check for external screen
+    if ([UIScreen screens].count > 1) {
+        for (UIScreen *screen in [UIScreen screens]) {
+            if (screen != [UIScreen mainScreen]) {
+                [self setupExternalWindowForScreen:screen];
+                break;
+            }
+        }
+        
+        NSAssert(self.externalWindow != nil, @"External screen counldn't be determined, no window was created");
+    }
+    
+    [self positionViewsForState:self.screenState];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(externalScreenDidConnect:) name:UIScreenDidConnectNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(externalScreenDidDisconnect:) name:UIScreenDidDisconnectNotification object:nil];
 }
 
 - (void)fadeOutControls {
-    if (_shouldHideControls) {
+    if (_shouldHideControls && self.screenState == NGMoviePlayerScreenStateDevice) {
         [self setControlsVisible:NO animated:YES];
     }
 }
 
 - (void)handleSingleTap:(UITapGestureRecognizer *)tap {
     if ((tap.state & UIGestureRecognizerStateRecognized) == UIGestureRecognizerStateRecognized) {
-        if (self.placeholderView.alpha == 0.f) {
+        if (self.placeholderView.alpha == 0.f && self.screenState == NGMoviePlayerScreenStateDevice) {
             // Toggle control visibility on single tap
             [self setControlsVisible:!self.controlsVisible animated:YES];
         }
