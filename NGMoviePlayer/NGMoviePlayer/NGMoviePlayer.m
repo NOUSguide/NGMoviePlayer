@@ -81,19 +81,21 @@ static char playerAirPlayVideoActiveContext;
 #pragma mark - Class Methods
 ////////////////////////////////////////////////////////////////////////
 
-+ (void)ignoreSystemMuteSwitch {
-    AudioSessionInitialize (NULL, NULL, NULL, NULL);
-    AudioSessionSetActive(true);
++ (void)setAudioSessionCategory:(NGMoviePlayerAudioSessionCategory)audioSessionCategory {
+    NSError *error = nil;
+    [[AVAudioSession sharedInstance] setCategory:NGAVAudioSessionCategoryFromNGMoviePlayerAudioSessionCategory(audioSessionCategory)
+                                           error:&error];
     
-    UInt32 sessionCategory = kAudioSessionCategory_MediaPlayback;
-    AudioSessionSetProperty(kAudioSessionProperty_AudioCategory, sizeof(sessionCategory),&sessionCategory);
+    if (error != nil) {
+        NSLog(@"There was an error setting the AudioCategory to AVAudioSessionCategoryPlayback");
+    }
 }
 
 + (void)initialize {
     if (self == [NGMoviePlayer class]) {
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            [self ignoreSystemMuteSwitch];
+            [self setAudioSessionCategory:NGMoviePlayerAudioSessionCategoryPlayback];
         });
     }
 }

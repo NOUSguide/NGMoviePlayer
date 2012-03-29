@@ -19,7 +19,6 @@ NS_INLINE NSString* NGAVLayerVideoGravityFromNGMoviePlayerVideoGravity(NGMoviePl
             return AVLayerVideoGravityResizeAspectFill;
         }
 
-            
         case NGMoviePlayerVideoGravityResize: {
             return AVLayerVideoGravityResize;
         }

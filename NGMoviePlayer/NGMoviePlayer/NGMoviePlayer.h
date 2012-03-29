@@ -9,6 +9,7 @@
 #import "NGMoviePlayerDelegate.h"
 #import "NGMoviePlayerView.h"
 #import "NGMoviePlayerVideoGravity.h"
+#import "NGMoviePlayerAudioSessionCategory.h"
 #import "NGWeak.h"
 
 @interface NGMoviePlayer : NSObject
@@ -42,10 +43,11 @@
 @property (nonatomic, readonly) NSTimeInterval playableDuration;
 
 /**
- Sets the audio session to MediaPlayback and thefore ignores the system mute switch,
- is called by default
+ By changing the audio session category you can influence how your audio output interacts with
+ other system audio output. Default category is AudioSessionCategoryPlackback, which ignores the
+ system volume mute switch.
  */
-+ (void)ignoreSystemMuteSwitch;
++ (void)setAudioSessionCategory:(NGMoviePlayerAudioSessionCategory)audioSessionCategory;
 
 - (id)init;
 - (id)initWithURL:(NSURL *)URL;

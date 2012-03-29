@@ -24,7 +24,6 @@
 		9B73C735150F38B000A4069A /* NGMoviePlayerControlView.h in Headers */ = {isa = PBXBuildFile; fileRef = 9B73C733150F38B000A4069A /* NGMoviePlayerControlView.h */; };
 		9B73C736150F38B000A4069A /* NGMoviePlayerControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B73C734150F38B000A4069A /* NGMoviePlayerControlView.m */; };
 		9B73C786150F49F500A4069A /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B73C785150F49F500A4069A /* CoreMedia.framework */; };
-		9BE34D41150F941D001CE6CD /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BE34D40150F941D001CE6CD /* AudioToolbox.framework */; };
 		9BE34D50150F96E5001CE6CD /* libNGVolumeControl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BE34D4D150F96C9001CE6CD /* libNGVolumeControl.a */; };
 		9BFF8CE51521BFDF0028D3A2 /* NGMoviePlayerFunctions.h in Headers */ = {isa = PBXBuildFile; fileRef = 9BFF8CE31521BFDF0028D3A2 /* NGMoviePlayerFunctions.h */; };
 		9BFF8CE61521BFDF0028D3A2 /* NGMoviePlayerFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF8CE41521BFDF0028D3A2 /* NGMoviePlayerFunctions.m */; };
@@ -65,6 +64,7 @@
 		9B04558715064DAD007F8E7C /* NGMoviePlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NGMoviePlayer.h; sourceTree = "<group>"; };
 		9B04558815064DAE007F8E7C /* NGMoviePlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NGMoviePlayer.m; sourceTree = "<group>"; };
 		9B0455951507545E007F8E7C /* NGMoviePlayer.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = NGMoviePlayer.bundle; path = Resources/NGMoviePlayer.bundle; sourceTree = "<group>"; };
+		9B1FFFF2152471D600DCE624 /* NGMoviePlayerAudioSessionCategory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NGMoviePlayerAudioSessionCategory.h; sourceTree = "<group>"; };
 		9B73C72F150E86C400A4069A /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		9B73C732150F37E000A4069A /* NGMoviePlayerControlStyle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NGMoviePlayerControlStyle.h; sourceTree = "<group>"; };
 		9B73C733150F38B000A4069A /* NGMoviePlayerControlView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NGMoviePlayerControlView.h; sourceTree = "<group>"; };
@@ -72,7 +72,6 @@
 		9B73C77F150F496C00A4069A /* NGWeak.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NGWeak.h; sourceTree = "<group>"; };
 		9B73C785150F49F500A4069A /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		9B73C78B150F5D7300A4069A /* NGMoviePlayerControlActionDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NGMoviePlayerControlActionDelegate.h; sourceTree = "<group>"; };
-		9BE34D40150F941D001CE6CD /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		9BE34D45150F96C9001CE6CD /* NGVolumeControl.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = NGVolumeControl.xcodeproj; path = ../NGVolumeControl/NGVolumeControl/NGVolumeControl.xcodeproj; sourceTree = "<group>"; };
 		9BFF8CE31521BFDF0028D3A2 /* NGMoviePlayerFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NGMoviePlayerFunctions.h; sourceTree = "<group>"; };
 		9BFF8CE41521BFDF0028D3A2 /* NGMoviePlayerFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NGMoviePlayerFunctions.m; sourceTree = "<group>"; };
@@ -84,7 +83,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				9BE34D50150F96E5001CE6CD /* libNGVolumeControl.a in Frameworks */,
-				9BE34D41150F941D001CE6CD /* AudioToolbox.framework in Frameworks */,
 				9B73C786150F49F500A4069A /* CoreMedia.framework in Frameworks */,
 				9B73C730150E86C400A4069A /* MediaPlayer.framework in Frameworks */,
 				9B04557C15064499007F8E7C /* UIKit.framework in Frameworks */,
@@ -118,7 +116,6 @@
 		9B04550C150640BA007F8E7C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				9BE34D40150F941D001CE6CD /* AudioToolbox.framework */,
 				9B0455771506448D007F8E7C /* AVFoundation.framework */,
 				9B73C785150F49F500A4069A /* CoreMedia.framework */,
 				9B04550D150640BA007F8E7C /* Foundation.framework */,
@@ -145,6 +142,7 @@
 				9B04557D150644EE007F8E7C /* NGMoviePlayerLayerView.h */,
 				9B04557E150644EE007F8E7C /* NGMoviePlayerLayerView.m */,
 				9B0455851506482A007F8E7C /* NGMoviePlayerVideoGravity.h */,
+				9B1FFFF2152471D600DCE624 /* NGMoviePlayerAudioSessionCategory.h */,
 				9BFF8CE31521BFDF0028D3A2 /* NGMoviePlayerFunctions.h */,
 				9BFF8CE41521BFDF0028D3A2 /* NGMoviePlayerFunctions.m */,
 				9B0455721506421D007F8E7C /* NGScrubber.h */,

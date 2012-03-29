@@ -8,5 +8,4 @@
     #import <AVFoundation/AVFoundation.h>
     #import <QuartzCore/QuartzCore.h>
     #import <MediaPlayer/MediaPlayer.h>
-    #import <AudioToolbox/AudioToolbox.h>
 #endif
