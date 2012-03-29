@@ -13,6 +13,7 @@ static char playerLayerReadyForDisplayContext;
 
 @interface NGMoviePlayerView () <UIGestureRecognizerDelegate> {
     BOOL _statusBarVisible;
+    UIStatusBarStyle _statusBarStyle;
     BOOL _shouldHideControls;
 }
 
@@ -164,8 +165,10 @@ static char playerLayerReadyForDisplayContext;
         
         // hide status bar in fullscreen, restore to previous state
         if (controlStyle == NGMoviePlayerControlStyleFullscreen) {
+            [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
             [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
         } else {
+            [[UIApplication sharedApplication] setStatusBarStyle:_statusBarStyle];
             [[UIApplication sharedApplication] setStatusBarHidden:!_statusBarVisible withAnimation:UIStatusBarAnimationFade];
         }
     }
@@ -237,6 +240,7 @@ static char playerLayerReadyForDisplayContext;
     self.controlStyle = NGMoviePlayerControlStyleInline;
     _controlsVisible = NO;
     _statusBarVisible = ![UIApplication sharedApplication].statusBarHidden;
+    _statusBarStyle = [UIApplication sharedApplication].statusBarStyle;
     
     // Player Layer
     _playerLayerView = [[NGMoviePlayerLayerView alloc] initWithFrame:self.bounds];
