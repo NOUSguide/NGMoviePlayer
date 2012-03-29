@@ -85,6 +85,9 @@
         
         _volumeControl = [[NGVolumeControl alloc] initWithFrame:CGRectZero];
         [_volumeControl addTarget:self action:@selector(handleVolumeChanged:) forControlEvents:UIControlEventValueChanged];
+        if (UI_USER_INTERFACE_IDIOM()  == UIUserInterfaceIdiomPhone) {
+            _volumeControl.sliderHeight = 124.f;
+        }
         // volume control needs to get added to self instead of bottomControlView because otherwise the expanded slider
         // doesn't receive any touch events
         [self addSubview:_volumeControl];
