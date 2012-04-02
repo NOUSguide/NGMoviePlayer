@@ -1,0 +1,30 @@
+<img src="http://office.nousguide.com/nouslogosmall.png" alt="NOUSguide Inc." title="NOUSguide Inc." title" style="display:block; margin: 10px auto 30px auto;" class="center">
+
+# NGMoviePlayer
+
+A Movieplayer based on [AVFoundation](http://developer.apple.com/library/ios/#DOCUMENTATION/AVFoundation/Reference/AVFoundationFramework/_index.html) with a lot of handsome features like:
+* VGA-output
+* Airplay
+* easy-to-customize UI
+
+## Usage
+
+``` objective-c
+self.moviePlayer = [[NGMoviePlayer alloc] initWithURL:self.movieURL];
+self.moviePlayer.autostartWhenReady = YES;
+self.moviePlayer.delegate = self;
+[self.moviePlayer addToSuperview:self.view withFrame:self.view.bounds];
+```
+
+To see a more enhanced Example. please run the Sample project
+
+## Credits
+
+NGMoviePlayer was created by [Matthias Tretter](https://github.com/myell0w/) ([@myell0w](http://twitter.com/myell0w)) and [Philip Messlehner](https://github.com/messi/) ([@messphilip](http://twitter.com/messphilip)).
+
+It is inspired from code from [HSPlayer](https://github.com/blommegard/HSPlayer).
+
+## License
+
+NGMoviePlayer is available under the MIT license. See the LICENSE file for more info.
+For usage without attribution contact [NOUSguide](mailto:info@nousguide.com).
