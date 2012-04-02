@@ -220,6 +220,13 @@
     }
 }
 
+- (void)setScrubberFillColor:(UIColor *)scrubberFillColor {
+    if (scrubberFillColor != _scrubberFillColor) {
+        _scrubberFillColor = scrubberFillColor;
+        [self setupScrubber:self.scrubber controlStyle:self.controlStyle];
+    }
+}
+
 - (void)setPlayableDuration:(NSTimeInterval)playableDuration {
     self.scrubber.playableValue = playableDuration;
 }
