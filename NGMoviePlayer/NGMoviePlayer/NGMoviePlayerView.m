@@ -126,9 +126,7 @@ static char playerLayerReadyForDisplayContext;
 
 - (void)setControlsVisible:(BOOL)controlsVisible animated:(BOOL)animated {
     if (controlsVisible != _controlsVisible) {
-        [self willChangeValueForKey:@"controlsVisible"];
         _controlsVisible = controlsVisible;
-        [self didChangeValueForKey:@"controlsVisible"];
         
         if (controlsVisible) {
             [self bringSubviewToFront:self.controlsView];
@@ -177,9 +175,7 @@ static char playerLayerReadyForDisplayContext;
 
 - (void)setControlStyle:(NGMoviePlayerControlStyle)controlStyle {
     if (controlStyle != self.controlsView.controlStyle) {
-        [self willChangeValueForKey:@"controlStyle"];
         self.controlsView.controlStyle = controlStyle;
-        [self didChangeValueForKey:@"controlStyle"];
         
         // hide status bar in fullscreen, restore to previous state
         if (controlStyle == NGMoviePlayerControlStyleFullscreen) {
