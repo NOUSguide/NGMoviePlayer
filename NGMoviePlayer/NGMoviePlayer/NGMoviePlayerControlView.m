@@ -14,7 +14,9 @@
 
 #define kControlAlphaValue 0.6f
 
-@interface NGMoviePlayerControlView ()
+@interface NGMoviePlayerControlView () {
+    BOOL _statusBarHidden;
+}
 
 @property (nonatomic, strong) UIButton *playPauseButton;
 @property (nonatomic, strong) UIButton *rewindButton;
@@ -155,6 +157,8 @@
         [_bottomControlsView addSubview:_remainingTimeLabel];
         
         [self setupScrubber:_scrubber controlStyle:_controlStyle];
+        
+        _statusBarHidden = [UIApplication sharedApplication].statusBarHidden;
     }
     
     return self;
@@ -169,7 +173,7 @@
     
     CGFloat controlsViewHeight = [self controlsViewHeightForControlStyle:self.controlStyle];
     
-    _topControlsView.frame = CGRectMake(0.f, 20.f, self.bounds.size.width, [self controlsViewHeightForControlStyle:NGMoviePlayerControlStyleInline]);
+    _topControlsView.frame = CGRectMake(0.f, (self.controlStyle == NGMoviePlayerControlStyleFullscreen && _statusBarHidden) ? 20.f : 0.f, self.bounds.size.width, [self controlsViewHeightForControlStyle:NGMoviePlayerControlStyleInline]);
     _bottomControlsView.frame = CGRectMake(0.f, self.bounds.size.height-controlsViewHeight, self.bounds.size.width, controlsViewHeight);
     
     if (self.controlStyle == NGMoviePlayerControlStyleFullscreen) {
