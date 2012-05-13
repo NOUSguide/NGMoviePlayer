@@ -32,11 +32,12 @@
 /** the color of the scrubber in fullscreen */
 @property (nonatomic, strong) UIColor *scrubberFillColor;
 
+/** the padding between the buttons in topControlsView */
+@property (nonatomic) CGFloat topControlsViewButtonPadding;
 
 - (void)updateScrubberWithCurrentTime:(NSTimeInterval)currentTime duration:(NSTimeInterval)duration;
 - (void)updateButtonsWithPlaybackStatus:(BOOL)isPlaying;
 
-- (void)addTopControlsViewControl:(UIView *)control;
-- (void)addBottomControlsViewControl:(UIView *)control;
+- (void)addTopControlsViewButton:(UIButton *)button;
 
 @end

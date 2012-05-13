@@ -28,6 +28,7 @@
 @property (nonatomic, strong) UIButton *zoomButton;
 @property (nonatomic, strong) UILabel *currentTimeLabel;
 @property (nonatomic, strong) UILabel *remainingTimeLabel;
+@property (nonatomic, strong) UIView *topButtonContainer;
 
 - (CGFloat)controlsViewHeightForControlStyle:(NGMoviePlayerControlStyle)controlStyle;
 - (void)setupScrubber:(NGScrubber *)scrubber controlStyle:(NGMoviePlayerControlStyle)controlStyle;
@@ -64,6 +65,8 @@
 @synthesize currentTimeLabel = _currentTimeLabel;
 @synthesize remainingTimeLabel = _remainingTimeLabel;
 @synthesize volumeControl = _volumeControl;
+@synthesize topButtonContainer = _topButtonContainer;
+@synthesize topControlsViewButtonPadding = _topControlsViewButtonPadding;
 
 ////////////////////////////////////////////////////////////////////////
 #pragma mark - Lifecycle
@@ -78,6 +81,11 @@
         _topControlsView = [[UIView alloc] initWithFrame:CGRectZero];
         _topControlsView.backgroundColor = [UIColor colorWithWhite:0.f alpha:kControlAlphaValue];
         [self addSubview:_topControlsView];
+        
+        _topButtonContainer = [[UIView alloc] initWithFrame:CGRectZero];
+        _topButtonContainer.backgroundColor = [UIColor clearColor];
+        _topControlsView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+        [_topControlsView addSubview:_topButtonContainer];
         
         UIImage *bottomControlImage = [UIImage imageNamed:@"NGMoviePlayer.bundle/fullscreen-hud.png"];
         if ([bottomControlImage respondsToSelector:@selector(resizableImageWithCapInsets:)]) {
@@ -222,6 +230,8 @@
         self.zoomButton.frame = CGRectMake(self.topControlsView.bounds.size.width - _topControlsView.bounds.size.height, 0.f,
                                            _topControlsView.bounds.size.height, _topControlsView.bounds.size.height);
         [self.zoomButton setImage:[UIImage imageNamed:@"NGMoviePlayer.bundle/zoomIn"] forState:UIControlStateNormal];
+        
+        self.topButtonContainer.frame = CGRectMake(MAX((self.topControlsView.frame.size.width - self.topButtonContainer.frame.size.width)/2.f, 0.f), 0.f, self.topButtonContainer.frame.size.width, [self controlsViewHeightForControlStyle:NGMoviePlayerControlStyleInline]);
     } else {
         self.rewindButton.hidden = YES;
         self.forwardButton.hidden = YES;
@@ -284,12 +294,19 @@
     [self.playPauseButton setImage:image forState:UIControlStateNormal];
 }
 
-- (void)addTopControlsViewControl:(UIView *)control {
-    // TODO: Add to topControlsView and automatically position
-}
-
-- (void)addBottomControlsViewControl:(UIView *)control {
-    // TODO: Add to bottomControlsView and automatically position
+- (void)addTopControlsViewButton:(UIButton *)button {
+    CGFloat maxX = 0.f;
+    for (UIView *subview in self.topButtonContainer.subviews) {
+        maxX = MAX(subview.frame.origin.x + subview.frame.size.width, maxX);
+    }
+    
+    if (maxX > 0.f) {
+        maxX += self.topControlsViewButtonPadding;
+    }
+    
+    button.frame = CGRectMake(maxX, 0.f, [self controlsViewHeightForControlStyle:NGMoviePlayerControlStyleInline], button.frame.size.width);
+    [self.topButtonContainer addSubview:button];
+    self.topButtonContainer.frame = CGRectMake(0.f, 0.f, maxX + button.frame.size.width, [self controlsViewHeightForControlStyle:NGMoviePlayerControlStyleInline]);
 }
 
 ////////////////////////////////////////////////////////////////////////
