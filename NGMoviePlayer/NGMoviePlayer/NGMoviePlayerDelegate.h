@@ -25,4 +25,7 @@
 - (void)playbackDidPauseWithPlayer:(NGMoviePlayer *)player;
 - (void)playbackDidFinishWithPlayer:(NGMoviePlayer *)player;
 
+- (void)playerDidBeginScrubbing:(NGMoviePlayer *)player;
+- (void)playerDidEndScrubbing:(NGMoviePlayer *)player;
+
 @end

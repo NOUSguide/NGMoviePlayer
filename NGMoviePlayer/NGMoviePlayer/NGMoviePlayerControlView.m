@@ -29,6 +29,7 @@
 @property (nonatomic, strong) UILabel *currentTimeLabel;
 @property (nonatomic, strong) UILabel *remainingTimeLabel;
 @property (nonatomic, strong) UIView *topButtonContainer;
+@property (nonatomic, readonly, getter = isAirPlayButtonVisible) BOOL airPlayButtonVisible;
 
 - (CGFloat)controlsViewHeightForControlStyle:(NGMoviePlayerControlStyle)controlStyle;
 - (void)setupScrubber:(NGScrubber *)scrubber controlStyle:(NGMoviePlayerControlStyle)controlStyle;
@@ -110,7 +111,7 @@
         _volumeControl = [[NGVolumeControl alloc] initWithFrame:CGRectZero];
         [_volumeControl addTarget:self action:@selector(handleVolumeChanged:) forControlEvents:UIControlEventValueChanged];
         if (UI_USER_INTERFACE_IDIOM()  == UIUserInterfaceIdiomPhone) {
-            _volumeControl.sliderHeight = 150.f;
+            //_volumeControl.sliderHeight = 150.f;
         }
         // volume control needs to get added to self instead of bottomControlView because otherwise the expanded slider
         // doesn't receive any touch events
@@ -128,7 +129,7 @@
         
         _forwardButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _forwardButton.frame = _rewindButton.frame;
-        _forwardButton.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
+        _forwardButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin;
         _forwardButton.showsTouchWhenHighlighted = YES;
         [_forwardButton setImage:[UIImage imageNamed:@"NGMoviePlayer.bundle/forward"] forState:UIControlStateNormal];
         [_forwardButton addTarget:self action:@selector(handleForwardButtonTouchDown:) forControlEvents:UIControlEventTouchDown];
@@ -139,11 +140,14 @@
         _playPauseButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _playPauseButton.contentMode = UIViewContentModeCenter;
         _playPauseButton.showsTouchWhenHighlighted = YES;
+        _playPauseButton.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
         [_playPauseButton addTarget:self action:@selector(handlePlayPauseButtonPress:) forControlEvents:UIControlEventTouchUpInside];
         [_bottomControlsView addSubview:_playPauseButton];
         
         _airPlayButton = [[MPVolumeView alloc] initWithFrame:(CGRect) { .size = CGSizeMake(40.f, 40.f) }];
-        _airPlayButton.showsRouteButton = YES;
+        _airPlayButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin;
+#warning set to YES
+        _airPlayButton.showsRouteButton = NO;
         _airPlayButton.showsVolumeSlider = NO;
         
         _scrubber = [[NGScrubber alloc] initWithFrame:CGRectZero];
@@ -194,10 +198,9 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    
     CGFloat controlsViewHeight = [self controlsViewHeightForControlStyle:self.controlStyle];
     
-    _topControlsView.frame = CGRectMake(0.f, (self.controlStyle == NGMoviePlayerControlStyleFullscreen && _statusBarHidden) ? 20.f : 0.f, self.bounds.size.width, [self controlsViewHeightForControlStyle:NGMoviePlayerControlStyleInline]);
+    _topControlsView.frame = CGRectMake(0.f, (self.controlStyle == NGMoviePlayerControlStyleFullscreen ? 20.f : 0.f), self.bounds.size.width, [self controlsViewHeightForControlStyle:NGMoviePlayerControlStyleInline]);
     _bottomControlsView.frame = CGRectMake(kBottomControlHorizontalPadding, self.bounds.size.height-controlsViewHeight, self.bounds.size.width - kBottomControlHorizontalPadding*2.f, controlsViewHeight-kBottomControlHorizontalPadding);
     
     if (self.controlStyle == NGMoviePlayerControlStyleFullscreen) {
@@ -206,10 +209,11 @@
         self.rewindButton.hidden = !displaySkipButtons;
         self.forwardButton.hidden = !displaySkipButtons;
         
-        [self.airPlayButton sizeToFit];
         [self.bottomControlsView addSubview:self.airPlayButton];
-        if (!CGRectIsEmpty(self.airPlayButton.frame)) {
+        if (!self.isAirPlayButtonVisible) {
             self.airPlayButton.frame = CGRectMake(_bottomControlsView.frame.size.width - 60.f, buttonTopPadding + 10.f, 40.f, 40.f);
+        } else {
+            self.airPlayButton.frame = CGRectMake(_bottomControlsView.frame.size.width - 20.f, buttonTopPadding + 10.f, 0.f, 0.f);
         }
         
         self.playPauseButton.frame = CGRectMake(20.f, buttonTopPadding, 40.f, 40.f);
@@ -403,6 +407,19 @@
 
 - (void)handleVolumeChanged:(id)sender {
     [self.delegate moviePlayerControl:sender didPerformAction:NGMoviePlayerControlActionVolumeChanged];
+}
+
+- (BOOL)isAirPlayButtonVisible {
+    for (UIView *subview in self.airPlayButton.subviews) {
+        if ([subview isKindOfClass:NSClassFromString([@"MP" stringByAppendingString:@"Button"])]) {
+            if (subview.alpha == 0.f) {
+                NSLog(@"AirPlayButtonVisible @%d", 0);
+                return NO;
+            }
+        }
+    }
+    NSLog(@"AirPlayButtonVisible @%d", 0);
+    return YES;
 }
 
 @end

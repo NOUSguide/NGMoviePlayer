@@ -27,6 +27,8 @@ static char playerAirPlayVideoActiveContext;
         unsigned int didStartToPlay:1;
         unsigned int didPausePlayback:1;
         unsigned int didChangeControlStyle:1;
+        unsigned int didBeginScrubbing:1;
+        unsigned int didEndScrubbing:1;
 	} _delegateFlags;
     
     BOOL _seekToZeroBeforePlay;
@@ -267,6 +269,8 @@ static char playerAirPlayVideoActiveContext;
         _delegateFlags.didChangeControlStyle = [delegate respondsToSelector:@selector(player:didChangeControlStyle:)];
         _delegateFlags.didStartToPlay = [delegate respondsToSelector:@selector(playbackDidStartWithPlayer:)];
         _delegateFlags.didPausePlayback = [delegate respondsToSelector:@selector(playbackDidPauseWithPlayer:)];
+        _delegateFlags.didBeginScrubbing = [delegate respondsToSelector:@selector(playerDidBeginScrubbing:)];
+        _delegateFlags.didEndScrubbing = [delegate respondsToSelector:@selector(playerDidEndScrubbing:)];
     }
 }
 
@@ -437,6 +441,10 @@ static char playerAirPlayVideoActiveContext;
     _rateToRestoreAfterScrubbing = self.player.rate;
     self.player.rate = 0.f;
     self.scrubbing = YES;
+    
+    if (_delegateFlags.didBeginScrubbing) {
+        [self.delegate playerDidBeginScrubbing:self];
+    }
 }
 
 - (void)endScrubbing {
@@ -447,6 +455,10 @@ static char playerAirPlayVideoActiveContext;
     [self.skippingTimer invalidate];
     self.skippingTimer = nil;
     [self startObservingPlayerTimeChanges];
+    
+    if (_delegateFlags.didEndScrubbing) {
+        [self.delegate playerDidEndScrubbing:self];
+    }
 }
 
 - (void)beginSkippingBackwards {
