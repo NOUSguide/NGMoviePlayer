@@ -24,6 +24,7 @@ static char playerAirPlayVideoActiveContext;
 		unsigned int didChangeAirPlay:1;
 		unsigned int didFinishPlayback:1;
         unsigned int didFailToLoadURL:1;
+        unsigned int didUpdateCurrentTime:1;
         unsigned int didStartToPlay:1;
         unsigned int didPausePlayback:1;
         unsigned int didChangeControlStyle:1;
@@ -145,6 +146,7 @@ static char playerAirPlayVideoActiveContext;
     if ([player respondsToSelector:@selector(allowsAirPlayVideo)]) {
         [player removeObserver:self forKeyPath:@"airPlayVideoActive"];
     }
+    _playerItem = nil;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -250,7 +252,9 @@ static char playerAirPlayVideoActiveContext;
             
             [self.asset loadValuesAsynchronouslyForKeys:keys completionHandler:^{
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self doneLoadingAsset:self.asset withKeys:keys];
+                    if (_URL != nil) {
+                        [self doneLoadingAsset:self.asset withKeys:keys];
+                    }
                 });
             }];
         }
@@ -267,6 +271,7 @@ static char playerAirPlayVideoActiveContext;
         _delegateFlags.didFinishPlayback = [delegate respondsToSelector:@selector(playbackDidFinishWithPlayer:)];
         _delegateFlags.didFailToLoadURL = [delegate respondsToSelector:@selector(player:didFailToLoadURL:)];
         _delegateFlags.didChangeControlStyle = [delegate respondsToSelector:@selector(player:didChangeControlStyle:)];
+        _delegateFlags.didUpdateCurrentTime = [delegate respondsToSelector:@selector(player:didUpdateCurrentTime:)];
         _delegateFlags.didStartToPlay = [delegate respondsToSelector:@selector(playbackDidStartWithPlayer:)];
         _delegateFlags.didPausePlayback = [delegate respondsToSelector:@selector(playbackDidPauseWithPlayer:)];
         _delegateFlags.didBeginScrubbing = [delegate respondsToSelector:@selector(playerDidBeginScrubbing:)];
@@ -678,6 +683,9 @@ static char playerAirPlayVideoActiveContext;
                                                                                if (CMTIME_IS_VALID(strongSelf.player.currentTime) && CMTIME_IS_VALID(strongSelf.CMDuration)) {
                                                                                    [strongSelf.view updateWithCurrentTime:strongSelf.currentTime 
                                                                                                                  duration:strongSelf.duration];
+                                                                                   if ([self.delegate respondsToSelector:@selector(player:didUpdateCurrentTime:)]) {
+                                                                                       [self.delegate player:strongSelf didUpdateCurrentTime:self.currentTime];
+                                                                                   }
                                                                                }
                                                                            }
                                                                        }];

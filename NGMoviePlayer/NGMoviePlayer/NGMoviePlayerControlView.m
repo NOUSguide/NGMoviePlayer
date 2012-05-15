@@ -411,14 +411,14 @@
 
 - (BOOL)isAirPlayButtonVisible {
     for (UIView *subview in self.airPlayButton.subviews) {
-        if ([subview isKindOfClass:NSClassFromString([@"MP" stringByAppendingString:@"Button"])]) {
-            if (subview.alpha == 0.f) {
+        if ([subview isKindOfClass:UIButton.class]) {
+            if (subview.alpha == 0.f || subview.hidden) {
                 NSLog(@"AirPlayButtonVisible @%d", 0);
                 return NO;
             }
         }
     }
-    NSLog(@"AirPlayButtonVisible @%d", 0);
+    NSLog(@"AirPlayButtonVisible @%d", 1);
     return YES;
 }
 
