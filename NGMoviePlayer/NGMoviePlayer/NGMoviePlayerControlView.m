@@ -14,7 +14,7 @@
 
 #define kControlAlphaValue                  0.6f
 #define kBottomControlHorizontalPadding     20.f
-#define kMinWidthToDisplaySkipButtons       600.f
+#define kMinWidthToDisplaySkipButtons       420.f
 
 @interface NGMoviePlayerControlView () {
     BOOL _statusBarHidden;
@@ -68,6 +68,7 @@
 @synthesize volumeControl = _volumeControl;
 @synthesize topButtonContainer = _topButtonContainer;
 @synthesize topControlsViewButtonPadding = _topControlsViewButtonPadding;
+@synthesize zoomOutButtonPosition = _zoomOutButtonPosition;
 
 ////////////////////////////////////////////////////////////////////////
 #pragma mark - Lifecycle
@@ -231,9 +232,12 @@
         self.remainingTimeLabel.frame = CGRectMake(scrubberRightOrigin - 65.f, self.scrubber.frame.origin.y, 55.f, 20.f);
         self.remainingTimeLabel.textAlignment = UITextAlignmentRight;
     
-        self.zoomButton.frame = CGRectMake(self.topControlsView.bounds.size.width - _topControlsView.bounds.size.height, 0.f,
-                                           _topControlsView.bounds.size.height, _topControlsView.bounds.size.height);
-        [self.zoomButton setImage:[UIImage imageNamed:@"NGMoviePlayer.bundle/zoomIn"] forState:UIControlStateNormal];
+        UIImage *zoomButtonImage = [UIImage imageNamed:@"NGMoviePlayer.bundle/zoomOut"];
+        self.zoomButton.frame = (self.zoomOutButtonPosition == NGMoviePlayerControlViewZoomOuttButtonPositionRight ?
+                                 CGRectMake(self.topControlsView.bounds.size.width - zoomButtonImage.size.width, 0.f,
+                                           zoomButtonImage.size.width, _topControlsView.bounds.size.height) :
+                                 CGRectMake(0.f, 0.f, zoomButtonImage.size.width, _topControlsView.bounds.size.height));
+        [self.zoomButton setImage:zoomButtonImage forState:UIControlStateNormal];
         
         self.topButtonContainer.frame = CGRectMake(MAX((self.topControlsView.frame.size.width - self.topButtonContainer.frame.size.width)/2.f, 0.f), 0.f, self.topButtonContainer.frame.size.width, [self controlsViewHeightForControlStyle:NGMoviePlayerControlStyleInline]);
     } else {
@@ -251,7 +255,7 @@
         self.scrubber.frame = CGRectMake(80.f, 0.f, self.bottomControlsView.bounds.size.width-160.f, controlsViewHeight);
         self.volumeControl.frame = CGRectMake(self.bounds.size.width-controlsViewHeight, self.bottomControlsView.frame.origin.y, controlsViewHeight,controlsViewHeight);
         self.zoomButton.frame = CGRectMake(self.topControlsView.bounds.size.width - controlsViewHeight, 0.f, controlsViewHeight, controlsViewHeight);
-        [self.zoomButton setImage:[UIImage imageNamed:@"NGMoviePlayer.bundle/zoomOut"] forState:UIControlStateNormal];
+        [self.zoomButton setImage:[UIImage imageNamed:@"NGMoviePlayer.bundle/zoomIn"] forState:UIControlStateNormal];
     }
 }
 

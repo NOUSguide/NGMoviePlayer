@@ -13,6 +13,11 @@
 @class NGScrubber;
 @class NGVolumeControl;
 
+typedef enum {
+    NGMoviePlayerControlViewZoomOuttButtonPositionRight = 0,
+    NGMoviePlayerControlViewZoomOuttButtonPositionLeft
+} NGMoviePlayerControlViewZoomOutButtonPosition;
+
 @interface NGMoviePlayerControlView : UIView
 
 @property (nonatomic, ng_weak) id<NGMoviePlayerControlActionDelegate> delegate;
@@ -34,6 +39,9 @@
 
 /** the padding between the buttons in topControlsView */
 @property (nonatomic) CGFloat topControlsViewButtonPadding;
+
+/** the position of the zoomout-button in fullscreen-style */
+@property (nonatomic) NGMoviePlayerControlViewZoomOutButtonPosition *zoomOutButtonPosition; 
 
 - (void)updateScrubberWithCurrentTime:(NSTimeInterval)currentTime duration:(NSTimeInterval)duration;
 - (void)updateButtonsWithPlaybackStatus:(BOOL)isPlaying;
