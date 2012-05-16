@@ -41,7 +41,7 @@ typedef enum {
 @property (nonatomic) CGFloat topControlsViewButtonPadding;
 
 /** the position of the zoomout-button in fullscreen-style */
-@property (nonatomic) NGMoviePlayerControlViewZoomOutButtonPosition *zoomOutButtonPosition; 
+@property (nonatomic) NGMoviePlayerControlViewZoomOutButtonPosition zoomOutButtonPosition; 
 
 - (void)updateScrubberWithCurrentTime:(NSTimeInterval)currentTime duration:(NSTimeInterval)duration;
 - (void)updateButtonsWithPlaybackStatus:(BOOL)isPlaying;
