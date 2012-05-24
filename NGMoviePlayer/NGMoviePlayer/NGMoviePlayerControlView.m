@@ -16,6 +16,20 @@
 #define kBottomControlHorizontalPadding     20.f
 #define kMinWidthToDisplaySkipButtons       420.f
 
+NSString * const NGMoviePlayerControlViewTopControlsViewKey = @"NGMoviePlayerControlViewTopControlsViewKey";
+NSString * const NGMoviePlayerControlViewBottomControlsViewKey = @"NGMoviePlayerControlViewBottomControlsViewKey";
+NSString * const NGMoviePlayerControlViewPlayPauseButtonKey = @"NGMoviePlayerControlViewPlayPauseButtonKey";
+NSString * const NGMoviePlayerControlViewScrubberKey = @"NGMoviePlayerControlViewScrubberKey";
+NSString * const NGMoviePlayerControlViewRewindButtonKey = @"NGMoviePlayerControlViewRewindButtonKey";
+NSString * const NGMoviePlayerControlViewForwardButtonKey = @"NGMoviePlayerControlViewForwardButtonKey";
+NSString * const NGMoviePlayerControlViewAirPlayButtonKey = @"NGMoviePlayerControlViewAirPlayButtonKey";
+NSString * const NGMoviePlayerControlViewVolumeControlKey = @"NGMoviePlayerControlViewVolumeControlKey";
+NSString * const NGMoviePlayerControlViewVolumeViewKey = @"NGMoviePlayerControlViewVolumeViewKey";
+NSString * const NGMoviePlayerControlViewZoomButtonKey = @"NGMoviePlayerControlViewZoomButtonKey";
+NSString * const NGMoviePlayerControlViewCurrentTimeLabelKey = @"NGMoviePlayerControlViewCurrentTimeLabelKey";
+NSString * const NGMoviePlayerControlViewRemainingTimeLabelKey = @"NGMoviePlayerControlViewRemainingTimeLabelKey";
+NSString * const NGMoviePlayerControlViewtopButtonContainerKey = @"NGMoviePlayerControlViewtopButtonContainerKey";
+
 @interface NGMoviePlayerControlView () {
     BOOL _statusBarHidden;
 }
@@ -30,6 +44,7 @@
 @property (nonatomic, strong) UILabel *remainingTimeLabel;
 @property (nonatomic, strong) UIView *topButtonContainer;
 @property (nonatomic, readonly, getter = isAirPlayButtonVisible) BOOL airPlayButtonVisible;
+@property (nonatomic, strong) NSDictionary *controls;
 
 - (CGFloat)controlsViewHeightForControlStyle:(NGMoviePlayerControlStyle)controlStyle;
 - (void)setupScrubber:(NGScrubber *)scrubber controlStyle:(NGMoviePlayerControlStyle)controlStyle;
@@ -69,6 +84,8 @@
 @synthesize topButtonContainer = _topButtonContainer;
 @synthesize topControlsViewButtonPadding = _topControlsViewButtonPadding;
 @synthesize zoomOutButtonPosition = _zoomOutButtonPosition;
+@synthesize layoutSubviewsBlock = _layoutSubviewsBlock;
+@synthesize controls = _controls;
 
 ////////////////////////////////////////////////////////////////////////
 #pragma mark - Lifecycle
@@ -91,9 +108,9 @@
         
         UIImage *bottomControlImage = [UIImage imageNamed:@"NGMoviePlayer.bundle/fullscreen-hud.png"];
         if ([bottomControlImage respondsToSelector:@selector(resizableImageWithCapInsets:)]) {
-            bottomControlImage = [bottomControlImage resizableImageWithCapInsets:UIEdgeInsetsMake(15.f, 15.f, 15.f, 15.f)];
+            bottomControlImage = [bottomControlImage resizableImageWithCapInsets:UIEdgeInsetsMake(48.f, 15.f, 46.f, 15.f)];
         } else {
-            bottomControlImage = [bottomControlImage stretchableImageWithLeftCapWidth:15 topCapHeight:15];
+            bottomControlImage = [bottomControlImage stretchableImageWithLeftCapWidth:15 topCapHeight:47];
         }
         _bottomControlsView = [[UIImageView alloc] initWithImage:bottomControlImage];
         _bottomControlsView.userInteractionEnabled = YES;
@@ -110,6 +127,7 @@
         }
         
         _volumeControl = [[NGVolumeControl alloc] initWithFrame:CGRectZero];
+        _volumeControl.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
         [_volumeControl addTarget:self action:@selector(handleVolumeChanged:) forControlEvents:UIControlEventValueChanged];
         if (UI_USER_INTERFACE_IDIOM()  == UIUserInterfaceIdiomPhone) {
             //_volumeControl.sliderHeight = 150.f;
@@ -188,6 +206,20 @@
         [self setupScrubber:_scrubber controlStyle:_controlStyle];
         
         _statusBarHidden = [UIApplication sharedApplication].statusBarHidden;
+        
+        _controls = [NSDictionary dictionaryWithObjectsAndKeys:_topControlsView, NGMoviePlayerControlViewTopControlsViewKey,
+                     _bottomControlsView, NGMoviePlayerControlViewBottomControlsViewKey,
+                     _playPauseButton, NGMoviePlayerControlViewPlayPauseButtonKey,
+                     _scrubber, NGMoviePlayerControlViewScrubberKey,
+                     _rewindButton, NGMoviePlayerControlViewRewindButtonKey,
+                     _forwardButton, NGMoviePlayerControlViewForwardButtonKey,
+                     _airPlayButton, NGMoviePlayerControlViewAirPlayButtonKey,
+                     _volumeControl, NGMoviePlayerControlViewVolumeControlKey,
+                     _zoomButton, NGMoviePlayerControlViewZoomButtonKey,
+                     _currentTimeLabel, NGMoviePlayerControlViewCurrentTimeLabelKey,
+                     _remainingTimeLabel, NGMoviePlayerControlViewRemainingTimeLabelKey,
+                     _topButtonContainer, NGMoviePlayerControlViewTopControlsViewKey,
+                     _volumeView, NGMoviePlayerControlViewVolumeViewKey, nil];
     }
     
     return self;
@@ -204,7 +236,16 @@
     _topControlsView.frame = CGRectMake(0.f, (self.controlStyle == NGMoviePlayerControlStyleFullscreen ? 20.f : 0.f), self.bounds.size.width, [self controlsViewHeightForControlStyle:NGMoviePlayerControlStyleInline]);
     _bottomControlsView.frame = CGRectMake(kBottomControlHorizontalPadding, self.bounds.size.height-controlsViewHeight, self.bounds.size.width - kBottomControlHorizontalPadding*2.f, controlsViewHeight-kBottomControlHorizontalPadding);
     
-    if (self.controlStyle == NGMoviePlayerControlStyleFullscreen) {
+    if (self.layoutSubviewsBlock) {
+        self.layoutSubviewsBlock(self.controlStyle, self.controls);
+    } else {
+        [self layoutSubviewsForControlStyle:self.controlStyle];
+    }
+}
+
+- (void)layoutSubviewsForControlStyle:(NGMoviePlayerControlStyle)controlStyle {
+    CGFloat controlsViewHeight = [self controlsViewHeightForControlStyle:self.controlStyle];
+    if (controlStyle == NGMoviePlayerControlStyleFullscreen) {
         BOOL displaySkipButtons = (_bottomControlsView.frame.size.width > kMinWidthToDisplaySkipButtons);
         CGFloat buttonTopPadding = 23.f;
         self.rewindButton.hidden = !displaySkipButtons;
@@ -231,11 +272,11 @@
         
         self.remainingTimeLabel.frame = CGRectMake(scrubberRightOrigin - 65.f, self.scrubber.frame.origin.y, 55.f, 20.f);
         self.remainingTimeLabel.textAlignment = UITextAlignmentRight;
-    
+        
         UIImage *zoomButtonImage = [UIImage imageNamed:@"NGMoviePlayer.bundle/zoomOut"];
-        self.zoomButton.frame = (self.zoomOutButtonPosition == NGMoviePlayerControlViewZoomOuttButtonPositionRight ?
+        self.zoomButton.frame = (self.zoomOutButtonPosition == NGMoviePlayerControlViewZoomOutButtonPositionRight ?
                                  CGRectMake(self.topControlsView.bounds.size.width - zoomButtonImage.size.width, 0.f,
-                                           zoomButtonImage.size.width, _topControlsView.bounds.size.height) :
+                                            zoomButtonImage.size.width, _topControlsView.bounds.size.height) :
                                  CGRectMake(0.f, 0.f, zoomButtonImage.size.width, _topControlsView.bounds.size.height));
         [self.zoomButton setImage:zoomButtonImage forState:UIControlStateNormal];
         
@@ -275,6 +316,7 @@
 - (void)setScrubberFillColor:(UIColor *)scrubberFillColor {
     if (scrubberFillColor != _scrubberFillColor) {
         _scrubberFillColor = scrubberFillColor;
+        self.volumeControl.minimumTrackColor = scrubberFillColor;
         [self setupScrubber:self.scrubber controlStyle:self.controlStyle];
     }
 }
@@ -331,6 +373,7 @@
 
 - (void)setupScrubber:(NGScrubber *)scrubber controlStyle:(NGMoviePlayerControlStyle)controlStyle {
     CGFloat height = 20.f;
+    CGFloat radius = 8.f;
     
     if (controlStyle == NGMoviePlayerControlStyleFullscreen) {        
         [scrubber setThumbImage:[UIImage imageNamed:@"NGMoviePlayer.bundle/scrubberKnobFullscreen"] 
@@ -342,32 +385,54 @@
                        forState:UIControlStateNormal];
     }
     
-    //Build a rect of appropriate size at origin 0,0
-    CGRect fillRect = CGRectMake(0.f,0.f,1.f,height);
+    //Build a roundedRect of appropriate size at origin 0,0
+    UIBezierPath* roundedRect = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0.f, 0.f, height, height) cornerRadius:radius];
+    //Color for Stroke
+    CGColorRef strokeColor = [[UIColor blackColor] CGColor];
     
     // create minimum track image
-    UIGraphicsBeginImageContext(CGSizeMake(1.f, height));
+    UIGraphicsBeginImageContext(CGSizeMake(height, height));
     CGContextRef currentContext = UIGraphicsGetCurrentContext();
     //Set the fill color
-    CGContextSetFillColorWithColor(currentContext, self.scrubberFillColor.CGColor);
+    CGContextSetFillColorWithColor(currentContext, self.scrubberFillColor.CGColor);   
     //Fill the color
-    CGContextFillRect(currentContext, fillRect);
+    [roundedRect fill];
+    //Draw stroke
+    CGContextSetStrokeColorWithColor(currentContext, strokeColor);
+    [roundedRect stroke];
     //Snap the picture and close the context
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
+    //generate stretchable Image
+    if ([image respondsToSelector:@selector(resizableImageWithCapInsets:)]) {
+        image = [image resizableImageWithCapInsets:UIEdgeInsetsMake(radius, radius, radius, radius)];
+    } else {
+        image = [image stretchableImageWithLeftCapWidth:radius topCapHeight:radius];
+    }
     [scrubber setMinimumTrackImage:image forState:UIControlStateNormal];
     
     // create maximum track image
-    UIGraphicsBeginImageContext(CGSizeMake(1.f, height));
+    UIGraphicsBeginImageContext(CGSizeMake(height, height));
     currentContext = UIGraphicsGetCurrentContext();
     //Set the fill color
     CGContextSetFillColorWithColor(currentContext, [UIColor colorWithWhite:1.f alpha:.2f].CGColor);
     //Fill the color
-    CGContextFillRect(currentContext, fillRect);
+    [roundedRect fill];
+    //Draw stroke
+    CGContextSetStrokeColorWithColor(currentContext, strokeColor);
+    [roundedRect stroke];
     //Snap the picture and close the context
     image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
+    //generate stretchable Image
+    if ([image respondsToSelector:@selector(resizableImageWithCapInsets:)]) {
+        image = [image resizableImageWithCapInsets:UIEdgeInsetsMake(radius, radius, radius, radius)];
+    } else {
+        image = [image stretchableImageWithLeftCapWidth:radius topCapHeight:radius];
+    }
     [scrubber setMaximumTrackImage:image forState:UIControlStateNormal];
+    
+    scrubber.playableValeRoundedRectRadius = radius;
     
     // force re-draw of playable value of scrubber
     scrubber.playableValue = scrubber.playableValue;

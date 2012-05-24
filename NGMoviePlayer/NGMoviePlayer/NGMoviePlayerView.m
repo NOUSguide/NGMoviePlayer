@@ -170,6 +170,8 @@ static char playerLayerReadyForDisplayContext;
     if (placeholderView != _placeholderView) {
         [_placeholderView removeFromSuperview];
         _placeholderView = placeholderView;
+        _placeholderView.frame = self.bounds;
+        _placeholderView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [self addSubview:_placeholderView];
     }
 }
@@ -181,11 +183,23 @@ static char playerLayerReadyForDisplayContext;
                              self.placeholderView.alpha = 0.f;
                          } completion:^(BOOL finished) {
                              [self.placeholderView removeFromSuperview];
-                             self.placeholderView = nil;
                          }];
     } else {
         [self.placeholderView removeFromSuperview];
-        self.placeholderView = nil;
+    }
+}
+
+- (void)showPlaceholderViewAnimated:(BOOL)animated {
+    if (animated) {
+        self.placeholderView.alpha = 0.f;
+        [self addSubview:self.placeholderView];
+        [UIView animateWithDuration:kNGFadeDuration
+                         animations:^{
+                             self.placeholderView.alpha = 1.f;
+                         }];
+    } else {
+        self.placeholderView.alpha = 1.f;
+        [self addSubview:self.placeholderView];
     }
 }
 

@@ -37,6 +37,8 @@
 - (void)setControlsVisible:(BOOL)controlsVisible animated:(BOOL)animated;
 /** Hides the placeholder view with the play button */
 - (void)hidePlaceholderViewAnimated:(BOOL)animated;
+/** shows the placeholder view with the play button */
+- (void)showPlaceholderViewAnimated:(BOOL)animated;
 
 - (void)stopFadeOutControlsViewTimer;
 - (void)restartFadeOutControlsViewTimer;

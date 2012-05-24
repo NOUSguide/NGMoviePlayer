@@ -272,6 +272,18 @@
     }
 }
 
+- (void)setPlayableValeRoundedRectRadius:(CGFloat)playableValeRoundedRectRadius {
+    CALayer *layer = self.playableView.layer;
+    
+	layer.masksToBounds = YES;
+	layer.cornerRadius = playableValeRoundedRectRadius;
+	layer.borderWidth = 0.f;
+}
+
+- (CGFloat)playableValeRoundedRectRadius {
+    return self.playableView.layer.cornerRadius;
+}
+
 ////////////////////////////////////////////////////////////////////////
 #pragma mark - Private
 ////////////////////////////////////////////////////////////////////////

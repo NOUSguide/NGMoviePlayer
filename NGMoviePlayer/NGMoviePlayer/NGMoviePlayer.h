@@ -41,6 +41,8 @@
 @property (nonatomic, readonly) NSTimeInterval duration;
 /** currently downloaded duration which is already playable */
 @property (nonatomic, readonly) NSTimeInterval playableDuration;
+/** initialPlaybackTime for playing the video */
+@property (nonatomic, assign) NSTimeInterval initialPlaybackTime;
 
 /**
  By changing the audio session category you can influence how your audio output interacts with
@@ -51,6 +53,9 @@
 
 - (id)init;
 - (id)initWithURL:(NSURL *)URL;
+- (id)initWithURL:(NSURL *)URL initialPlaybackTime:(NSTimeInterval)initialPlaybackTime;
+
+- (void)setURL:(NSURL *)URL initialPlaybackTime:(NSTimeInterval)initialPlaybackTime;
 
 - (void)play;
 - (void)pause;
