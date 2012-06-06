@@ -218,7 +218,7 @@ NSString * const NGMoviePlayerControlViewtopButtonContainerKey = @"NGMoviePlayer
                      _zoomButton, NGMoviePlayerControlViewZoomButtonKey,
                      _currentTimeLabel, NGMoviePlayerControlViewCurrentTimeLabelKey,
                      _remainingTimeLabel, NGMoviePlayerControlViewRemainingTimeLabelKey,
-                     _topButtonContainer, NGMoviePlayerControlViewTopControlsViewKey,
+                     _topButtonContainer, NGMoviePlayerControlViewtopButtonContainerKey,
                      _volumeView, NGMoviePlayerControlViewVolumeViewKey, nil];
     }
     
@@ -252,11 +252,11 @@ NSString * const NGMoviePlayerControlViewtopButtonContainerKey = @"NGMoviePlayer
         self.forwardButton.hidden = !displaySkipButtons;
         
         [self.bottomControlsView addSubview:self.airPlayButton];
-        if (!self.isAirPlayButtonVisible) {
+        /*if (!self.isAirPlayButtonVisible) {
             self.airPlayButton.frame = CGRectMake(_bottomControlsView.frame.size.width - 60.f, buttonTopPadding + 10.f, 40.f, 40.f);
-        } else {
+        } else {*/
             self.airPlayButton.frame = CGRectMake(_bottomControlsView.frame.size.width - 20.f, buttonTopPadding + 10.f, 0.f, 0.f);
-        }
+        //}
         
         self.playPauseButton.frame = CGRectMake(20.f, buttonTopPadding, 40.f, 40.f);
         self.volumeControl.frame = CGRectMake(self.airPlayButton.frame.origin.x - 25.f, _bottomControlsView.frame.origin.y + buttonTopPadding, 40.f, 40.f);
@@ -479,6 +479,9 @@ NSString * const NGMoviePlayerControlViewtopButtonContainerKey = @"NGMoviePlayer
 }
 
 - (BOOL)isAirPlayButtonVisible {
+    if (self.airPlayButton == nil) {
+        return NO;
+    }
     for (UIView *subview in self.airPlayButton.subviews) {
         if ([subview isKindOfClass:UIButton.class]) {
             if (subview.alpha == 0.f || subview.hidden) {
