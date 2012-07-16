@@ -255,6 +255,10 @@
         _playableValue = playableValue;
     }
     
+    if (playableValue == 0) {
+        self.playableView.frame = CGRectZero;
+        return;
+    }
     float valueDifference = self.maximumValue - self.minimumValue;
     float percentage = playableValue / valueDifference;
     CGRect trackRect = [self trackRectForBounds:self.bounds];

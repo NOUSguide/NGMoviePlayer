@@ -12,9 +12,9 @@
 #import "NGVolumeControl.h"
 #import "NGMoviePlayerFunctions.h"
 
-#define kControlAlphaValue                  0.6f
-#define kBottomControlHorizontalPadding     20.f
-#define kMinWidthToDisplaySkipButtons       420.f
+#define kControlAlphaValue                     0.6f
+#define kBottomControlHorizontalPadding        (self.controlStyle == NGMoviePlayerControlStyleFullscreen ? 20.f : 0.f)
+#define kMinWidthToDisplaySkipButtons          420.f
 
 NSString * const NGMoviePlayerControlViewTopControlsViewKey = @"NGMoviePlayerControlViewTopControlsViewKey";
 NSString * const NGMoviePlayerControlViewBottomControlsViewKey = @"NGMoviePlayerControlViewBottomControlsViewKey";
@@ -43,6 +43,7 @@ NSString * const NGMoviePlayerControlViewtopButtonContainerKey = @"NGMoviePlayer
 @property (nonatomic, strong) UILabel *currentTimeLabel;
 @property (nonatomic, strong) UILabel *remainingTimeLabel;
 @property (nonatomic, strong) UIView *topButtonContainer;
+@property (nonatomic, strong) UIImage *bottomControlFullscreenImage;
 @property (nonatomic, readonly, getter = isAirPlayButtonVisible) BOOL airPlayButtonVisible;
 @property (nonatomic, strong) NSDictionary *controls;
 
@@ -86,6 +87,7 @@ NSString * const NGMoviePlayerControlViewtopButtonContainerKey = @"NGMoviePlayer
 @synthesize zoomOutButtonPosition = _zoomOutButtonPosition;
 @synthesize layoutSubviewsBlock = _layoutSubviewsBlock;
 @synthesize controls = _controls;
+@synthesize bottomControlFullscreenImage = _bottomControlFullscreenImage;
 
 ////////////////////////////////////////////////////////////////////////
 #pragma mark - Lifecycle
@@ -106,13 +108,13 @@ NSString * const NGMoviePlayerControlViewtopButtonContainerKey = @"NGMoviePlayer
         _topControlsView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         [_topControlsView addSubview:_topButtonContainer];
         
-        UIImage *bottomControlImage = [UIImage imageNamed:@"NGMoviePlayer.bundle/fullscreen-hud.png"];
-        if ([bottomControlImage respondsToSelector:@selector(resizableImageWithCapInsets:)]) {
-            bottomControlImage = [bottomControlImage resizableImageWithCapInsets:UIEdgeInsetsMake(48.f, 15.f, 46.f, 15.f)];
+        _bottomControlFullscreenImage = [UIImage imageNamed:@"NGMoviePlayer.bundle/fullscreen-hud.png"];
+        if ([_bottomControlFullscreenImage respondsToSelector:@selector(resizableImageWithCapInsets:)]) {
+            _bottomControlFullscreenImage = [_bottomControlFullscreenImage resizableImageWithCapInsets:UIEdgeInsetsMake(48.f, 15.f, 46.f, 15.f)];
         } else {
-            bottomControlImage = [bottomControlImage stretchableImageWithLeftCapWidth:15 topCapHeight:47];
+            _bottomControlFullscreenImage = [_bottomControlFullscreenImage stretchableImageWithLeftCapWidth:15 topCapHeight:47];
         }
-        _bottomControlsView = [[UIImageView alloc] initWithImage:bottomControlImage];
+        _bottomControlsView = [[UIImageView alloc] initWithImage:_bottomControlFullscreenImage];
         _bottomControlsView.userInteractionEnabled = YES;
         _bottomControlsView.frame = CGRectZero;
         _bottomControlsView.backgroundColor = [UIColor clearColor];
@@ -130,7 +132,7 @@ NSString * const NGMoviePlayerControlViewtopButtonContainerKey = @"NGMoviePlayer
         _volumeControl.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
         [_volumeControl addTarget:self action:@selector(handleVolumeChanged:) forControlEvents:UIControlEventValueChanged];
         if (UI_USER_INTERFACE_IDIOM()  == UIUserInterfaceIdiomPhone) {
-            //_volumeControl.sliderHeight = 150.f;
+            _volumeControl.sliderHeight = 130.f;
         }
         // volume control needs to get added to self instead of bottomControlView because otherwise the expanded slider
         // doesn't receive any touch events
@@ -246,6 +248,9 @@ NSString * const NGMoviePlayerControlViewtopButtonContainerKey = @"NGMoviePlayer
 - (void)layoutSubviewsForControlStyle:(NGMoviePlayerControlStyle)controlStyle {
     CGFloat controlsViewHeight = [self controlsViewHeightForControlStyle:self.controlStyle];
     if (controlStyle == NGMoviePlayerControlStyleFullscreen) {
+        ((UIImageView *)self.bottomControlsView).image = self.bottomControlFullscreenImage;
+        self.bottomControlsView.backgroundColor = [UIColor clearColor];
+        
         BOOL displaySkipButtons = (_bottomControlsView.frame.size.width > kMinWidthToDisplaySkipButtons);
         CGFloat buttonTopPadding = 23.f;
         self.rewindButton.hidden = !displaySkipButtons;
@@ -282,6 +287,8 @@ NSString * const NGMoviePlayerControlViewtopButtonContainerKey = @"NGMoviePlayer
         
         self.topButtonContainer.frame = CGRectMake(MAX((self.topControlsView.frame.size.width - self.topButtonContainer.frame.size.width)/2.f, 0.f), 0.f, self.topButtonContainer.frame.size.width, [self controlsViewHeightForControlStyle:NGMoviePlayerControlStyleInline]);
     } else {
+        ((UIImageView *)self.bottomControlsView).image = nil;
+        self.bottomControlsView.backgroundColor = [UIColor colorWithWhite:0.f alpha:kControlAlphaValue];
         self.rewindButton.hidden = YES;
         self.forwardButton.hidden = YES;
         

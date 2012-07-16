@@ -65,6 +65,18 @@
     }
 }
 
+- (void)player:(NGMoviePlayer *)player didChangePlaybackRate:(float)rate {
+    NSLog(@"PlaybackRate chagned %f", rate);
+}
+
+- (void)playbackDidFinishWithPlayer:(NGMoviePlayer *)player {
+    NSLog(@"Playbackfinished with Player: %@", player);
+}
+
+- (void)player:(NGMoviePlayer *)player didChangeStatus:(AVPlayerStatus)playerStatus {
+    NSLog(@"Status chaned: %d", playerStatus);
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
 #pragma mark PSPushPopPressViewDelegate
