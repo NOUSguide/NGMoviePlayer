@@ -61,7 +61,7 @@ static char playerLayerReadyForDisplayContext;
     if ((self = [super initWithFrame:frame])) {
         self.clipsToBounds = YES;
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        self.backgroundColor = [UIColor blackColor];
+        self.backgroundColor = [UIColor clearColor];
         
         [self setup];
     }
@@ -159,6 +159,8 @@ static char playerLayerReadyForDisplayContext;
 }
 
 - (void)hidePlaceholderViewAnimated:(BOOL)animated {
+    self.backgroundColor = [UIColor blackColor];
+    
     if (animated) {
         [UIView animateWithDuration:kNGFadeDuration
                          animations:^{
