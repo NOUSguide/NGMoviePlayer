@@ -452,7 +452,7 @@ static char playerLayerReadyForDisplayContext;
     }
 }
 
-- (void)handlePlayButtonPress:(id)sender {
+- (void)handlePlayButtonPress:(id)playControl {
     UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     activityView.hidesWhenStopped = YES;
     activityView.center = self.playButton.center;
@@ -461,7 +461,7 @@ static char playerLayerReadyForDisplayContext;
     [self.playButton removeFromSuperview];
     [activityView startAnimating];
     
-    [self.delegate moviePlayerControl:sender didPerformAction:NGMoviePlayerControlActionStartToPlay];
+    [self.delegate moviePlayerControl:playControl didPerformAction:NGMoviePlayerControlActionStartToPlay];
 }
 
 @end
