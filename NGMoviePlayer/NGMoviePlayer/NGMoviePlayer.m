@@ -562,7 +562,7 @@ static char playerAirPlayVideoActiveContext;
                 
                 float value = slider.value;
                 [self setCurrentPlaybackTime:value];
-                _seekToZeroBeforePlay = NO;
+                _seekToInitialPlaybackTimeBeforePlay = NO;
             }
             
             break;
@@ -698,7 +698,7 @@ static char playerAirPlayVideoActiveContext;
                                                                                    [strongSelf.view updateWithCurrentTime:strongSelf.currentPlaybackTime 
                                                                                                                  duration:strongSelf.duration];
                                                                                    if ([self.delegate respondsToSelector:@selector(player:didUpdateCurrentTime:)]) {
-                                                                                       [self.delegate player:strongSelf didUpdateCurrentTime:self.currentTime];
+                                                                                       [self.delegate player:strongSelf didUpdateCurrentTime:self.currentPlaybackTime];
                                                                                    }
                                                                                }
                                                                            }
