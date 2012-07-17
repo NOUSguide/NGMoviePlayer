@@ -238,8 +238,7 @@ static char playerAirPlayVideoActiveContext;
     if (player != self.view.playerLayer.player) {
         // Support AirPlay?
         if (self.airPlayActive && [player respondsToSelector:@selector(allowsAirPlayVideo)]) {
-            //TODO: Set to YES
-            [player setAllowsAirPlayVideo:NO];
+            [player setAllowsAirPlayVideo:YES];
             [player setUsesAirPlayVideoWhileAirPlayScreenIsActive:YES];
             
             [self.view.playerLayer.player removeObserver:self forKeyPath:@"airPlayVideoActive"];
@@ -421,17 +420,11 @@ static char playerAirPlayVideoActiveContext;
     } 
     
     else if (context == &playerAirPlayVideoActiveContext) {
-        if ([self.player respondsToSelector:@selector(airPlayVideoActive)]) {
-            BOOL airPlayVideoActive = self.player.airPlayVideoActive;
-            
-            if (airPlayVideoActive) {
-                //[self addSubview:self.airPlayActiveView];
-                //self.airPlayActiveView.frame = self.bounds;
-            } else {
-                //[self.airPlayActiveView removeFromSuperview];
-            }
+        if ([self.player respondsToSelector:@selector(isAirPlayVideoActive)]) {
+            [self.view updateViewsForCurrentScreenState];
             
             if (_delegateFlags.didChangeAirPlay) {
+                BOOL airPlayVideoActive = self.player.airPlayVideoActive;
                 [self.delegate player:self didChangeAirPlayActive:airPlayVideoActive];
             }
         }

@@ -167,8 +167,7 @@ NSString * const NGMoviePlayerControlViewtopButtonContainerKey = @"NGMoviePlayer
         
         _airPlayButton = [[MPVolumeView alloc] initWithFrame:(CGRect) { .size = CGSizeMake(40.f, 40.f) }];
         _airPlayButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin;
-#warning set to YES
-        _airPlayButton.showsRouteButton = NO;
+        _airPlayButton.showsRouteButton = YES;
         _airPlayButton.showsVolumeSlider = NO;
         
         _scrubber = [[NGScrubber alloc] initWithFrame:CGRectZero];
@@ -257,11 +256,12 @@ NSString * const NGMoviePlayerControlViewtopButtonContainerKey = @"NGMoviePlayer
         self.forwardButton.hidden = !displaySkipButtons;
         
         [self.bottomControlsView addSubview:self.airPlayButton];
-        /*if (!self.isAirPlayButtonVisible) {
+        if (self.isAirPlayButtonVisible) {
             self.airPlayButton.frame = CGRectMake(_bottomControlsView.frame.size.width - 60.f, buttonTopPadding + 10.f, 40.f, 40.f);
-        } else {*/
+            [self.bottomControlsView addSubview:self.airPlayButton];
+        } else {
             self.airPlayButton.frame = CGRectMake(_bottomControlsView.frame.size.width - 20.f, buttonTopPadding + 10.f, 0.f, 0.f);
-        //}
+        }
         
         self.playPauseButton.frame = CGRectMake(20.f, buttonTopPadding, 40.f, 40.f);
         self.volumeControl.frame = CGRectMake(self.airPlayButton.frame.origin.x - 25.f, _bottomControlsView.frame.origin.y + buttonTopPadding, 40.f, 40.f);
@@ -291,6 +291,7 @@ NSString * const NGMoviePlayerControlViewtopButtonContainerKey = @"NGMoviePlayer
         self.bottomControlsView.backgroundColor = [UIColor colorWithWhite:0.f alpha:kControlAlphaValue];
         self.rewindButton.hidden = YES;
         self.forwardButton.hidden = YES;
+        [self.airPlayButton removeFromSuperview];
         
         self.playPauseButton.frame = CGRectMake(0.f, 0.f, controlsViewHeight, controlsViewHeight);
         

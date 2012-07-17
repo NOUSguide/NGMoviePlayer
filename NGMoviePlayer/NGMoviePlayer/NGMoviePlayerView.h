@@ -40,6 +40,9 @@
 /** shows the placeholder view with the play button */
 - (void)showPlaceholderViewAnimated:(BOOL)animated;
 
+/** setups the UI corresponding to the State (Airplay, VGA, or just playing) */
+- (void)updateViewsForCurrentScreenState;
+
 - (void)stopFadeOutControlsViewTimer;
 - (void)restartFadeOutControlsViewTimer;
 

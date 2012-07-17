@@ -229,7 +229,7 @@ static char playerLayerReadyForDisplayContext;
 }
 
 - (NGMoviePlayerScreenState)screenState {
-    return self.externalWindow != nil ? NGMoviePlayerScreenStateExternal : NGMoviePlayerScreenStateDevice;
+    return self.externalWindow != nil || self.playerLayer.player.airPlayVideoActive ? NGMoviePlayerScreenStateExternal : NGMoviePlayerScreenStateDevice;
 }
 
 - (UIView *)externalScreenPlaceholder {
@@ -240,32 +240,32 @@ static char playerLayerReadyForDisplayContext;
         _externalScreenPlaceholder.frame = self.bounds;
         _externalScreenPlaceholder.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         
-        UIView *airplayPlaceholderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, (isIPad ? 280 : 140))];
+        UIView *externalScreenPlaceholderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, (isIPad ? 280 : 140))];
         
-        UIImageView *airPlayImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:(isIPad ? @"NGMoviePlayer.bundle/wildcatNoContentVideos@2x" : @"NGMoviePlayer.bundle/wildcatNoContentVideos")]];
-        airPlayImageView.frame = CGRectMake((320-airPlayImageView.image.size.width)/2, 0, airPlayImageView.image.size.width, airPlayImageView.image.size.height);
-        [airplayPlaceholderView addSubview:airPlayImageView];
+        UIImageView *externalScreenPlaceholderImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:(isIPad ? @"NGMoviePlayer.bundle/wildcatNoContentVideos@2x" : @"NGMoviePlayer.bundle/wildcatNoContentVideos")]];
+        externalScreenPlaceholderImageView.frame = CGRectMake((320-externalScreenPlaceholderImageView.image.size.width)/2, 0, externalScreenPlaceholderImageView.image.size.width, externalScreenPlaceholderImageView.image.size.height);
+        [externalScreenPlaceholderView addSubview:externalScreenPlaceholderImageView];
         
-        UILabel *airPlayVideoLabel = [[UILabel alloc] initWithFrame:CGRectMake(29, airPlayImageView.frame.size.height + (isIPad ? 15 : 5), 262, 30)];
-        airPlayVideoLabel.font = [UIFont systemFontOfSize:(isIPad ? 26.0f : 20.0f)];
-        airPlayVideoLabel.textAlignment = UITextAlignmentCenter;
-        airPlayVideoLabel.backgroundColor = [UIColor clearColor];
-        airPlayVideoLabel.textColor = [UIColor darkGrayColor];
-        airPlayVideoLabel.text = @"VGA";
-        [airplayPlaceholderView addSubview:airPlayVideoLabel];
+        UILabel *externalScreenLabel = [[UILabel alloc] initWithFrame:CGRectMake(29, externalScreenPlaceholderImageView.frame.size.height + (isIPad ? 15 : 5), 262, 30)];
+        externalScreenLabel.font = [UIFont systemFontOfSize:(isIPad ? 26.0f : 20.0f)];
+        externalScreenLabel.textAlignment = UITextAlignmentCenter;
+        externalScreenLabel.backgroundColor = [UIColor clearColor];
+        externalScreenLabel.textColor = [UIColor darkGrayColor];
+        externalScreenLabel.text = ([self.playerLayer.player respondsToSelector:@selector(isAirPlayVideoActive)] && self.playerLayer.player.isAirPlayVideoActive ? @"AirPlay" : @"Mirroring");
+        [externalScreenPlaceholderView addSubview:externalScreenLabel];
         
-        UILabel *airPlayVideoDescriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, airPlayVideoLabel.frame.origin.y + (isIPad ? 35 : 20), 320, 30)];
-        airPlayVideoDescriptionLabel.font = [UIFont systemFontOfSize:(isIPad ? 14.0f : 10.0f)];
-        airPlayVideoDescriptionLabel.textAlignment = UITextAlignmentCenter;
-        airPlayVideoDescriptionLabel.backgroundColor = [UIColor clearColor];
-        airPlayVideoDescriptionLabel.textColor = [UIColor lightGrayColor];
-        airPlayVideoDescriptionLabel.text = @"Dieses Video wird über VGA wiedergegeben.";
-        [airplayPlaceholderView addSubview:airPlayVideoDescriptionLabel];
+        UILabel *externalScreenDescriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, externalScreenLabel.frame.origin.y + (isIPad ? 35 : 20), 320, 30)];
+        externalScreenDescriptionLabel.font = [UIFont systemFontOfSize:(isIPad ? 14.0f : 10.0f)];
+        externalScreenDescriptionLabel.textAlignment = UITextAlignmentCenter;
+        externalScreenDescriptionLabel.backgroundColor = [UIColor clearColor];
+        externalScreenDescriptionLabel.textColor = [UIColor lightGrayColor];
+        externalScreenDescriptionLabel.text = [NSString stringWithFormat:@"Dieses Video wird über %@ wiedergegeben.", externalScreenLabel.text];
+        [externalScreenPlaceholderView addSubview:externalScreenDescriptionLabel];
         
-        airplayPlaceholderView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
-        airplayPlaceholderView.center = _externalScreenPlaceholder.center;
+        externalScreenPlaceholderView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+        externalScreenPlaceholderView.center = _externalScreenPlaceholder.center;
         
-        [_externalScreenPlaceholder addSubview:airplayPlaceholderView];
+        [_externalScreenPlaceholder addSubview:externalScreenPlaceholderView];
     }
     
     return _externalScreenPlaceholder;
@@ -323,6 +323,10 @@ static char playerLayerReadyForDisplayContext;
         self.externalWindow.hidden = YES;
         self.externalWindow = nil;
     }
+}
+
+- (void)updateViewsForCurrentScreenState {
+    [self positionViewsForState:self.screenState];
 }
 
 - (void)positionViewsForState:(NGMoviePlayerScreenState)screenState {
