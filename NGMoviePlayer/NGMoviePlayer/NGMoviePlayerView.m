@@ -79,8 +79,10 @@ static char playerLayerReadyForDisplayContext;
 
 - (void)dealloc {
     AVPlayerLayer *playerLayer = (AVPlayerLayer *)[_playerLayerView layer];
-    
+
+    [_playerLayerView removeFromSuperview];
     [playerLayer removeObserver:self forKeyPath:@"readyForDisplay"];
+    
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(fadeOutControls) object:nil];
 }
 
@@ -116,12 +118,16 @@ static char playerLayerReadyForDisplayContext;
     if (newSuperview == nil) {
         [self.playerLayer.player pause];
     }
+
+    [super willMoveToSuperview:newSuperview];
 }
 
 - (void)willMoveToWindow:(UIWindow *)newWindow {
     if (newWindow == nil) {
         [self.playerLayer.player pause];
     }
+
+    [super willMoveToWindow:newWindow];
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -208,10 +214,12 @@ static char playerLayerReadyForDisplayContext;
 - (void)setControlStyle:(NGMoviePlayerControlStyle)controlStyle {
     if (controlStyle != self.controlsView.controlStyle) {
         self.controlsView.controlStyle = controlStyle;
+
+        BOOL isIPad = [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad;
         
         // hide status bar in fullscreen, restore to previous state
         if (controlStyle == NGMoviePlayerControlStyleFullscreen) {
-            [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
+            [[UIApplication sharedApplication] setStatusBarStyle: (isIPad ? UIStatusBarStyleBlackOpaque : UIStatusBarStyleBlackTranslucent)];
             [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
         } else {
             [[UIApplication sharedApplication] setStatusBarStyle:_statusBarStyle];
