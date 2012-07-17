@@ -61,7 +61,7 @@ static char playerLayerReadyForDisplayContext;
     if ((self = [super initWithFrame:frame])) {
         self.clipsToBounds = YES;
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        self.backgroundColor = [UIColor blackColor];
+        self.backgroundColor = [UIColor clearColor];
         
         [self setup];
     }
@@ -177,6 +177,8 @@ static char playerLayerReadyForDisplayContext;
 }
 
 - (void)hidePlaceholderViewAnimated:(BOOL)animated {
+    self.backgroundColor = [UIColor blackColor];
+    
     if (animated) {
         [UIView animateWithDuration:kNGFadeDuration
                          animations:^{
@@ -486,7 +488,7 @@ static char playerLayerReadyForDisplayContext;
     }
 }
 
-- (void)handlePlayButtonPress:(id)sender {
+- (void)handlePlayButtonPress:(id)playControl {
     UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     activityView.hidesWhenStopped = YES;
     activityView.center = self.playButton.center;
@@ -495,7 +497,7 @@ static char playerLayerReadyForDisplayContext;
     [self.playButton removeFromSuperview];
     [activityView startAnimating];
     
-    [self.delegate moviePlayerControl:sender didPerformAction:NGMoviePlayerControlActionStartToPlay];
+    [self.delegate moviePlayerControl:playControl didPerformAction:NGMoviePlayerControlActionStartToPlay];
 }
 
 @end

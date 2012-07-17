@@ -36,7 +36,7 @@
 @property (nonatomic, assign) BOOL autostartWhenReady;
 
 /** current playback time of the player */
-@property (nonatomic, assign) NSTimeInterval currentTime;
+@property (nonatomic, assign) NSTimeInterval currentPlaybackTime;
 /** total duration of played video */
 @property (nonatomic, readonly) NSTimeInterval duration;
 /** currently downloaded duration which is already playable */
@@ -59,6 +59,7 @@
 
 - (void)play;
 - (void)pause;
+- (void)togglePlaybackState;
 
 /**
  Convenience method to set frame of view and add to superview

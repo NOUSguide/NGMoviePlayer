@@ -139,6 +139,7 @@ static char playerAirPlayVideoActiveContext;
     [_playableDurationTimer invalidate];
     _delegate = nil;
     _view.controlsView.delegate = nil;
+    [_view removeFromSuperview];
     
     [self stopObservingPlayerTimeChanges];
     [player pause];
@@ -312,7 +313,7 @@ static char playerAirPlayVideoActiveContext;
     return NGMoviePlayerVideoGravityFromAVLayerVideoGravity(self.view.playerLayer.videoGravity);
 }
 
-- (void)setCurrentTime:(NSTimeInterval)currentTime {
+- (void)setCurrentPlaybackTime:(NSTimeInterval)currentTime {
     currentTime = MAX(currentTime,0.);
     currentTime = MIN(currentTime,self.duration);
     
@@ -323,7 +324,7 @@ static char playerAirPlayVideoActiveContext;
         [self.player seekToTime:time
               completionHandler:^(BOOL finished) {
                   if (finished) {
-                      [self.view updateWithCurrentTime:self.currentTime duration:self.duration];
+                      [self.view updateWithCurrentTime:self.currentPlaybackTime duration:self.duration];
                   }
               }];
     } else {
@@ -331,7 +332,7 @@ static char playerAirPlayVideoActiveContext;
     }
 }
 
-- (NSTimeInterval)currentTime {
+- (NSTimeInterval)currentPlaybackTime {
     return CMTimeGetSeconds(self.player.currentTime);
 }
 
@@ -364,7 +365,7 @@ static char playerAirPlayVideoActiveContext;
         switch (status) {
             case AVPlayerStatusUnknown: {
                 [self stopObservingPlayerTimeChanges];
-                [self.view updateWithCurrentTime:self.currentTime duration:self.duration];
+                [self.view updateWithCurrentTime:self.currentPlaybackTime duration:self.duration];
                 // TODO: Disable buttons & scrubber
                 break;
             }
@@ -382,7 +383,7 @@ static char playerAirPlayVideoActiveContext;
                 
             case AVPlayerStatusFailed: {
                 [self stopObservingPlayerTimeChanges];
-                [self.view updateWithCurrentTime:self.currentTime duration:self.duration];
+                [self.view updateWithCurrentTime:self.currentPlaybackTime duration:self.duration];
                 // TODO: Disable buttons & scrubber
                 break;
             }
@@ -396,7 +397,7 @@ static char playerAirPlayVideoActiveContext;
     } 
     
     else if (context == &playerItemDurationContext) {
-        [self.view updateWithCurrentTime:self.currentTime duration:self.duration];
+        [self.view updateWithCurrentTime:self.currentPlaybackTime duration:self.duration];
     } 
     
     else if (context == &playerCurrentItemContext) {
@@ -482,7 +483,7 @@ static char playerAirPlayVideoActiveContext;
 - (void)beginSkippingBackwards {
     [self beginScrubbing];
     
-    self.currentTime -= kNGInitialTimeToSkip;
+    self.currentPlaybackTime -= kNGInitialTimeToSkip;
     self.timeToSkip = kNGRepeatedTimeToSkipStartValue;
     
     self.skippingTimer = [NSTimer scheduledTimerWithTimeInterval:1.0
@@ -495,7 +496,7 @@ static char playerAirPlayVideoActiveContext;
 - (void)beginSkippingForwards {
     [self beginScrubbing];
     
-    self.currentTime += kNGInitialTimeToSkip;
+    self.currentPlaybackTime += kNGInitialTimeToSkip;
     self.timeToSkip = kNGRepeatedTimeToSkipStartValue;
     
     self.skippingTimer = [NSTimer scheduledTimerWithTimeInterval:1.0
@@ -560,8 +561,8 @@ static char playerAirPlayVideoActiveContext;
                 NGScrubber *slider = (NGScrubber *)control;
                 
                 float value = slider.value;
-                [self setCurrentTime:value];
-                _seekToInitialPlaybackTimeBeforePlay = NO;
+                [self setCurrentPlaybackTime:value];
+                _seekToZeroBeforePlay = NO;
             }
             
             break;
@@ -694,7 +695,7 @@ static char playerAirPlayVideoActiveContext;
                                                                            
                                                                            if (strongSelf != nil) {
                                                                                if (CMTIME_IS_VALID(strongSelf.player.currentTime) && CMTIME_IS_VALID(strongSelf.CMDuration)) {
-                                                                                   [strongSelf.view updateWithCurrentTime:strongSelf.currentTime 
+                                                                                   [strongSelf.view updateWithCurrentTime:strongSelf.currentPlaybackTime 
                                                                                                                  duration:strongSelf.duration];
                                                                                    if ([self.delegate respondsToSelector:@selector(player:didUpdateCurrentTime:)]) {
                                                                                        [self.delegate player:strongSelf didUpdateCurrentTime:self.currentTime];
@@ -716,9 +717,9 @@ static char playerAirPlayVideoActiveContext;
     NGMoviePlayerControlAction action = [timer.userInfo intValue];
     
     if (action == NGMoviePlayerControlActionBeginSkippingBackwards) {
-        self.currentTime -= self.timeToSkip++;
+        self.currentPlaybackTime -= self.timeToSkip++;
     } else if (action == NGMoviePlayerControlActionBeginSkippingForwards) {
-        self.currentTime += self.timeToSkip++;
+        self.currentPlaybackTime += self.timeToSkip++;
     }
 }
 

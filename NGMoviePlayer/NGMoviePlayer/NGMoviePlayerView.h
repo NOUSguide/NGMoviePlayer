@@ -12,9 +12,11 @@
 #import "NGMoviePlayerControlStyle.h"
 #import "NGWeak.h"
 
+
 @class NGMoviePlayerLayerView;
 @class NGMoviePlayerControlView;
 @protocol NGMoviePlayerControlActionDelegate;
+
 
 @interface NGMoviePlayerView : UIView
 
@@ -49,5 +51,14 @@
 /** Updates the UI to reflect the current time */
 - (void)updateWithCurrentTime:(NSTimeInterval)currentTime duration:(NSTimeInterval)duration;
 - (void)updateWithPlaybackStatus:(BOOL)isPlaying;
+
+/** 
+ Performs the actions on the playerView to start playback. 
+ Call this method on your custom placeholderView implementation 
+ 
+ @param playControl the control used to start playback
+
+ */
+- (void)handlePlayButtonPress:(id)playControl;
 
 @end
