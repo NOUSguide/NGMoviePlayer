@@ -8,6 +8,7 @@
 
 #import "NGMoviePlayerDelegate.h"
 #import "NGMoviePlayerView.h"
+#import "NGMoviePlayerControlView.h"
 #import "NGMoviePlayerVideoGravity.h"
 #import "NGMoviePlayerAudioSessionCategory.h"
 #import "NGWeak.h"
@@ -65,5 +66,18 @@
  Convenience method to set frame of view and add to superview
  */
 - (void)addToSuperview:(UIView *)view withFrame:(CGRect)frame;
+
+/******************************************
+ @name Subclass Hooks
+ 
+ Subclasses can override this method to perform an action here, the default implementation does nothing
+ ******************************************/
+
+- (void)playerDidStartToPlay;
+
+- (void)playerWillShowControlsWithDuration:(NSTimeInterval)duration;
+- (void)playerDidShowControls;
+- (void)playerWillHideControlsWithDuration:(NSTimeInterval)duration;
+- (void)playerDidHideControls;
 
 @end

@@ -9,3 +9,6 @@
     #import <QuartzCore/QuartzCore.h>
     #import <MediaPlayer/MediaPlayer.h>
 #endif
+
+
+#define kNGFadeDuration                     0.4

@@ -125,7 +125,7 @@ static char playerAirPlayVideoActiveContext;
 }
 
 - (id)initWithURL:(NSURL *)URL {
-    return [self initWithURL:URL initialPlaybackTime:0];
+    return [self initWithURL:URL initialPlaybackTime:0.];
 }
 
 - (id)init {
@@ -180,6 +180,7 @@ static char playerAirPlayVideoActiveContext;
         
         if (_delegateFlags.didStartToPlay) {
             [self.delegate playbackDidStartWithPlayer:self];
+            [self playerDidStartToPlay];
         }
     } else {
         _autostartWhenReady = YES;
@@ -207,6 +208,30 @@ static char playerAirPlayVideoActiveContext;
     } else {
         [self play]; 
     }
+}
+
+////////////////////////////////////////////////////////////////////////
+#pragma mark - NGMoviePlayer Subclass Hooks
+////////////////////////////////////////////////////////////////////////
+
+- (void)playerDidStartToPlay {
+    // do nothing here
+}
+
+- (void)playerWillShowControlsWithDuration:(NSTimeInterval)duration {
+    // do nothing here
+}
+
+- (void)playerDidShowControls {
+    // do nothing here
+}
+
+- (void)playerWillHideControlsWithDuration:(NSTimeInterval)duration {
+    // do nothing here
+}
+
+- (void)playerDidHideControls {
+    // do nothing here
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -580,8 +605,29 @@ static char playerAirPlayVideoActiveContext;
             [self.view restartFadeOutControlsViewTimer];
             break;
         }
+
+        case NGMoviePlayerControlActionWillShowControls: {
+            [self playerWillShowControlsWithDuration:kNGFadeDuration];
+            break;
+        }
+
+        case NGMoviePlayerControlActionDidShowControls: {
+            [self playerDidShowControls];
+            break;
+        }
+
+        case NGMoviePlayerControlActionWillHideControls: {
+            [self playerWillHideControlsWithDuration:kNGFadeDuration];
+            break;
+        }
+
+        case NGMoviePlayerControlActionDidHideControls: {
+            [self playerDidHideControls];
+            break;
+        }
             
         default:
+            // do nothing
             break;
             
     }

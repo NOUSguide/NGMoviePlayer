@@ -16,7 +16,11 @@ typedef enum {
     NGMoviePlayerControlActionScrubbingValueChanged,
     NGMoviePlayerControlActionEndScrubbing,
     NGMoviePlayerControlActionEndSkipping,
-    NGMoviePlayerControlActionVolumeChanged
+    NGMoviePlayerControlActionVolumeChanged,
+    NGMoviePlayerControlActionWillShowControls,
+    NGMoviePlayerControlActionDidShowControls,
+    NGMoviePlayerControlActionWillHideControls,
+    NGMoviePlayerControlActionDidHideControls
 } NGMoviePlayerControlAction;
 
 

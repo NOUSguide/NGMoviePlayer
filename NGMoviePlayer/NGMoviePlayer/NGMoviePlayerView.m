@@ -5,8 +5,9 @@
 #import "NGMoviePlayerControlActionDelegate.h"
 #import "NGMoviePlayerVideoGravity.h"
 
-#define kNGFadeDuration                     0.4
-#define kNGControlVisibilityDuration        4.
+
+#define kNGControlVisibilityDuration        5.
+
 
 typedef enum {
     NGMoviePlayerScreenStateDevice,
@@ -155,15 +156,22 @@ static char playerLayerReadyForDisplayContext;
         } else {
             [self.controlsView.volumeControl setExpanded:NO animated:YES];
         }
-        
+
+        NSTimeInterval duration = animated ? kNGFadeDuration : 0.;
+        NGMoviePlayerControlAction willAction = controlsVisible ? NGMoviePlayerControlActionWillShowControls : NGMoviePlayerControlActionWillHideControls;
+        NGMoviePlayerControlAction didAction = controlsVisible ? NGMoviePlayerControlActionDidShowControls : NGMoviePlayerControlActionDidHideControls;
+
+        [self.delegate moviePlayerControl:self.controlsView didPerformAction:willAction];
+
         [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(fadeOutControls) object:nil];
-        [UIView animateWithDuration:animated ? kNGFadeDuration : 0.
+        [UIView animateWithDuration:duration
                               delay:0.
                             options:UIViewAnimationOptionCurveEaseInOut
                          animations:^{        
                              self.controlsView.alpha = controlsVisible ? 1.f : 0.f;
                          } completion:^(BOOL finished) {
                              [self restartFadeOutControlsViewTimer];
+                             [self.delegate moviePlayerControl:self.controlsView didPerformAction:didAction];
                          }];
         
         if (self.controlStyle == NGMoviePlayerControlStyleFullscreen) {
@@ -297,6 +305,12 @@ static char playerLayerReadyForDisplayContext;
     _shouldHideControls = isPlaying;
 }
 
+- (void)addVideoOverlayView:(UIView *)overlayView {
+    UIView *superview = self.playerLayerView.superview;
+
+    [superview insertSubview:overlayView aboveSubview:self.playerLayerView];
+}
+
 ////////////////////////////////////////////////////////////////////////
 #pragma mark - Controls
 ////////////////////////////////////////////////////////////////////////
@@ -307,6 +321,7 @@ static char playerLayerReadyForDisplayContext;
 
 - (void)restartFadeOutControlsViewTimer {
     [self stopFadeOutControlsViewTimer];
+
     [self performSelector:@selector(fadeOutControls) withObject:nil afterDelay:kNGControlVisibilityDuration];
 }
 

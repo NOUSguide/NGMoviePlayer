@@ -52,6 +52,9 @@
 - (void)updateWithCurrentTime:(NSTimeInterval)currentTime duration:(NSTimeInterval)duration;
 - (void)updateWithPlaybackStatus:(BOOL)isPlaying;
 
+/** Adds an overlay view to the view that is beneath the controls but on top of the video */
+- (void)addVideoOverlayView:(UIView *)overlayView;
+
 /** 
  Performs the actions on the playerView to start playback. 
  Call this method on your custom placeholderView implementation 

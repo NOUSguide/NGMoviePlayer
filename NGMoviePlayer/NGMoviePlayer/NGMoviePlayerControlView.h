@@ -23,14 +23,17 @@ extern NSString * const NGMoviePlayerControlViewCurrentTimeLabelKey;
 extern NSString * const NGMoviePlayerControlViewRemainingTimeLabelKey;
 extern NSString * const NGMoviePlayerControlViewtopButtonContainerKey;
 
+
 @protocol NGMoviePlayerControlActionDelegate;
 @class NGScrubber;
 @class NGVolumeControl;
+
 
 typedef enum {
     NGMoviePlayerControlViewZoomOutButtonPositionRight = 0,
     NGMoviePlayerControlViewZoomOutButtonPositionLeft
 } NGMoviePlayerControlViewZoomOutButtonPosition;
+
 
 @interface NGMoviePlayerControlView : UIView
 
@@ -56,7 +59,6 @@ typedef enum {
 
 /** the position of the zoomout-button in fullscreen-style */
 @property (nonatomic) NGMoviePlayerControlViewZoomOutButtonPosition zoomOutButtonPosition;
-
 
 @property (nonatomic, copy) void (^layoutSubviewsBlock)(NGMoviePlayerControlStyle controlStyle, NSDictionary *controls);
 

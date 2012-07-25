@@ -12,9 +12,11 @@
 #import "NGVolumeControl.h"
 #import "NGMoviePlayerFunctions.h"
 
+
 #define kControlAlphaValue                     0.6f
 #define kBottomControlHorizontalPadding        (self.controlStyle == NGMoviePlayerControlStyleFullscreen ? 20.f : 0.f)
 #define kMinWidthToDisplaySkipButtons          420.f
+
 
 NSString * const NGMoviePlayerControlViewTopControlsViewKey = @"NGMoviePlayerControlViewTopControlsViewKey";
 NSString * const NGMoviePlayerControlViewBottomControlsViewKey = @"NGMoviePlayerControlViewBottomControlsViewKey";
@@ -29,6 +31,7 @@ NSString * const NGMoviePlayerControlViewZoomButtonKey = @"NGMoviePlayerControlV
 NSString * const NGMoviePlayerControlViewCurrentTimeLabelKey = @"NGMoviePlayerControlViewCurrentTimeLabelKey";
 NSString * const NGMoviePlayerControlViewRemainingTimeLabelKey = @"NGMoviePlayerControlViewRemainingTimeLabelKey";
 NSString * const NGMoviePlayerControlViewtopButtonContainerKey = @"NGMoviePlayerControlViewtopButtonContainerKey";
+
 
 @interface NGMoviePlayerControlView () {
     BOOL _statusBarHidden;
@@ -64,6 +67,7 @@ NSString * const NGMoviePlayerControlViewtopButtonContainerKey = @"NGMoviePlayer
 - (void)handleVolumeChanged:(id)sender;
 
 @end
+
 
 @implementation NGMoviePlayerControlView
 
@@ -108,7 +112,7 @@ NSString * const NGMoviePlayerControlViewtopButtonContainerKey = @"NGMoviePlayer
         _topControlsView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         [_topControlsView addSubview:_topButtonContainer];
         
-        _bottomControlFullscreenImage = [UIImage imageNamed:@"NGMoviePlayer.bundle/fullscreen-hud.png"];
+        _bottomControlFullscreenImage = [UIImage imageNamed:@"NGMoviePlayer.bundle/fullscreen-hud"];
         if ([_bottomControlFullscreenImage respondsToSelector:@selector(resizableImageWithCapInsets:)]) {
             _bottomControlFullscreenImage = [_bottomControlFullscreenImage resizableImageWithCapInsets:UIEdgeInsetsMake(48.f, 15.f, 46.f, 15.f)];
         } else {
@@ -208,7 +212,8 @@ NSString * const NGMoviePlayerControlViewtopButtonContainerKey = @"NGMoviePlayer
         
         _statusBarHidden = [UIApplication sharedApplication].statusBarHidden;
         
-        _controls = [NSDictionary dictionaryWithObjectsAndKeys:_topControlsView, NGMoviePlayerControlViewTopControlsViewKey,
+        _controls = [NSDictionary dictionaryWithObjectsAndKeys:
+                     _topControlsView, NGMoviePlayerControlViewTopControlsViewKey,
                      _bottomControlsView, NGMoviePlayerControlViewBottomControlsViewKey,
                      _playPauseButton, NGMoviePlayerControlViewPlayPauseButtonKey,
                      _scrubber, NGMoviePlayerControlViewScrubberKey,
@@ -220,7 +225,8 @@ NSString * const NGMoviePlayerControlViewtopButtonContainerKey = @"NGMoviePlayer
                      _currentTimeLabel, NGMoviePlayerControlViewCurrentTimeLabelKey,
                      _remainingTimeLabel, NGMoviePlayerControlViewRemainingTimeLabelKey,
                      _topButtonContainer, NGMoviePlayerControlViewtopButtonContainerKey,
-                     _volumeView, NGMoviePlayerControlViewVolumeViewKey, nil];
+                     _volumeView, NGMoviePlayerControlViewVolumeViewKey,
+                     nil];
     }
     
     return self;
@@ -232,6 +238,7 @@ NSString * const NGMoviePlayerControlViewtopButtonContainerKey = @"NGMoviePlayer
 
 - (void)layoutSubviews {
     [super layoutSubviews];
+    
     CGFloat controlsViewHeight = [self controlsViewHeightForControlStyle:self.controlStyle];
     
     _topControlsView.frame = CGRectMake(0.f, (self.controlStyle == NGMoviePlayerControlStyleFullscreen ? 20.f : 0.f), self.bounds.size.width, [self controlsViewHeightForControlStyle:NGMoviePlayerControlStyleInline]);
@@ -244,9 +251,13 @@ NSString * const NGMoviePlayerControlViewtopButtonContainerKey = @"NGMoviePlayer
     }
 }
 
+////////////////////////////////////////////////////////////////////////
+#pragma mark - NGMoviePlayerControlView
+////////////////////////////////////////////////////////////////////////
+
 - (void)layoutSubviewsForControlStyle:(NGMoviePlayerControlStyle)controlStyle {
     CGFloat controlsViewHeight = [self controlsViewHeightForControlStyle:self.controlStyle];
-
+    
     if (controlStyle == NGMoviePlayerControlStyleFullscreen) {
         ((UIImageView *)self.bottomControlsView).image = self.bottomControlFullscreenImage;
         self.bottomControlsView.backgroundColor = [UIColor clearColor];
@@ -309,10 +320,6 @@ NSString * const NGMoviePlayerControlViewtopButtonContainerKey = @"NGMoviePlayer
     }
 }
 
-////////////////////////////////////////////////////////////////////////
-#pragma mark - NGMoviePlayerControlView
-////////////////////////////////////////////////////////////////////////
-
 - (void)setControlStyle:(NGMoviePlayerControlStyle)controlStyle {
     if (controlStyle != _controlStyle) {
         _controlStyle = controlStyle;
@@ -355,6 +362,8 @@ NSString * const NGMoviePlayerControlViewtopButtonContainerKey = @"NGMoviePlayer
 
 - (void)addTopControlsViewButton:(UIButton *)button {
     CGFloat maxX = 0.f;
+    CGFloat height = [self controlsViewHeightForControlStyle:NGMoviePlayerControlStyleInline];
+
     for (UIView *subview in self.topButtonContainer.subviews) {
         maxX = MAX(subview.frame.origin.x + subview.frame.size.width, maxX);
     }
@@ -363,9 +372,9 @@ NSString * const NGMoviePlayerControlViewtopButtonContainerKey = @"NGMoviePlayer
         maxX += self.topControlsViewButtonPadding;
     }
     
-    button.frame = CGRectMake(maxX, 0.f, [self controlsViewHeightForControlStyle:NGMoviePlayerControlStyleInline], button.frame.size.width);
+    button.frame = CGRectMake(maxX, 0.f, button.frame.size.width, height);
     [self.topButtonContainer addSubview:button];
-    self.topButtonContainer.frame = CGRectMake(0.f, 0.f, maxX + button.frame.size.width, [self controlsViewHeightForControlStyle:NGMoviePlayerControlStyleInline]);
+    self.topButtonContainer.frame = CGRectMake(0.f, 0.f, maxX + button.frame.size.width, height);
 }
 
 ////////////////////////////////////////////////////////////////////////
