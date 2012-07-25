@@ -19,17 +19,20 @@ static char playerAirPlayVideoActiveContext;
 @interface NGMoviePlayer () <NGMoviePlayerControlActionDelegate> {
     // flags for methods implemented in the delegate
     struct {
-        unsigned int didChangeStatus:1;
-        unsigned int didChangePlaybackRate:1;
-		unsigned int didChangeAirPlay:1;
-		unsigned int didFinishPlayback:1;
-        unsigned int didFailToLoadURL:1;
-        unsigned int didUpdateCurrentTime:1;
-        unsigned int didStartToPlay:1;
+        unsigned int didStartPlayback:1;
+        unsigned int didFailToLoad:1;
+        unsigned int didFinishPlayback:1;
         unsigned int didPausePlayback:1;
-        unsigned int didChangeControlStyle:1;
+        unsigned int didResumePlayback:1;
+
         unsigned int didBeginScrubbing:1;
         unsigned int didEndScrubbing:1;
+
+        unsigned int didChangeStatus:1;
+        unsigned int didChangePlaybackRate:1;
+		unsigned int didChangeAirPlayActive:1;
+        unsigned int didChangeControlStyle:1;
+        unsigned int didUpdateCurrentTime:1;
 	} _delegateFlags;
     
     BOOL _seekToInitialPlaybackTimeBeforePlay;
@@ -156,6 +159,89 @@ static char playerAirPlayVideoActiveContext;
 }
 
 ////////////////////////////////////////////////////////////////////////
+#pragma mark - NSObject KVO
+////////////////////////////////////////////////////////////////////////
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if (context == &playerItemStatusContext) {
+        AVPlayerStatus status = [[change objectForKey:NSKeyValueChangeNewKey] integerValue];
+
+        switch (status) {
+            case AVPlayerStatusUnknown: {
+                [self stopObservingPlayerTimeChanges];
+                [self.view updateWithCurrentTime:self.currentPlaybackTime duration:self.duration];
+                // TODO: Disable buttons & scrubber
+                break;
+            }
+
+            case AVPlayerStatusReadyToPlay: {
+                // TODO: Enable buttons & scrubber
+                if (!self.scrubbing) {
+                    if (self.autostartWhenReady && self.view.superview != nil) {
+                        [self play];
+                    }
+                }
+
+                break;
+            }
+
+            case AVPlayerStatusFailed: {
+                [self stopObservingPlayerTimeChanges];
+                [self.view updateWithCurrentTime:self.currentPlaybackTime duration:self.duration];
+                // TODO: Disable buttons & scrubber
+                break;
+            }
+        }
+
+        [self.view updateWithPlaybackStatus:self.playing];
+
+        if (_delegateFlags.didChangeStatus) {
+            [self.delegate moviePlayer:self didChangeStatus:status];
+        }
+    }
+
+    else if (context == &playerItemDurationContext) {
+        [self.view updateWithCurrentTime:self.currentPlaybackTime duration:self.duration];
+    }
+
+    else if (context == &playerCurrentItemContext) {
+        AVPlayerItem *newPlayerItem = [change objectForKey:NSKeyValueChangeNewKey];
+
+        if (newPlayerItem == (id)[NSNull null]) {
+            [self stopObservingPlayerTimeChanges];
+            // TODO: Disable buttons & scrubber
+        } else {
+            [self.view updateWithPlaybackStatus:self.playing];
+            [self startObservingPlayerTimeChanges];
+        }
+    }
+
+    else if (context == &playerRateContext) {
+        [self.view updateWithPlaybackStatus:self.playing];
+
+        if (_delegateFlags.didChangePlaybackRate) {
+            [self.delegate moviePlayer:self didChangePlaybackRate:self.player.rate];
+        }
+    }
+
+    else if (context == &playerAirPlayVideoActiveContext) {
+        if ([self.player respondsToSelector:@selector(isAirPlayVideoActive)]) {
+            [self.view updateViewsForCurrentScreenState];
+
+            if (_delegateFlags.didChangeAirPlayActive) {
+                BOOL airPlayVideoActive = self.player.airPlayVideoActive;
+
+                [self.delegate moviePlayer:self didChangeAirPlayActive:airPlayVideoActive];
+            }
+        }
+    }
+
+    else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
+}
+
+////////////////////////////////////////////////////////////////////////
 #pragma mark - NGMoviePlayer Video Playback
 ////////////////////////////////////////////////////////////////////////
 
@@ -163,25 +249,36 @@ static char playerAirPlayVideoActiveContext;
     if (self.player.status == AVPlayerStatusReadyToPlay) {
         if (_seekToInitialPlaybackTimeBeforePlay) {
             CMTime time = CMTimeMakeWithSeconds(_initialPlaybackTime, NSEC_PER_SEC);
-            if (_initialPlaybackTime != 0 && [self.player respondsToSelector:@selector(seekToTime:completionHandler:)]) {
+
+            if (_initialPlaybackTime != 0. && [self.player respondsToSelector:@selector(seekToTime:completionHandler:)]) {
                 [self.view showPlaceholderViewAnimated:NO];
                 [self.player seekToTime:time completionHandler:^(BOOL finished) {
                     [self.view hidePlaceholderViewAnimated:YES];
+
+                    if (_delegateFlags.didStartPlayback) {
+                        [self.delegate moviePlayer:self didStartPlaybackOfURL:self.URL];
+                        [self moviePlayerDidStartToPlay];
+                    }
                 }];
             } else {
                 [self.player seekToTime:time];
                 [self.view hidePlaceholderViewAnimated:YES];
+
+                if (_delegateFlags.didStartPlayback) {
+                    [self.delegate moviePlayer:self didStartPlaybackOfURL:self.URL];
+                    [self moviePlayerDidStartToPlay];
+                }
             }
+            
             _seekToInitialPlaybackTimeBeforePlay = NO;
+        } else {
+            if (_delegateFlags.didResumePlayback) {
+                [self.delegate moviePlayerDidResumePlayback:self];
+            }
         }
     
         [self.player play];
         [self.view setControlsVisible:YES animated:YES];
-        
-        if (_delegateFlags.didStartToPlay) {
-            [self.delegate playbackDidStartWithPlayer:self];
-            [self playerDidStartToPlay];
-        }
     } else {
         _autostartWhenReady = YES;
     }
@@ -198,7 +295,7 @@ static char playerAirPlayVideoActiveContext;
     [self.player pause];
     
     if (_delegateFlags.didPausePlayback) {
-        [self.delegate playbackDidPauseWithPlayer:self];
+        [self.delegate moviePlayerDidPausePlayback:self];
     }
 }
 
@@ -214,23 +311,23 @@ static char playerAirPlayVideoActiveContext;
 #pragma mark - NGMoviePlayer Subclass Hooks
 ////////////////////////////////////////////////////////////////////////
 
-- (void)playerDidStartToPlay {
+- (void)moviePlayerDidStartToPlay {
     // do nothing here
 }
 
-- (void)playerWillShowControlsWithDuration:(NSTimeInterval)duration {
+- (void)moviePlayerWillShowControlsWithDuration:(NSTimeInterval)duration {
     // do nothing here
 }
 
-- (void)playerDidShowControls {
+- (void)moviePlayerDidShowControls {
     // do nothing here
 }
 
-- (void)playerWillHideControlsWithDuration:(NSTimeInterval)duration {
+- (void)moviePlayerWillHideControlsWithDuration:(NSTimeInterval)duration {
     // do nothing here
 }
 
-- (void)playerDidHideControls {
+- (void)moviePlayerDidHideControls {
     // do nothing here
 }
 
@@ -296,6 +393,7 @@ static char playerAirPlayVideoActiveContext;
                     }
                 });
             }];
+            
             [self.view showPlaceholderViewAnimated:YES];
         }
     }
@@ -309,18 +407,21 @@ static char playerAirPlayVideoActiveContext;
 - (void)setDelegate:(id<NGMoviePlayerDelegate>)delegate {
     if (delegate != _delegate) {
         _delegate = delegate;
-        
-        _delegateFlags.didChangeStatus = [delegate respondsToSelector:@selector(player:didChangeStatus:)];
-        _delegateFlags.didChangePlaybackRate = [delegate respondsToSelector:@selector(player:didChangePlaybackRate:)];
-        _delegateFlags.didChangeAirPlay = [delegate respondsToSelector:@selector(player:didChangeAirPlayActive:)];
-        _delegateFlags.didFinishPlayback = [delegate respondsToSelector:@selector(playbackDidFinishWithPlayer:)];
-        _delegateFlags.didFailToLoadURL = [delegate respondsToSelector:@selector(player:didFailToLoadURL:)];
-        _delegateFlags.didChangeControlStyle = [delegate respondsToSelector:@selector(player:didChangeControlStyle:)];
-        _delegateFlags.didUpdateCurrentTime = [delegate respondsToSelector:@selector(player:didUpdateCurrentTime:)];
-        _delegateFlags.didStartToPlay = [delegate respondsToSelector:@selector(playbackDidStartWithPlayer:)];
-        _delegateFlags.didPausePlayback = [delegate respondsToSelector:@selector(playbackDidPauseWithPlayer:)];
-        _delegateFlags.didBeginScrubbing = [delegate respondsToSelector:@selector(playerDidBeginScrubbing:)];
-        _delegateFlags.didEndScrubbing = [delegate respondsToSelector:@selector(playerDidEndScrubbing:)];
+
+        _delegateFlags.didStartPlayback = [delegate respondsToSelector:@selector(moviePlayer:didStartPlaybackOfURL:)];
+        _delegateFlags.didFailToLoad = [delegate respondsToSelector:@selector(moviePlayer:didFailToLoadURL:)];
+        _delegateFlags.didFinishPlayback = [delegate respondsToSelector:@selector(moviePlayer:didFinishPlaybackOfURL:)];
+        _delegateFlags.didPausePlayback = [delegate respondsToSelector:@selector(moviePlayerDidPausePlayback:)];
+        _delegateFlags.didResumePlayback = [delegate respondsToSelector:@selector(moviePlayerDidResumePlayback:)];
+
+        _delegateFlags.didBeginScrubbing = [delegate respondsToSelector:@selector(moviePlayerDidBeginScrubbing:)];
+        _delegateFlags.didEndScrubbing = [delegate respondsToSelector:@selector(moviePlayerDidEndScrubbing:)];
+
+        _delegateFlags.didChangeStatus = [delegate respondsToSelector:@selector(moviePlayer:didChangeStatus:)];
+        _delegateFlags.didChangePlaybackRate = [delegate respondsToSelector:@selector(moviePlayer:didChangePlaybackRate:)];
+        _delegateFlags.didChangeAirPlayActive = [delegate respondsToSelector:@selector(moviePlayer:didChangeAirPlayActive:)];
+        _delegateFlags.didChangeControlStyle = [delegate respondsToSelector:@selector(moviePlayer:didChangeControlStyle:)];
+        _delegateFlags.didUpdateCurrentTime = [delegate respondsToSelector:@selector(moviePlayer:didUpdateCurrentTime:)];
     }
 }
 
@@ -380,88 +481,6 @@ static char playerAirPlayVideoActiveContext;
 }
 
 ////////////////////////////////////////////////////////////////////////
-#pragma mark - KVO
-////////////////////////////////////////////////////////////////////////
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    if (context == &playerItemStatusContext) {
-        AVPlayerStatus status = [[change objectForKey:NSKeyValueChangeNewKey] integerValue];
-        
-        switch (status) {
-            case AVPlayerStatusUnknown: {
-                [self stopObservingPlayerTimeChanges];
-                [self.view updateWithCurrentTime:self.currentPlaybackTime duration:self.duration];
-                // TODO: Disable buttons & scrubber
-                break;
-            }
-                
-            case AVPlayerStatusReadyToPlay: {
-                // TODO: Enable buttons & scrubber
-                if (!self.scrubbing) {
-                    if (self.autostartWhenReady && self.view.superview != nil) {
-                        [self play];
-                    }
-                }
-                
-                break;
-            }
-                
-            case AVPlayerStatusFailed: {
-                [self stopObservingPlayerTimeChanges];
-                [self.view updateWithCurrentTime:self.currentPlaybackTime duration:self.duration];
-                // TODO: Disable buttons & scrubber
-                break;
-            }
-        }
-        
-        [self.view updateWithPlaybackStatus:self.playing];
-        
-        if (_delegateFlags.didChangeStatus) {
-            [self.delegate player:self didChangeStatus:status];
-        }
-    } 
-    
-    else if (context == &playerItemDurationContext) {
-        [self.view updateWithCurrentTime:self.currentPlaybackTime duration:self.duration];
-    } 
-    
-    else if (context == &playerCurrentItemContext) {
-        AVPlayerItem *newPlayerItem = [change objectForKey:NSKeyValueChangeNewKey];
-        
-        if (newPlayerItem == (id)[NSNull null]) {
-            [self stopObservingPlayerTimeChanges];
-            // TODO: Disable buttons & scrubber
-        } else {
-            [self.view updateWithPlaybackStatus:self.playing];
-            [self startObservingPlayerTimeChanges];
-        }
-    } 
-    
-    else if (context == &playerRateContext) {
-        [self.view updateWithPlaybackStatus:self.playing];
-        
-        if (_delegateFlags.didChangePlaybackRate) {
-            [self.delegate player:self didChangePlaybackRate:self.player.rate];
-        }
-    } 
-    
-    else if (context == &playerAirPlayVideoActiveContext) {
-        if ([self.player respondsToSelector:@selector(isAirPlayVideoActive)]) {
-            [self.view updateViewsForCurrentScreenState];
-            
-            if (_delegateFlags.didChangeAirPlay) {
-                BOOL airPlayVideoActive = self.player.airPlayVideoActive;
-                [self.delegate player:self didChangeAirPlayActive:airPlayVideoActive];
-            }
-        }
-    } 
-    
-    else {
-        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
-    }
-}
-
-////////////////////////////////////////////////////////////////////////
 #pragma mark - Notifications
 ////////////////////////////////////////////////////////////////////////
 
@@ -471,7 +490,7 @@ static char playerAirPlayVideoActiveContext;
     [self.view setControlsVisible:YES animated:YES];
     
     if (_delegateFlags.didFinishPlayback) {
-        [self.delegate playbackDidFinishWithPlayer:self];
+        [self.delegate moviePlayer:self didFinishPlaybackOfURL:self.URL];
     }
 }
 
@@ -487,7 +506,7 @@ static char playerAirPlayVideoActiveContext;
     self.scrubbing = YES;
     
     if (_delegateFlags.didBeginScrubbing) {
-        [self.delegate playerDidBeginScrubbing:self];
+        [self.delegate moviePlayerDidBeginScrubbing:self];
     }
 }
 
@@ -501,7 +520,7 @@ static char playerAirPlayVideoActiveContext;
     [self startObservingPlayerTimeChanges];
     
     if (_delegateFlags.didEndScrubbing) {
-        [self.delegate playerDidEndScrubbing:self];
+        [self.delegate moviePlayerDidEndScrubbing:self];
     }
 }
 
@@ -561,7 +580,7 @@ static char playerAirPlayVideoActiveContext;
             [self.view restartFadeOutControlsViewTimer];
             
             if (_delegateFlags.didChangeControlStyle) {
-                [self.delegate player:self didChangeControlStyle:self.view.controlStyle];
+                [self.delegate moviePlayer:self didChangeControlStyle:self.view.controlStyle];
             }
             break;
         }
@@ -607,25 +626,25 @@ static char playerAirPlayVideoActiveContext;
         }
 
         case NGMoviePlayerControlActionWillShowControls: {
-            [self playerWillShowControlsWithDuration:kNGFadeDuration];
+            [self moviePlayerWillShowControlsWithDuration:kNGFadeDuration];
             [self.view restartFadeOutControlsViewTimer];
             break;
         }
 
         case NGMoviePlayerControlActionDidShowControls: {
-            [self playerDidShowControls];
+            [self moviePlayerDidShowControls];
             [self.view restartFadeOutControlsViewTimer];
             break;
         }
 
         case NGMoviePlayerControlActionWillHideControls: {
-            [self playerWillHideControlsWithDuration:kNGFadeDuration];
+            [self moviePlayerWillHideControlsWithDuration:kNGFadeDuration];
             [self.view restartFadeOutControlsViewTimer];
             break;
         }
 
         case NGMoviePlayerControlActionDidHideControls: {
-            [self playerDidHideControls];
+            [self moviePlayerDidHideControls];
             [self.view restartFadeOutControlsViewTimer];
             break;
         }
@@ -658,8 +677,8 @@ static char playerAirPlayVideoActiveContext;
 
 - (void)doneLoadingAsset:(AVAsset *)asset withKeys:(NSArray *)keys {
     if (!asset.playable) {
-        if (_delegateFlags.didFailToLoadURL) {
-            [self.delegate player:self didFailToLoadURL:self.URL];
+        if (_delegateFlags.didFailToLoad) {
+            [self.delegate moviePlayer:self didFailToLoadURL:self.URL];
         }
         
         return;
@@ -671,8 +690,8 @@ static char playerAirPlayVideoActiveContext;
         AVKeyValueStatus status = [asset statusOfValueForKey:key error:&error];
         
         if (status == AVKeyValueStatusFailed || status == AVKeyValueStatusCancelled) {
-            if (_delegateFlags.didFailToLoadURL) {
-                [self.delegate player:self didFailToLoadURL:self.URL];
+            if (_delegateFlags.didFailToLoad) {
+                [self.delegate moviePlayer:self didFailToLoadURL:self.URL];
             }
             
             return;
@@ -747,8 +766,9 @@ static char playerAirPlayVideoActiveContext;
                                                                                if (CMTIME_IS_VALID(strongSelf.player.currentTime) && CMTIME_IS_VALID(strongSelf.CMDuration)) {
                                                                                    [strongSelf.view updateWithCurrentTime:strongSelf.currentPlaybackTime 
                                                                                                                  duration:strongSelf.duration];
-                                                                                   if ([self.delegate respondsToSelector:@selector(player:didUpdateCurrentTime:)]) {
-                                                                                       [self.delegate player:strongSelf didUpdateCurrentTime:self.currentPlaybackTime];
+
+                                                                                   if (strongSelf->_delegateFlags.didUpdateCurrentTime) {
+                                                                                       [self.delegate moviePlayer:strongSelf didUpdateCurrentTime:strongSelf.currentPlaybackTime];
                                                                                    }
                                                                                }
                                                                            }

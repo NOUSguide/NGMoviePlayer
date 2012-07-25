@@ -15,18 +15,19 @@
 
 @optional
 
-- (void)player:(NGMoviePlayer *)player didChangeStatus:(AVPlayerStatus)playerStatus;
-- (void)player:(NGMoviePlayer *)player didChangePlaybackRate:(float)rate;
-- (void)player:(NGMoviePlayer *)player didChangeAirPlayActive:(BOOL)airPlayVideoActive;
-- (void)player:(NGMoviePlayer *)player didChangeControlStyle:(NGMoviePlayerControlStyle)controlStyle;
-- (void)player:(NGMoviePlayer *)player didFailToLoadURL:(NSURL *)URL;
-- (void)player:(NGMoviePlayer *)player didUpdateCurrentTime:(NSTimeInterval)currentTime;
+- (void)moviePlayer:(NGMoviePlayer *)moviePlayer didStartPlaybackOfURL:(NSURL *)URL;
+- (void)moviePlayer:(NGMoviePlayer *)moviePlayer didFailToLoadURL:(NSURL *)URL;
+- (void)moviePlayer:(NGMoviePlayer *)moviePlayer didFinishPlaybackOfURL:(NSURL *)URL;
+- (void)moviePlayerDidPausePlayback:(NGMoviePlayer *)moviePlayer;
+- (void)moviePlayerDidResumePlayback:(NGMoviePlayer *)moviePlayer;
 
-- (void)playbackDidStartWithPlayer:(NGMoviePlayer *)player;
-- (void)playbackDidPauseWithPlayer:(NGMoviePlayer *)player;
-- (void)playbackDidFinishWithPlayer:(NGMoviePlayer *)player;
+- (void)moviePlayerDidBeginScrubbing:(NGMoviePlayer *)moviePlayer;
+- (void)moviePlayerDidEndScrubbing:(NGMoviePlayer *)moviePlayer;
 
-- (void)playerDidBeginScrubbing:(NGMoviePlayer *)player;
-- (void)playerDidEndScrubbing:(NGMoviePlayer *)player;
+- (void)moviePlayer:(NGMoviePlayer *)moviePlayer didChangeStatus:(AVPlayerStatus)playerStatus;
+- (void)moviePlayer:(NGMoviePlayer *)moviePlayer didChangePlaybackRate:(float)rate;
+- (void)moviePlayer:(NGMoviePlayer *)moviePlayer didChangeAirPlayActive:(BOOL)airPlayVideoActive;
+- (void)moviePlayer:(NGMoviePlayer *)moviePlayer didChangeControlStyle:(NGMoviePlayerControlStyle)controlStyle;
+- (void)moviePlayer:(NGMoviePlayer *)moviePlayer didUpdateCurrentTime:(NSTimeInterval)currentTime;
 
 @end

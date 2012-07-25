@@ -73,11 +73,11 @@
  Subclasses can override this method to perform an action here, the default implementation does nothing
  ******************************************/
 
-- (void)playerDidStartToPlay;
+- (void)moviePlayerDidStartToPlay;
 
-- (void)playerWillShowControlsWithDuration:(NSTimeInterval)duration;
-- (void)playerDidShowControls;
-- (void)playerWillHideControlsWithDuration:(NSTimeInterval)duration;
-- (void)playerDidHideControls;
+- (void)moviePlayerWillShowControlsWithDuration:(NSTimeInterval)duration;
+- (void)moviePlayerDidShowControls;
+- (void)moviePlayerWillHideControlsWithDuration:(NSTimeInterval)duration;
+- (void)moviePlayerDidHideControls;
 
 @end
