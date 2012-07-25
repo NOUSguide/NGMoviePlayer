@@ -608,21 +608,25 @@ static char playerAirPlayVideoActiveContext;
 
         case NGMoviePlayerControlActionWillShowControls: {
             [self playerWillShowControlsWithDuration:kNGFadeDuration];
+            [self.view restartFadeOutControlsViewTimer];
             break;
         }
 
         case NGMoviePlayerControlActionDidShowControls: {
             [self playerDidShowControls];
+            [self.view restartFadeOutControlsViewTimer];
             break;
         }
 
         case NGMoviePlayerControlActionWillHideControls: {
             [self playerWillHideControlsWithDuration:kNGFadeDuration];
+            [self.view restartFadeOutControlsViewTimer];
             break;
         }
 
         case NGMoviePlayerControlActionDidHideControls: {
             [self playerDidHideControls];
+            [self.view restartFadeOutControlsViewTimer];
             break;
         }
             
