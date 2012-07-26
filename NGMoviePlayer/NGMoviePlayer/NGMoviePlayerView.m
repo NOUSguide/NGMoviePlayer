@@ -380,14 +380,13 @@ static char playerLayerReadyForDisplayContext;
         case NGMoviePlayerScreenStateDevice: {
             self.playerLayerView.frame = self.bounds;
             [self insertSubview:self.playerLayerView belowSubview:self.placeholderView];
-
-            for (UIView *overlayView in self.videoOverlayViews) {
-                [self insertSubview:overlayView aboveSubview:self.playerLayerView];
-            }
-
             self.externalScreenPlaceholder = nil;
             break;
         }
+    }
+
+    for (UIView *overlayView in self.videoOverlayViews) {
+        [self.playerLayerView.superview insertSubview:overlayView aboveSubview:self.playerLayerView];
     }
 }
 
