@@ -511,6 +511,9 @@ static char playerAirPlayVideoActiveContext;
 }
 
 - (void)endScrubbing {
+    // TODO: We need to set this somewhere later (or find another workaround)
+    // Current Bug: when the player is paused and the user scrubs player starts
+    // playing again because we get a KVO notification that the status changed to ReadyForPlay
     self.scrubbing = NO;
     self.player.rate = _rateToRestoreAfterScrubbing;
     _rateToRestoreAfterScrubbing = 0.f;
