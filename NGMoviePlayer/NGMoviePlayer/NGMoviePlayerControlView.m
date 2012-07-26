@@ -453,8 +453,12 @@ NSString * const NGMoviePlayerControlViewtopButtonContainerKey = @"NGMoviePlayer
         image = [image stretchableImageWithLeftCapWidth:radius topCapHeight:radius];
     }
     [scrubber setMaximumTrackImage:image forState:UIControlStateNormal];
-    
-    scrubber.playableValeRoundedRectRadius = radius;
+
+    if (controlStyle == NGMoviePlayerControlStyleFullscreen) {
+        scrubber.playableValueRoundedRectRadius = radius;
+    } else {
+        scrubber.playableValueRoundedRectRadius = 2.f;
+    }
     
     // force re-draw of playable value of scrubber
     scrubber.playableValue = scrubber.playableValue;

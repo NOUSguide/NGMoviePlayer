@@ -18,6 +18,6 @@
 
 @property (nonatomic, assign) float playableValue;
 @property (nonatomic, strong) UIColor *playableValueColor;
-@property (nonatomic, assign) CGFloat playableValeRoundedRectRadius;
+@property (nonatomic, assign) CGFloat playableValueRoundedRectRadius;
 
 @end

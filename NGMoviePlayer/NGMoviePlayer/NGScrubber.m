@@ -259,10 +259,12 @@
         self.playableView.frame = CGRectZero;
         return;
     }
+    
     float valueDifference = self.maximumValue - self.minimumValue;
     float percentage = playableValue / valueDifference;
     CGRect trackRect = [self trackRectForBounds:self.bounds];
-    
+
+    trackRect = CGRectInset(trackRect, 0.f, 2.f);
     trackRect.size.width *= percentage;
     trackRect = CGRectIntegral(trackRect);
     
@@ -276,15 +278,15 @@
     }
 }
 
-- (void)setPlayableValeRoundedRectRadius:(CGFloat)playableValeRoundedRectRadius {
+- (void)setPlayableValueRoundedRectRadius:(CGFloat)playableValueRoundedRectRadius {
     CALayer *layer = self.playableView.layer;
     
 	layer.masksToBounds = YES;
-	layer.cornerRadius = playableValeRoundedRectRadius;
+	layer.cornerRadius = playableValueRoundedRectRadius;
 	layer.borderWidth = 0.f;
 }
 
-- (CGFloat)playableValeRoundedRectRadius {
+- (CGFloat)playableValueRoundedRectRadius {
     return self.playableView.layer.cornerRadius;
 }
 
