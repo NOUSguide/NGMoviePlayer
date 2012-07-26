@@ -296,8 +296,6 @@ NSString * const NGMoviePlayerControlViewtopButtonContainerKey = @"NGMoviePlayer
                                             zoomButtonImage.size.width, _topControlsView.bounds.size.height) :
                                  CGRectMake(0.f, 0.f, zoomButtonImage.size.width, _topControlsView.bounds.size.height));
         [self.zoomButton setImage:zoomButtonImage forState:UIControlStateNormal];
-        
-        self.topButtonContainer.frame = CGRectMake(MAX((self.topControlsView.frame.size.width - self.topButtonContainer.frame.size.width)/2.f, 0.f), 0.f, self.topButtonContainer.frame.size.width, [self controlsViewHeightForControlStyle:NGMoviePlayerControlStyleInline]);
     } else {
         ((UIImageView *)self.bottomControlsView).image = nil;
         self.bottomControlsView.backgroundColor = [UIColor colorWithWhite:0.f alpha:kControlAlphaValue];
@@ -318,6 +316,12 @@ NSString * const NGMoviePlayerControlViewtopButtonContainerKey = @"NGMoviePlayer
         self.zoomButton.frame = CGRectMake(self.topControlsView.bounds.size.width - controlsViewHeight, 0.f, controlsViewHeight, controlsViewHeight);
         [self.zoomButton setImage:[UIImage imageNamed:@"NGMoviePlayer.bundle/zoomOut"] forState:UIControlStateNormal];
     }
+
+    // center top controls
+    self.topButtonContainer.frame = CGRectMake(MAX((self.topControlsView.frame.size.width - self.topButtonContainer.frame.size.width)/2.f, 0.f),
+                                               0.f,
+                                               self.topButtonContainer.frame.size.width,
+                                               [self controlsViewHeightForControlStyle:NGMoviePlayerControlStyleInline]);
 }
 
 - (void)setControlStyle:(NGMoviePlayerControlStyle)controlStyle {
