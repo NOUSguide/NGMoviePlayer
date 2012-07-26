@@ -131,7 +131,8 @@ NSString * const NGMoviePlayerControlViewtopButtonContainerKey = @"NGMoviePlayer
             _volumeView.showsVolumeSlider = NO;
             [_bottomControlsView addSubview:_volumeView];
         }
-        
+
+        [NGVolumeControl preventSystemVolumePopup];
         _volumeControl = [[NGVolumeControl alloc] initWithFrame:CGRectZero];
         _volumeControl.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
         [_volumeControl addTarget:self action:@selector(handleVolumeChanged:) forControlEvents:UIControlEventValueChanged];
