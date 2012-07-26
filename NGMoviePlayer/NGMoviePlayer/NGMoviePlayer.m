@@ -265,6 +265,7 @@ static char playerAirPlayVideoActiveContext;
                 [self.view hidePlaceholderViewAnimated:YES];
 
                 if (_delegateFlags.didStartPlayback) {
+                    [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
                     [self.delegate moviePlayer:self didStartPlaybackOfURL:self.URL];
                     [self moviePlayerDidStartToPlay];
                 }
@@ -485,7 +486,9 @@ static char playerAirPlayVideoActiveContext;
 ////////////////////////////////////////////////////////////////////////
 
 - (void)playerItemDidPlayToEndTime:(NSNotification *)notification {
+    [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
     [self.player pause];
+
     _seekToInitialPlaybackTimeBeforePlay = YES;
     [self.view setControlsVisible:YES animated:YES];
     
