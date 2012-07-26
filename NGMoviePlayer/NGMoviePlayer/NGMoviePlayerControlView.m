@@ -465,6 +465,22 @@ NSString * const NGMoviePlayerControlViewtopButtonContainerKey = @"NGMoviePlayer
     scrubber.playableValue = scrubber.playableValue;
 }
 
+- (BOOL)isAirPlayButtonVisible {
+    if (self.airPlayButton == nil) {
+        return NO;
+    }
+
+    for (UIView *subview in self.airPlayButton.subviews) {
+        if ([subview isKindOfClass:[UIButton class]]) {
+            if (subview.alpha == 0.f || subview.hidden) {
+                return NO;
+            }
+        }
+    }
+
+    return YES;
+}
+
 - (void)handlePlayPauseButtonPress:(id)sender {
     [self.delegate moviePlayerControl:sender didPerformAction:NGMoviePlayerControlActionTogglePlayPause];
 }
@@ -503,22 +519,6 @@ NSString * const NGMoviePlayerControlViewtopButtonContainerKey = @"NGMoviePlayer
 
 - (void)handleVolumeChanged:(id)sender {
     [self.delegate moviePlayerControl:sender didPerformAction:NGMoviePlayerControlActionVolumeChanged];
-}
-
-- (BOOL)isAirPlayButtonVisible {
-    if (self.airPlayButton == nil) {
-        return NO;
-    }
-    for (UIView *subview in self.airPlayButton.subviews) {
-        if ([subview isKindOfClass:UIButton.class]) {
-            if (subview.alpha == 0.f || subview.hidden) {
-                NSLog(@"AirPlayButtonVisible @%d", 0);
-                return NO;
-            }
-        }
-    }
-    NSLog(@"AirPlayButtonVisible @%d", 1);
-    return YES;
 }
 
 @end

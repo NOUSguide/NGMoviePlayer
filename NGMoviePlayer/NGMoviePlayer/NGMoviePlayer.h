@@ -31,8 +31,10 @@
 /** The gravity of the video */
 @property (nonatomic, assign) NGMoviePlayerVideoGravity videoGravity;
 
-/** AirPlay is only supported on >= iOS 5, defaults to YES */
-@property (nonatomic, assign, getter = isAirPlayActive) BOOL airPlayActive;
+/** AirPlay is only supported on >= iOS 5, defaults to YES on iOS >= 5, NO otherwise */
+@property (nonatomic, assign, getter = isAirPlayEnabled) BOOL airPlayEnabled;
+/** Is AirPlay currently active? */
+@property (nonatomic, readonly, getter = isAirPlayVideoActive) BOOL airPlayVideoActive;
 /** flag to indicate whether the video autoplays when it's ready loading, defaults to NO */
 @property (nonatomic, assign) BOOL autostartWhenReady;
 

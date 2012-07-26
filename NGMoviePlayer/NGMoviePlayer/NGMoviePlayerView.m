@@ -30,6 +30,8 @@ static char playerLayerReadyForDisplayContext;
 @property (nonatomic, readonly) NGMoviePlayerScreenState screenState;
 @property (nonatomic, strong) UIView *externalScreenPlaceholder;
 
+@property (nonatomic, readonly, getter = isAirPlayVideoActive) BOOL airPlayVideoActive;
+
 - (void)setup;
 - (void)fadeOutControls;
 - (void)setupExternalWindowForScreen:(UIScreen *)screen;
@@ -63,10 +65,10 @@ static char playerLayerReadyForDisplayContext;
         self.clipsToBounds = YES;
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         self.backgroundColor = [UIColor clearColor];
-        
+
         [self setup];
     }
-    
+
     return self;
 }
 
@@ -74,7 +76,7 @@ static char playerLayerReadyForDisplayContext;
     if ((self = [super initWithCoder:aDecoder])) {
         [self setup];
     }
-    
+
     return self;
 }
 
@@ -83,7 +85,7 @@ static char playerLayerReadyForDisplayContext;
 
     [_playerLayerView removeFromSuperview];
     [playerLayer removeObserver:self forKeyPath:@"readyForDisplay"];
-    
+
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(fadeOutControls) object:nil];
 }
 
@@ -94,15 +96,15 @@ static char playerLayerReadyForDisplayContext;
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if (context == &playerLayerReadyForDisplayContext) {
         BOOL readyForDisplay = [[change valueForKey:NSKeyValueChangeNewKey] boolValue];
-        
+
         if (self.playerLayerView.layer.opacity == 0.f && readyForDisplay) {
             CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"opacity"];
-            
+
             animation.duration = kNGFadeDuration;
             animation.fromValue = [NSNumber numberWithFloat:0.];
             animation.toValue = [NSNumber numberWithFloat:1.];
             animation.removedOnCompletion = NO;
-            
+
             self.playerLayerView.layer.opacity = 1.f;
             [self.playerLayerView.layer addAnimation:animation forKey:nil];
         }
@@ -139,7 +141,7 @@ static char playerLayerReadyForDisplayContext;
     if (delegate != _delegate) {
         _delegate = delegate;
     }
-    
+
     self.controlsView.delegate = delegate;
 }
 
@@ -150,7 +152,7 @@ static char playerLayerReadyForDisplayContext;
 - (void)setControlsVisible:(BOOL)controlsVisible animated:(BOOL)animated {
     if (controlsVisible != _controlsVisible) {
         _controlsVisible = controlsVisible;
-        
+
         if (controlsVisible) {
             [self bringSubviewToFront:self.controlsView];
         } else {
@@ -167,13 +169,13 @@ static char playerLayerReadyForDisplayContext;
         [UIView animateWithDuration:duration
                               delay:0.
                             options:UIViewAnimationOptionCurveEaseInOut
-                         animations:^{        
+                         animations:^{
                              self.controlsView.alpha = controlsVisible ? 1.f : 0.f;
                          } completion:^(BOOL finished) {
                              [self restartFadeOutControlsViewTimer];
                              [self.delegate moviePlayerControl:self.controlsView didPerformAction:didAction];
                          }];
-        
+
         if (self.controlStyle == NGMoviePlayerControlStyleFullscreen) {
             [[UIApplication sharedApplication] setStatusBarHidden:(!controlsVisible) withAnimation:UIStatusBarAnimationFade];
         }
@@ -192,7 +194,7 @@ static char playerLayerReadyForDisplayContext;
 
 - (void)hidePlaceholderViewAnimated:(BOOL)animated {
     self.backgroundColor = [UIColor blackColor];
-    
+
     if (animated) {
         [UIView animateWithDuration:kNGFadeDuration
                          animations:^{
@@ -224,7 +226,7 @@ static char playerLayerReadyForDisplayContext;
         self.controlsView.controlStyle = controlStyle;
 
         BOOL isIPad = [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad;
-        
+
         // hide status bar in fullscreen, restore to previous state
         if (controlStyle == NGMoviePlayerControlStyleFullscreen) {
             [[UIApplication sharedApplication] setStatusBarStyle: (isIPad ? UIStatusBarStyleBlackOpaque : UIStatusBarStyleBlackTranslucent)];
@@ -234,7 +236,7 @@ static char playerLayerReadyForDisplayContext;
             [[UIApplication sharedApplication] setStatusBarHidden:!_statusBarVisible withAnimation:UIStatusBarAnimationFade];
         }
     }
-    
+
     self.controlsVisible = NO;
 }
 
@@ -247,31 +249,32 @@ static char playerLayerReadyForDisplayContext;
 }
 
 - (NGMoviePlayerScreenState)screenState {
-    return self.externalWindow != nil || self.playerLayer.player.airPlayVideoActive ? NGMoviePlayerScreenStateExternal : NGMoviePlayerScreenStateDevice;
+    return self.externalWindow != nil || self.airPlayVideoActive ? NGMoviePlayerScreenStateExternal : NGMoviePlayerScreenStateDevice;
 }
 
 - (UIView *)externalScreenPlaceholder {
     if(_externalScreenPlaceholder == nil) {
         BOOL isIPad = [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad;
-        
+
         _externalScreenPlaceholder = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"NGMoviePlayer.bundle/playerBackground"]];
+        _externalScreenPlaceholder.userInteractionEnabled = YES;
         _externalScreenPlaceholder.frame = self.bounds;
         _externalScreenPlaceholder.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-        
+
         UIView *externalScreenPlaceholderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, (isIPad ? 280 : 140))];
-        
+
         UIImageView *externalScreenPlaceholderImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:(isIPad ? @"NGMoviePlayer.bundle/wildcatNoContentVideos@2x" : @"NGMoviePlayer.bundle/wildcatNoContentVideos")]];
         externalScreenPlaceholderImageView.frame = CGRectMake((320-externalScreenPlaceholderImageView.image.size.width)/2, 0, externalScreenPlaceholderImageView.image.size.width, externalScreenPlaceholderImageView.image.size.height);
         [externalScreenPlaceholderView addSubview:externalScreenPlaceholderImageView];
-        
+
         UILabel *externalScreenLabel = [[UILabel alloc] initWithFrame:CGRectMake(29, externalScreenPlaceholderImageView.frame.size.height + (isIPad ? 15 : 5), 262, 30)];
         externalScreenLabel.font = [UIFont systemFontOfSize:(isIPad ? 26.0f : 20.0f)];
         externalScreenLabel.textAlignment = UITextAlignmentCenter;
         externalScreenLabel.backgroundColor = [UIColor clearColor];
         externalScreenLabel.textColor = [UIColor darkGrayColor];
-        externalScreenLabel.text = ([self.playerLayer.player respondsToSelector:@selector(isAirPlayVideoActive)] && self.playerLayer.player.isAirPlayVideoActive ? @"AirPlay" : @"Mirroring");
+        externalScreenLabel.text = self.airPlayVideoActive ? @"AirPlay" : @"Mirroring";
         [externalScreenPlaceholderView addSubview:externalScreenLabel];
-        
+
         UILabel *externalScreenDescriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, externalScreenLabel.frame.origin.y + (isIPad ? 35 : 20), 320, 30)];
         externalScreenDescriptionLabel.font = [UIFont systemFontOfSize:(isIPad ? 14.0f : 10.0f)];
         externalScreenDescriptionLabel.textAlignment = UITextAlignmentCenter;
@@ -279,13 +282,17 @@ static char playerLayerReadyForDisplayContext;
         externalScreenDescriptionLabel.textColor = [UIColor lightGrayColor];
         externalScreenDescriptionLabel.text = [NSString stringWithFormat:@"Dieses Video wird über %@ wiedergegeben.", externalScreenLabel.text];
         [externalScreenPlaceholderView addSubview:externalScreenDescriptionLabel];
-        
+
         externalScreenPlaceholderView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
         externalScreenPlaceholderView.center = _externalScreenPlaceholder.center;
-        
+
         [_externalScreenPlaceholder addSubview:externalScreenPlaceholderView];
+
+        UITapGestureRecognizer *singleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
+        singleTapGestureRecognizer.delegate = self;
+        [self addGestureRecognizer:singleTapGestureRecognizer];
     }
-    
+
     return _externalScreenPlaceholder;
 }
 
@@ -301,7 +308,7 @@ static char playerLayerReadyForDisplayContext;
 
 - (void)updateWithPlaybackStatus:(BOOL)isPlaying {
     [self.controlsView updateButtonsWithPlaybackStatus:isPlaying];
-    
+
     _shouldHideControls = isPlaying;
 }
 
@@ -334,12 +341,12 @@ static char playerLayerReadyForDisplayContext;
         self.externalWindow = [[UIWindow alloc] initWithFrame:screen.applicationFrame];
         self.externalWindow.hidden = NO;
         self.externalWindow.clipsToBounds = YES;
-        
+
         if (screen.availableModes.count > 0) {
             UIScreenMode *desiredMode = [screen.availableModes objectAtIndex:screen.availableModes.count-1];
             screen.currentMode = desiredMode;
         }
-        
+
         self.externalWindow.screen = screen;
         [self.externalWindow makeKeyAndVisible];
     } else {
@@ -360,9 +367,10 @@ static char playerLayerReadyForDisplayContext;
             self.playerLayerView.frame = self.externalWindow.bounds;
             [self.externalWindow addSubview:self.playerLayerView];
             [self insertSubview:self.externalScreenPlaceholder belowSubview:self.placeholderView];
+            [self bringSubviewToFront:self.controlsView];
             break;
         }
-            
+
         default:
         case NGMoviePlayerScreenStateDevice: {
             self.playerLayerView.frame = self.bounds;
@@ -375,7 +383,7 @@ static char playerLayerReadyForDisplayContext;
 
 - (void)externalScreenDidConnect:(NSNotification *)notification {
     UIScreen *screen = [notification object];
-    
+
     [self setupExternalWindowForScreen:screen];
     [self positionViewsForState:self.screenState];
 }
@@ -392,7 +400,7 @@ static char playerLayerReadyForDisplayContext;
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
     if (self.controlsVisible || self.placeholderView.alpha > 0.f) {
         NSArray *controls = [NSArray arrayWithObjects:self.controlsView.topControlsView, self.controlsView.bottomControlsView, self.playButton, nil];
-        
+
         // We dont want to to hide the controls when we tap em
         for (UIView *view in controls) {
             if (CGRectContainsPoint(view.frame, [touch locationInView:view.superview])) {
@@ -400,7 +408,7 @@ static char playerLayerReadyForDisplayContext;
             }
         }
     }
-    
+
     return YES;
 }
 
@@ -413,29 +421,29 @@ static char playerLayerReadyForDisplayContext;
     _controlsVisible = NO;
     _statusBarVisible = ![UIApplication sharedApplication].statusBarHidden;
     _statusBarStyle = [UIApplication sharedApplication].statusBarStyle;
-    
+
     // Player Layer
     _playerLayerView = [[NGMoviePlayerLayerView alloc] initWithFrame:self.bounds];
     _playerLayerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _playerLayerView.alpha = 0.f;
-    
+
     [self.playerLayer addObserver:self
                        forKeyPath:@"readyForDisplay"
                           options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
                           context:&playerLayerReadyForDisplayContext];
-    
+
     // Controls
     _controlsView = [[NGMoviePlayerControlView alloc] initWithFrame:self.bounds];
     _controlsView.alpha = 0.f;
     [self addSubview:_controlsView];
-    
+
     // Placeholder
     _placeholderView = [[UIView alloc] initWithFrame:self.bounds];
     _placeholderView.frame = self.bounds;
     _placeholderView.userInteractionEnabled = YES;
     _placeholderView.contentMode = UIViewContentModeScaleAspectFill;
     _placeholderView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    
+
     UIImage *playImage = [UIImage imageNamed:@"NGMoviePlayer.bundle/playVideo"];
     _playButton = [UIButton buttonWithType:UIButtonTypeCustom];
     _playButton.frame = (CGRect){.size = playImage.size};
@@ -445,29 +453,29 @@ static char playerLayerReadyForDisplayContext;
     [_playButton addTarget:self action:@selector(handlePlayButtonPress:) forControlEvents:UIControlEventTouchUpInside];
     [_placeholderView addSubview:_playButton];
     [self addSubview:_placeholderView];
-    
+
     // Gesture Recognizer for self
     UITapGestureRecognizer *doubleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleDoubleTap:)];
     doubleTapGestureRecognizer.numberOfTapsRequired = 2;
     doubleTapGestureRecognizer.delegate = self;
     [self addGestureRecognizer:doubleTapGestureRecognizer];
-    
+
     UITapGestureRecognizer *singleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
     [singleTapGestureRecognizer requireGestureRecognizerToFail:doubleTapGestureRecognizer];
     singleTapGestureRecognizer.delegate = self;
     [self addGestureRecognizer:singleTapGestureRecognizer];
-    
+
     // Gesture Recognizer for controlsView
     doubleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleDoubleTap:)];
     doubleTapGestureRecognizer.numberOfTapsRequired = 2;
     doubleTapGestureRecognizer.delegate = self;
     [self.controlsView addGestureRecognizer:doubleTapGestureRecognizer];
-    
+
     singleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
     [singleTapGestureRecognizer requireGestureRecognizerToFail:doubleTapGestureRecognizer];
     singleTapGestureRecognizer.delegate = self;
     [self.controlsView addGestureRecognizer:singleTapGestureRecognizer];
-    
+
     // Check for external screen
     if ([UIScreen screens].count > 1) {
         for (UIScreen *screen in [UIScreen screens]) {
@@ -476,10 +484,10 @@ static char playerLayerReadyForDisplayContext;
                 break;
             }
         }
-        
+
         NSAssert(self.externalWindow != nil, @"External screen counldn't be determined, no window was created");
     }
-    
+
     [self positionViewsForState:self.screenState];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(externalScreenDidConnect:) name:UIScreenDidConnectNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(externalScreenDidDisconnect:) name:UIScreenDidDisconnectNotification object:nil];
@@ -491,11 +499,24 @@ static char playerLayerReadyForDisplayContext;
     }
 }
 
+- (BOOL)isAirPlayVideoActive {
+    if ([AVPlayer instancesRespondToSelector:@selector(isAirPlayVideoActive)]) {
+        return self.playerLayer.player.airPlayVideoActive;
+    }
+
+    return NO;
+}
+
 - (void)handleSingleTap:(UITapGestureRecognizer *)tap {
     if ((tap.state & UIGestureRecognizerStateRecognized) == UIGestureRecognizerStateRecognized) {
         if (self.placeholderView.alpha == 0.f && self.screenState == NGMoviePlayerScreenStateDevice) {
-            // Toggle control visibility on single tap
-            [self setControlsVisible:!self.controlsVisible animated:YES];
+                // Toggle control visibility on single tap
+                [self setControlsVisible:!self.controlsVisible animated:YES];
+        }
+
+        // We don't want to hide controls when airPlay is active
+        else if (self.screenState == NGMoviePlayerScreenStateExternal) {
+            [self setControlsVisible:YES animated:YES];
         }
     }
 }
@@ -519,7 +540,7 @@ static char playerLayerReadyForDisplayContext;
     [self.playButton.superview addSubview:activityView];
     [self.playButton removeFromSuperview];
     [activityView startAnimating];
-    
+
     [self.delegate moviePlayerControl:playControl didPerformAction:NGMoviePlayerControlActionStartToPlay];
 }
 

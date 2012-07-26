@@ -76,7 +76,7 @@ static char playerAirPlayVideoActiveContext;
 @synthesize URL = _URL;
 @synthesize scrubbing = _scrubbing;
 @synthesize delegate = _delegate;
-@synthesize airPlayActive = _airPlayActive;
+@synthesize airPlayEnabled = _airPlayEnabled;
 @synthesize autostartWhenReady = _autostartWhenReady;
 @synthesize asset = _asset;
 @synthesize playerItem = _playerItem;
@@ -117,7 +117,7 @@ static char playerAirPlayVideoActiveContext;
     if ((self = [super init])) {
         _autostartWhenReady = NO;
         _seekToInitialPlaybackTimeBeforePlay = YES;
-        _airPlayActive = YES;
+        _airPlayEnabled = [AVPlayer instancesRespondToSelector:@selector(allowsAirPlayVideo)];
         _rateToRestoreAfterScrubbing = 1.;
         _initialPlaybackTime = initialPlaybackTime;
         
@@ -152,9 +152,10 @@ static char playerAirPlayVideoActiveContext;
 	[_playerItem removeObserver:self forKeyPath:@"status"];
     [_playerItem removeObserver:self forKeyPath:@"duration"];
     
-    if ([player respondsToSelector:@selector(allowsAirPlayVideo)]) {
+    if ([AVPlayer instancesRespondToSelector:@selector(allowsAirPlayVideo)]) {
         [player removeObserver:self forKeyPath:@"airPlayVideoActive"];
     }
+
     _playerItem = nil;
 }
 
@@ -225,7 +226,7 @@ static char playerAirPlayVideoActiveContext;
     }
 
     else if (context == &playerAirPlayVideoActiveContext) {
-        if ([self.player respondsToSelector:@selector(isAirPlayVideoActive)]) {
+        if ([AVPlayer instancesRespondToSelector:@selector(isAirPlayVideoActive)]) {
             [self.view updateViewsForCurrentScreenState];
 
             if (_delegateFlags.didChangeAirPlayActive) {
@@ -361,7 +362,7 @@ static char playerAirPlayVideoActiveContext;
 - (void)setPlayer:(AVPlayer *)player {
     if (player != self.view.playerLayer.player) {
         // Support AirPlay?
-        if (self.airPlayActive && [player respondsToSelector:@selector(allowsAirPlayVideo)]) {
+        if (self.airPlayEnabled) {
             [player setAllowsAirPlayVideo:YES];
             [player setUsesAirPlayVideoWhileAirPlayScreenIsActive:YES];
             
@@ -369,13 +370,25 @@ static char playerAirPlayVideoActiveContext;
             
             [player addObserver:self
                      forKeyPath:@"airPlayVideoActive"
-                        options:(NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew)
+                        options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
                         context:&playerAirPlayVideoActiveContext];
         }
         
         self.view.playerLayer.player = player;
         self.view.delegate = self;
     }
+}
+
+- (void)setAirPlayEnabled:(BOOL)airPlayEnabled {
+    if ([AVPlayer instancesRespondToSelector:@selector(allowsAirPlayVideo)]) {
+        if (airPlayEnabled != _airPlayEnabled) {
+            _airPlayEnabled = airPlayEnabled;
+        }
+    }
+}
+
+- (BOOL)isAirPlayVideoActive {
+    return [AVPlayer instancesRespondToSelector:@selector(isAirPlayVideoActive)] && self.player.airPlayVideoActive;
 }
 
 - (void)setURL:(NSURL *)URL {
