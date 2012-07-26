@@ -29,6 +29,7 @@ static char playerLayerReadyForDisplayContext;
 @property (nonatomic, strong) UIWindow *externalWindow;
 @property (nonatomic, readonly) NGMoviePlayerScreenState screenState;
 @property (nonatomic, strong) UIView *externalScreenPlaceholder;
+@property (nonatomic, strong) NSMutableSet *videoOverlayViews;
 
 @property (nonatomic, readonly, getter = isAirPlayVideoActive) BOOL airPlayVideoActive;
 
@@ -55,6 +56,7 @@ static char playerLayerReadyForDisplayContext;
 @synthesize placeholderView = _placeholderView;
 @synthesize externalWindow = _externalWindow;
 @synthesize externalScreenPlaceholder = _externalScreenPlaceholder;
+@synthesize videoOverlayViews = _videoOverlayViews;
 
 ////////////////////////////////////////////////////////////////////////
 #pragma mark - Lifecycle
@@ -287,10 +289,6 @@ static char playerLayerReadyForDisplayContext;
         externalScreenPlaceholderView.center = _externalScreenPlaceholder.center;
 
         [_externalScreenPlaceholder addSubview:externalScreenPlaceholderView];
-
-        UITapGestureRecognizer *singleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
-        singleTapGestureRecognizer.delegate = self;
-        [self addGestureRecognizer:singleTapGestureRecognizer];
     }
 
     return _externalScreenPlaceholder;
@@ -313,9 +311,16 @@ static char playerLayerReadyForDisplayContext;
 }
 
 - (void)addVideoOverlayView:(UIView *)overlayView {
-    UIView *superview = self.playerLayerView.superview;
+    if (overlayView != nil) {
+        if (_videoOverlayViews == nil) {
+            _videoOverlayViews = [NSMutableSet set];
+        }
 
-    [superview insertSubview:overlayView aboveSubview:self.playerLayerView];
+        UIView *superview = self.playerLayerView.superview;
+
+        [superview insertSubview:overlayView aboveSubview:self.playerLayerView];
+        [self.videoOverlayViews addObject:overlayView];
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -375,6 +380,11 @@ static char playerLayerReadyForDisplayContext;
         case NGMoviePlayerScreenStateDevice: {
             self.playerLayerView.frame = self.bounds;
             [self insertSubview:self.playerLayerView belowSubview:self.placeholderView];
+
+            for (UIView *overlayView in self.videoOverlayViews) {
+                [self insertSubview:overlayView aboveSubview:self.playerLayerView];
+            }
+
             self.externalScreenPlaceholder = nil;
             break;
         }
@@ -510,8 +520,8 @@ static char playerLayerReadyForDisplayContext;
 - (void)handleSingleTap:(UITapGestureRecognizer *)tap {
     if ((tap.state & UIGestureRecognizerStateRecognized) == UIGestureRecognizerStateRecognized) {
         if (self.placeholderView.alpha == 0.f && self.screenState == NGMoviePlayerScreenStateDevice) {
-                // Toggle control visibility on single tap
-                [self setControlsVisible:!self.controlsVisible animated:YES];
+            // Toggle control visibility on single tap
+            [self setControlsVisible:!self.controlsVisible animated:YES];
         }
 
         // We don't want to hide controls when airPlay is active
@@ -540,7 +550,7 @@ static char playerLayerReadyForDisplayContext;
     [self.playButton.superview addSubview:activityView];
     [self.playButton removeFromSuperview];
     [activityView startAnimating];
-
+    
     [self.delegate moviePlayerControl:playControl didPerformAction:NGMoviePlayerControlActionStartToPlay];
 }
 
