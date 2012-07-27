@@ -32,6 +32,9 @@
 
 - (id)initWithContentURL:(NSURL *)contentURL {
     if ((self = [super initWithNibName:nil bundle:nil])) {
+        _statusBarStyle = [UIApplication sharedApplication].statusBarStyle;
+        _statusBarHidden = [UIApplication sharedApplication].statusBarHidden;
+
         _moviePlayer = [[NGMoviePlayer alloc] initWithURL:contentURL];
         _moviePlayer.delegate = self;
         _moviePlayer.autostartWhenReady = YES;
@@ -63,9 +66,6 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-
-    _statusBarStyle = [UIApplication sharedApplication].statusBarStyle;
-    _statusBarHidden = [UIApplication sharedApplication].statusBarHidden;
 
     if (animated) {
         [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
