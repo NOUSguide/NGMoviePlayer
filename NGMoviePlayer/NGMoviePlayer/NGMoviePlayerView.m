@@ -2,6 +2,7 @@
 #import "NGVolumeControl.h"
 #import "NGMoviePlayerLayerView.h"
 #import "NGMoviePlayerControlView.h"
+#import "NGMoviePlayerPlaceholderView.h"
 #import "NGMoviePlayerControlActionDelegate.h"
 #import "NGMoviePlayerVideoGravity.h"
 
@@ -24,7 +25,6 @@ static char playerLayerReadyForDisplayContext;
 }
 
 @property (nonatomic, strong, readwrite) NGMoviePlayerControlView *controlsView;  // re-defined as read/write
-@property (nonatomic, strong) UIButton *playButton;
 @property (nonatomic, strong) NGMoviePlayerLayerView *playerLayerView;
 @property (nonatomic, strong) UIWindow *externalWindow;
 @property (nonatomic, readonly) NGMoviePlayerScreenState screenState;
@@ -51,7 +51,6 @@ static char playerLayerReadyForDisplayContext;
 @synthesize delegate = _delegate;
 @synthesize controlsView = _controlsView;
 @synthesize controlsVisible = _controlsVisible;
-@synthesize playButton = _playButton;
 @synthesize playerLayerView = _playerLayerView;
 @synthesize placeholderView = _placeholderView;
 @synthesize externalWindow = _externalWindow;
@@ -408,7 +407,7 @@ static char playerLayerReadyForDisplayContext;
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
     if (self.controlsVisible || self.placeholderView.alpha > 0.f) {
-        NSArray *controls = [NSArray arrayWithObjects:self.controlsView.topControlsView, self.controlsView.bottomControlsView, self.playButton, nil];
+        NSArray *controls = [NSArray arrayWithObjects:self.controlsView.topControlsView, self.controlsView.bottomControlsView, self.placeholderView, nil];
 
         // We dont want to to hide the controls when we tap em
         for (UIView *view in controls) {
@@ -447,20 +446,10 @@ static char playerLayerReadyForDisplayContext;
     [self addSubview:_controlsView];
 
     // Placeholder
-    _placeholderView = [[UIView alloc] initWithFrame:self.bounds];
-    _placeholderView.frame = self.bounds;
-    _placeholderView.userInteractionEnabled = YES;
-    _placeholderView.contentMode = UIViewContentModeScaleAspectFill;
-    _placeholderView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-
-    UIImage *playImage = [UIImage imageNamed:@"NGMoviePlayer.bundle/playVideo"];
-    _playButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    _playButton.frame = (CGRect){.size = playImage.size};
-    _playButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
-    _playButton.center = CGPointMake(_placeholderView.bounds.size.width/2.f, _placeholderView.bounds.size.height/2.f);
-    [_playButton setImage:playImage forState:UIControlStateNormal];
-    [_playButton addTarget:self action:@selector(handlePlayButtonPress:) forControlEvents:UIControlEventTouchUpInside];
-    [_placeholderView addSubview:_playButton];
+    NGMoviePlayerPlaceholderView *placeholderView = [[NGMoviePlayerPlaceholderView alloc] initWithFrame:self.bounds];
+    placeholderView.infoText = @"Loading...";
+    [placeholderView addPlayButtonTarget:self action:@selector(handlePlayButtonPress:)];
+    _placeholderView = placeholderView;
     [self addSubview:_placeholderView];
 
     // Gesture Recognizer for self
@@ -542,14 +531,6 @@ static char playerLayerReadyForDisplayContext;
 }
 
 - (void)handlePlayButtonPress:(id)playControl {
-    UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    activityView.hidesWhenStopped = YES;
-    activityView.center = self.playButton.center;
-    activityView.autoresizingMask = self.playButton.autoresizingMask;
-    [self.playButton.superview addSubview:activityView];
-    [self.playButton removeFromSuperview];
-    [activityView startAnimating];
-    
     [self.delegate moviePlayerControl:playControl didPerformAction:NGMoviePlayerControlActionStartToPlay];
 }
 

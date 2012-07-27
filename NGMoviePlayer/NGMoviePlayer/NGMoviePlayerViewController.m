@@ -54,6 +54,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    self.view.backgroundColor = [UIColor blackColor];
     self.moviePlayer.view.controlStyle = NGMoviePlayerControlStyleFullscreen;
     [self.moviePlayer addToSuperview:self.view withFrame:self.view.bounds];
 }
