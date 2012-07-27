@@ -34,7 +34,7 @@ static char playerAirPlayVideoActiveContext;
         unsigned int didChangeControlStyle:1;
         unsigned int didUpdateCurrentTime:1;
 	} _delegateFlags;
-    
+
     BOOL _seekToInitialPlaybackTimeBeforePlay;
     float _rateToRestoreAfterScrubbing;
 }
@@ -55,6 +55,8 @@ static char playerAirPlayVideoActiveContext;
 
 - (void)beginScrubbing;
 - (void)endScrubbing;
+
+- (void)updateControlsViewForLivestreamStatus;
 
 - (void)skipTimerFired:(NSTimer *)timer;
 - (void)updatePlayableDurationTimerFired:(NSTimer *)timer;
@@ -94,7 +96,7 @@ static char playerAirPlayVideoActiveContext;
     NSError *error = nil;
     [[AVAudioSession sharedInstance] setCategory:NGAVAudioSessionCategoryFromNGMoviePlayerAudioSessionCategory(audioSessionCategory)
                                            error:&error];
-    
+
     if (error != nil) {
         NSLog(@"There was an error setting the AudioCategory to AVAudioSessionCategoryPlayback");
     }
@@ -120,7 +122,7 @@ static char playerAirPlayVideoActiveContext;
         _airPlayEnabled = [AVPlayer instancesRespondToSelector:@selector(allowsAirPlayVideo)];
         _rateToRestoreAfterScrubbing = 1.;
         _initialPlaybackTime = initialPlaybackTime;
-        
+
         // calling setter here on purpose
         self.URL = URL;
     }
@@ -137,21 +139,21 @@ static char playerAirPlayVideoActiveContext;
 
 - (void)dealloc {
     AVPlayer *player = _view.playerLayer.player;
-    
+
     [_skippingTimer invalidate];
     [_playableDurationTimer invalidate];
     _delegate = nil;
     _view.controlsView.delegate = nil;
     [_view removeFromSuperview];
-    
+
     [self stopObservingPlayerTimeChanges];
     [player pause];
-    
+
     [player removeObserver:self forKeyPath:@"rate"];
     [player removeObserver:self forKeyPath:@"currentItem"];
 	[_playerItem removeObserver:self forKeyPath:@"status"];
     [_playerItem removeObserver:self forKeyPath:@"duration"];
-    
+
     if ([AVPlayer instancesRespondToSelector:@selector(allowsAirPlayVideo)]) {
         [player removeObserver:self forKeyPath:@"airPlayVideoActive"];
     }
@@ -265,26 +267,28 @@ static char playerAirPlayVideoActiveContext;
                 [self.player seekToTime:time];
                 [self.view hidePlaceholderViewAnimated:YES];
 
+                [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
+                [self moviePlayerDidStartToPlay];
+                [self updateControlsViewForLivestreamStatus];
+
                 if (_delegateFlags.didStartPlayback) {
-                    [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
                     [self.delegate moviePlayer:self didStartPlaybackOfURL:self.URL];
-                    [self moviePlayerDidStartToPlay];
                 }
             }
-            
+
             _seekToInitialPlaybackTimeBeforePlay = NO;
         } else {
             if (_delegateFlags.didResumePlayback) {
                 [self.delegate moviePlayerDidResumePlayback:self];
             }
         }
-    
+
         [self.player play];
         [self.view setControlsVisible:YES animated:YES];
     } else {
         _autostartWhenReady = YES;
     }
-    
+
     [self.playableDurationTimer invalidate];
     self.playableDurationTimer = [NSTimer scheduledTimerWithTimeInterval:1.
                                                                   target:self
@@ -295,7 +299,7 @@ static char playerAirPlayVideoActiveContext;
 
 - (void)pause {
     [self.player pause];
-    
+
     if (_delegateFlags.didPausePlayback) {
         [self.delegate moviePlayerDidPausePlayback:self];
     }
@@ -305,7 +309,7 @@ static char playerAirPlayVideoActiveContext;
     if (self.playing) {
         [self pause];
     } else {
-        [self play]; 
+        [self play];
     }
 }
 
@@ -351,7 +355,7 @@ static char playerAirPlayVideoActiveContext;
         _view = [[NGMoviePlayerView alloc] initWithFrame:CGRectZero];
         _view.delegate = self;
     }
-    
+
     return _view;
 }
 
@@ -365,15 +369,15 @@ static char playerAirPlayVideoActiveContext;
         if (self.airPlayEnabled) {
             [player setAllowsAirPlayVideo:YES];
             [player setUsesAirPlayVideoWhileAirPlayScreenIsActive:YES];
-            
+
             [self.view.playerLayer.player removeObserver:self forKeyPath:@"airPlayVideoActive"];
-            
+
             [player addObserver:self
                      forKeyPath:@"airPlayVideoActive"
                         options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
                         context:&playerAirPlayVideoActiveContext];
         }
-        
+
         self.view.playerLayer.player = player;
         self.view.delegate = self;
     }
@@ -394,12 +398,12 @@ static char playerAirPlayVideoActiveContext;
 - (void)setURL:(NSURL *)URL {
     if (_URL != URL) {
         _URL = URL;
-        
+
         if (URL != nil) {
             // Create Asset, and load
             [self setAsset:[AVURLAsset URLAssetWithURL:URL options:nil]];
             NSArray *keys = [NSArray arrayWithObjects:@"tracks", @"playable", nil];
-            
+
             [self.asset loadValuesAsynchronouslyForKeys:keys completionHandler:^{
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if (_URL != nil) {
@@ -407,7 +411,7 @@ static char playerAirPlayVideoActiveContext;
                     }
                 });
             }];
-            
+
             [self.view showPlaceholderViewAnimated:YES];
         }
     }
@@ -449,7 +453,7 @@ static char playerAirPlayVideoActiveContext;
 
 - (void)setVideoGravity:(NGMoviePlayerVideoGravity)videoGravity {
     self.view.playerLayer.videoGravity = NGAVLayerVideoGravityFromNGMoviePlayerVideoGravity(videoGravity);
-    // BUG: otherwise the video gravity doesn't change immediately
+    // Hack: otherwise the video gravity doesn't change immediately
     self.view.playerLayer.bounds = self.view.playerLayer.bounds;
 }
 
@@ -460,9 +464,9 @@ static char playerAirPlayVideoActiveContext;
 - (void)setCurrentPlaybackTime:(NSTimeInterval)currentTime {
     currentTime = MAX(currentTime,0.);
     currentTime = MIN(currentTime,self.duration);
-    
+
     CMTime time = CMTimeMakeWithSeconds(currentTime, NSEC_PER_SEC);
-    
+
     // completion handler only supported in iOS 5
     if ([self.player respondsToSelector:@selector(seekToTime:completionHandler:)]) {
         [self.player seekToTime:time
@@ -486,12 +490,12 @@ static char playerAirPlayVideoActiveContext;
 
 - (NSTimeInterval)playableDuration {
     NSArray *loadedTimeRanges = [self.player.currentItem loadedTimeRanges];
-    
+
     if (loadedTimeRanges.count > 0) {
         CMTimeRange timeRange = [[loadedTimeRanges objectAtIndex:0] CMTimeRangeValue];
         Float64 startSeconds = CMTimeGetSeconds(timeRange.start);
         Float64 durationSeconds = CMTimeGetSeconds(timeRange.duration);
-        
+
         return (NSTimeInterval)(startSeconds + durationSeconds);
     } else {
         return 0.;
@@ -508,7 +512,7 @@ static char playerAirPlayVideoActiveContext;
 
     _seekToInitialPlaybackTimeBeforePlay = YES;
     [self.view setControlsVisible:YES animated:YES];
-    
+
     if (_delegateFlags.didFinishPlayback) {
         [self.delegate moviePlayer:self didFinishPlaybackOfURL:self.URL];
     }
@@ -520,11 +524,11 @@ static char playerAirPlayVideoActiveContext;
 
 - (void)beginScrubbing {
     [self stopObservingPlayerTimeChanges];
-    
+
     _rateToRestoreAfterScrubbing = self.player.rate;
     self.player.rate = 0.f;
     self.scrubbing = YES;
-    
+
     if (_delegateFlags.didBeginScrubbing) {
         [self.delegate moviePlayerDidBeginScrubbing:self];
     }
@@ -537,11 +541,11 @@ static char playerAirPlayVideoActiveContext;
     self.scrubbing = NO;
     self.player.rate = _rateToRestoreAfterScrubbing;
     _rateToRestoreAfterScrubbing = 0.f;
-    
+
     [self.skippingTimer invalidate];
     self.skippingTimer = nil;
     [self startObservingPlayerTimeChanges];
-    
+
     if (_delegateFlags.didEndScrubbing) {
         [self.delegate moviePlayerDidEndScrubbing:self];
     }
@@ -549,10 +553,10 @@ static char playerAirPlayVideoActiveContext;
 
 - (void)beginSkippingBackwards {
     [self beginScrubbing];
-    
+
     self.currentPlaybackTime -= kNGInitialTimeToSkip;
     self.timeToSkip = kNGRepeatedTimeToSkipStartValue;
-    
+
     self.skippingTimer = [NSTimer scheduledTimerWithTimeInterval:1.0
                                                           target:self
                                                         selector:@selector(skipTimerFired:)
@@ -562,10 +566,10 @@ static char playerAirPlayVideoActiveContext;
 
 - (void)beginSkippingForwards {
     [self beginScrubbing];
-    
+
     self.currentPlaybackTime += kNGInitialTimeToSkip;
     self.timeToSkip = kNGRepeatedTimeToSkipStartValue;
-    
+
     self.skippingTimer = [NSTimer scheduledTimerWithTimeInterval:1.0
                                                           target:self
                                                         selector:@selector(skipTimerFired:)
@@ -579,62 +583,62 @@ static char playerAirPlayVideoActiveContext;
 
 - (void)moviePlayerControl:(id)control didPerformAction:(NGMoviePlayerControlAction)action {
     [self.view stopFadeOutControlsViewTimer];
-    
+
     switch (action) {
         case NGMoviePlayerControlActionStartToPlay: {
             [self play];
             [self.view restartFadeOutControlsViewTimer];
             break;
         }
-            
+
         case NGMoviePlayerControlActionTogglePlayPause: {
             [self togglePlaybackState];
             [self.view restartFadeOutControlsViewTimer];
             break;
         }
-            
+
         case NGMoviePlayerControlActionToggleZoomState: {
             if (self.view.controlStyle == NGMoviePlayerControlStyleInline) {
                 self.view.controlStyle = NGMoviePlayerControlStyleFullscreen;
             } else {
                 self.view.controlStyle = NGMoviePlayerControlStyleInline;
             }
-            
+
             [self.view restartFadeOutControlsViewTimer];
-            
+
             if (_delegateFlags.didChangeControlStyle) {
                 [self.delegate moviePlayer:self didChangeControlStyle:self.view.controlStyle];
             }
             break;
         }
-            
+
         case NGMoviePlayerControlActionBeginSkippingBackwards: {
             [self beginSkippingBackwards];
             break;
         }
-            
+
         case NGMoviePlayerControlActionBeginSkippingForwards: {
             [self beginSkippingForwards];
             break;
         }
-            
+
         case NGMoviePlayerControlActionBeginScrubbing: {
             [self beginScrubbing];
             break;
         }
-            
+
         case NGMoviePlayerControlActionScrubbingValueChanged: {
             if ([control isKindOfClass:[NGScrubber class]]) {
                 NGScrubber *slider = (NGScrubber *)control;
-                
+
                 float value = slider.value;
                 [self setCurrentPlaybackTime:value];
                 _seekToInitialPlaybackTimeBeforePlay = NO;
             }
-            
+
             break;
         }
-            
+
         case NGMoviePlayerControlActionEndScrubbing:
         case NGMoviePlayerControlActionEndSkipping: {
             [self endScrubbing];
@@ -642,7 +646,7 @@ static char playerAirPlayVideoActiveContext;
             _seekToInitialPlaybackTimeBeforePlay = NO;
             break;
         }
-            
+
         case NGMoviePlayerControlActionVolumeChanged: {
             [self.view restartFadeOutControlsViewTimer];
             break;
@@ -671,11 +675,11 @@ static char playerAirPlayVideoActiveContext;
             [self.view restartFadeOutControlsViewTimer];
             break;
         }
-            
+
         default:
             // do nothing
             break;
-            
+
     }
 }
 
@@ -690,11 +694,11 @@ static char playerAirPlayVideoActiveContext;
         if (CMTIME_IS_VALID(self.playerItem.duration))
             return self.playerItem.duration;
     }
-    
+
     else if (CMTIME_IS_VALID(self.player.currentItem.asset.duration)) {
         return self.player.currentItem.asset.duration;
     }
-    
+
     return kCMTimeInvalid;
 }
 
@@ -703,73 +707,73 @@ static char playerAirPlayVideoActiveContext;
         if (_delegateFlags.didFailToLoad) {
             [self.delegate moviePlayer:self didFailToLoadURL:self.URL];
         }
-        
+
         return;
     }
-    
+
     // Check if all keys are OK
     for (NSString *key in keys) {
         NSError *error = nil;
         AVKeyValueStatus status = [asset statusOfValueForKey:key error:&error];
-        
+
         if (status == AVKeyValueStatusFailed || status == AVKeyValueStatusCancelled) {
             if (_delegateFlags.didFailToLoad) {
                 [self.delegate moviePlayer:self didFailToLoadURL:self.URL];
             }
-            
+
             return;
         }
     }
-    
+
     // Remove observer from old playerItem and create new one
     if (self.playerItem) {
         [self.playerItem removeObserver:self forKeyPath:@"status"];
         [self.playerItem removeObserver:self forKeyPath:@"duration"];
-        
+
         [[NSNotificationCenter defaultCenter] removeObserver:self
                                                         name:AVPlayerItemDidPlayToEndTimeNotification
                                                       object:self.playerItem];
     }
-    
+
     [self setPlayerItem:[AVPlayerItem playerItemWithAsset:asset]];
-    
+
     // Observe status, ok -> play
     [self.playerItem addObserver:self
                       forKeyPath:@"status"
                          options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
                          context:&playerItemStatusContext];
-    
+
     // Durationchange
     [self.playerItem addObserver:self
                       forKeyPath:@"duration"
                          options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
                          context:&playerItemDurationContext];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self 
-                                             selector:@selector(playerItemDidPlayToEndTime:) 
-                                                 name:AVPlayerItemDidPlayToEndTimeNotification 
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(playerItemDidPlayToEndTime:)
+                                                 name:AVPlayerItemDidPlayToEndTimeNotification
                                                object:self.playerItem];
-    
+
     _seekToInitialPlaybackTimeBeforePlay = YES;
-    
+
     // Create the player
     if (!self.player) {
         [self setPlayer:[AVPlayer playerWithPlayerItem:self.playerItem]];
-        
+
         // Observe currentItem, catch the -replaceCurrentItemWithPlayerItem:
         [self.player addObserver:self
                       forKeyPath:@"currentItem"
                          options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
                          context:&playerCurrentItemContext];
-        
+
         // Observe rate, play/pause-button?
         [self.player addObserver:self
                       forKeyPath:@"rate"
                          options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
                          context:&playerRateContext];
-        
+
     }
-    
+
     // New playerItem?
     if (self.player.currentItem != self.playerItem) {
         [self.player replaceCurrentItemWithPlayerItem:self.playerItem];
@@ -784,10 +788,10 @@ static char playerAirPlayVideoActiveContext;
                                                                             queue:dispatch_get_main_queue()
                                                                        usingBlock:^(CMTime time) {
                                                                            __strong NGMoviePlayer *strongSelf = weakSelf;
-                                                                           
+
                                                                            if (strongSelf != nil) {
                                                                                if (CMTIME_IS_VALID(strongSelf.player.currentTime) && CMTIME_IS_VALID(strongSelf.CMDuration)) {
-                                                                                   [strongSelf.view updateWithCurrentTime:strongSelf.currentPlaybackTime 
+                                                                                   [strongSelf.view updateWithCurrentTime:strongSelf.currentPlaybackTime
                                                                                                                  duration:strongSelf.duration];
 
                                                                                    if (strongSelf->_delegateFlags.didUpdateCurrentTime) {
@@ -806,9 +810,13 @@ static char playerAirPlayVideoActiveContext;
     }
 }
 
+- (void)updateControlsViewForLivestreamStatus {
+    self.view.controlsView.scrubberHidden = self.playingLivestream;
+}
+
 - (void)skipTimerFired:(NSTimer *)timer {
     NGMoviePlayerControlAction action = [timer.userInfo intValue];
-    
+
     if (action == NGMoviePlayerControlActionBeginSkippingBackwards) {
         self.currentPlaybackTime -= self.timeToSkip++;
     } else if (action == NGMoviePlayerControlActionBeginSkippingForwards) {

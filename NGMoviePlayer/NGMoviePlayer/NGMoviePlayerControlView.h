@@ -41,7 +41,6 @@ typedef enum {
 
 /** Controls whether the player controls are currently in fullscreen- or inlinestyle */
 @property (nonatomic, assign) NGMoviePlayerControlStyle controlStyle;
-
 @property (nonatomic, strong) UIView *topControlsView;
 @property (nonatomic, strong) UIView *bottomControlsView;
 
@@ -51,7 +50,11 @@ typedef enum {
 /** the super-fancy volume control */
 @property (nonatomic, strong) NGVolumeControl *volumeControl;
 
-/** the color of the scrubber in fullscreen */
+/** Force hiding of controls, default to NO */
+@property (nonatomic, assign) BOOL scrubberHidden;
+@property (nonatomic, assign) BOOL skipButtonsHidden;
+
+/** the color of the scrubber */
 @property (nonatomic, strong) UIColor *scrubberFillColor;
 
 /** the padding between the buttons in topControlsView */

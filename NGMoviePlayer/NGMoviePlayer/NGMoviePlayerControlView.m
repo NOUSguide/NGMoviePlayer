@@ -90,6 +90,8 @@ NSString * const NGMoviePlayerControlViewtopButtonContainerKey = @"NGMoviePlayer
 @synthesize layoutSubviewsBlock = _layoutSubviewsBlock;
 @synthesize controls = _controls;
 @synthesize bottomControlFullscreenImage = _bottomControlFullscreenImage;
+@synthesize scrubberHidden = _scrubberHidden;
+@synthesize skipButtonsHidden = _skipButtonsHidden;
 
 ////////////////////////////////////////////////////////////////////////
 #pragma mark - Lifecycle
@@ -265,7 +267,7 @@ NSString * const NGMoviePlayerControlViewtopButtonContainerKey = @"NGMoviePlayer
             self.airPlayButton.frame = CGRectMake(_bottomControlsView.frame.size.width - 5.f, buttonTopPadding + 10.f, 0.f, 0.f);
         }
 
-        BOOL displaySkipButtons = (_bottomControlsView.frame.size.width > kMinWidthToDisplaySkipButtons);
+        BOOL displaySkipButtons = !self.skipButtonsHidden && (_bottomControlsView.frame.size.width > kMinWidthToDisplaySkipButtons);
         self.rewindButton.hidden = !displaySkipButtons;
         self.forwardButton.hidden = !displaySkipButtons;
 
@@ -277,6 +279,7 @@ NSString * const NGMoviePlayerControlViewtopButtonContainerKey = @"NGMoviePlayer
         CGFloat scrubberLeftOrigin = (displaySkipButtons ? self.rewindButton.frame.origin.x + self.rewindButton.frame.size.width : self.playPauseButton.frame.origin.x + self.playPauseButton.frame.size.width);
         CGFloat scrubberRightOrigin = (displaySkipButtons ? self.forwardButton.frame.origin.x : self.volumeControl.frame.origin.x - 20.f);
         self.scrubber.frame = CGRectMake(scrubberLeftOrigin, buttonTopPadding + 10.f, scrubberRightOrigin - scrubberLeftOrigin, 20.f);
+        self.scrubber.hidden = self.scrubberHidden;
 
         self.currentTimeLabel.frame = CGRectMake(scrubberLeftOrigin + 10.f, self.scrubber.frame.origin.y, 55.f, 20.f);
         self.currentTimeLabel.textAlignment = UITextAlignmentLeft;
@@ -339,6 +342,22 @@ NSString * const NGMoviePlayerControlViewtopButtonContainerKey = @"NGMoviePlayer
         _scrubberFillColor = scrubberFillColor;
         self.volumeControl.minimumTrackColor = scrubberFillColor;
         [self setupScrubber:self.scrubber controlStyle:self.controlStyle];
+    }
+}
+
+- (void)setScrubberHidden:(BOOL)scrubberHidden {
+    if (scrubberHidden != _scrubberHidden) {
+        _scrubberHidden = scrubberHidden;
+
+        [self setNeedsLayout];
+    }
+}
+
+- (void)setSkipButtonsHidden:(BOOL)skipButtonsHidden {
+    if (skipButtonsHidden != _skipButtonsHidden) {
+        _skipButtonsHidden = skipButtonsHidden;
+
+        [self setNeedsLayout];
     }
 }
 
