@@ -447,7 +447,6 @@ static char playerLayerReadyForDisplayContext;
 
     // Placeholder
     NGMoviePlayerPlaceholderView *placeholderView = [[NGMoviePlayerPlaceholderView alloc] initWithFrame:self.bounds];
-    placeholderView.infoText = @"Loading...";
     [placeholderView addPlayButtonTarget:self action:@selector(handlePlayButtonPress:)];
     _placeholderView = placeholderView;
     [self addSubview:_placeholderView];
