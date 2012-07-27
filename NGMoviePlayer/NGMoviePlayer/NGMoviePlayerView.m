@@ -407,7 +407,13 @@ static char playerLayerReadyForDisplayContext;
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
     if (self.controlsVisible || self.placeholderView.alpha > 0.f) {
-        NSArray *controls = [NSArray arrayWithObjects:self.controlsView.topControlsView, self.controlsView.bottomControlsView, self.placeholderView, nil];
+        id playButton = nil;
+        if ([self.placeholderView respondsToSelector:@selector(playButton)]) {
+            playButton = [self.placeholderView performSelector:@selector(playButton)];
+        }
+
+        // We here rely on the fact that nil terminates a list, because playButton can be nil
+        NSArray *controls = [NSArray arrayWithObjects:self.controlsView.topControlsView, self.controlsView.bottomControlsView, playButton, nil];
 
         // We dont want to to hide the controls when we tap em
         for (UIView *view in controls) {

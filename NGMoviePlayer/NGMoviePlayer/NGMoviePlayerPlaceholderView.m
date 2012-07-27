@@ -11,7 +11,7 @@
 
 @interface NGMoviePlayerPlaceholderView ()
 
-@property (nonatomic, strong) UIButton *playButton;
+@property (nonatomic, strong, readwrite) UIButton *playButton;      // redefined as readwrite
 @property (nonatomic, strong) UILabel *infoLabel;
 
 - (void)handlePlayButtonPress:(id)sender;

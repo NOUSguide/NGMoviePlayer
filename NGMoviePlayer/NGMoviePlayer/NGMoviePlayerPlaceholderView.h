@@ -11,6 +11,8 @@
 
 @interface NGMoviePlayerPlaceholderView : UIView
 
+@property (nonatomic, strong, readonly) UIButton *playButton;
+
 /** Defaults to NO */
 @property (nonatomic, assign) BOOL playButtonHidden;
 /** Defaults to nil */
