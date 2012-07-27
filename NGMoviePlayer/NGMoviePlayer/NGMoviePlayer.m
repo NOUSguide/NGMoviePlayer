@@ -443,6 +443,10 @@ static char playerAirPlayVideoActiveContext;
     return self.player != nil && self.player.rate != 0.f;
 }
 
+- (BOOL)isPlayingLivestream {
+    return self.URL != nil && self.player != nil && (isnan(self.duration) || self.duration <= 0.);
+}
+
 - (void)setVideoGravity:(NGMoviePlayerVideoGravity)videoGravity {
     self.view.playerLayer.videoGravity = NGAVLayerVideoGravityFromNGMoviePlayerVideoGravity(videoGravity);
     // BUG: otherwise the video gravity doesn't change immediately

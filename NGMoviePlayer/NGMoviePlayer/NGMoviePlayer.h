@@ -11,6 +11,7 @@
 #import "NGMoviePlayerControlView.h"
 #import "NGMoviePlayerVideoGravity.h"
 #import "NGMoviePlayerAudioSessionCategory.h"
+#import "NGMoviePlayerViewController.h"
 #import "NGWeak.h"
 
 @interface NGMoviePlayer : NSObject
@@ -24,6 +25,8 @@
 @property (nonatomic, copy) NSURL *URL;
 /** flag to indicate if the player is currently playing */
 @property (nonatomic, readonly, getter = isPlaying) BOOL playing;
+/** Indicates whether the current played URL is a livestream */
+@property (nonatomic, readonly, getter = isPlayingLivestream) BOOL playingLivestream;
 /** flag that indicates whether the player is currently scrubbing */
 @property (nonatomic, assign, readonly, getter = isScrubbing) BOOL scrubbing;
 /** The delegate of the player */

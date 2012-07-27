@@ -46,6 +46,7 @@ NSString * const NGMoviePlayerControlViewtopButtonContainerKey = @"NGMoviePlayer
 @property (nonatomic, strong) UIView *topButtonContainer;
 @property (nonatomic, strong) UIImage *bottomControlFullscreenImage;
 @property (nonatomic, readonly, getter = isAirPlayButtonVisible) BOOL airPlayButtonVisible;
+@property (nonatomic, readonly, getter = isPlayingLivestream) BOOL playingLivestream;
 @property (nonatomic, strong) NSDictionary *controls;
 
 - (CGFloat)controlsViewHeightForControlStyle:(NGMoviePlayerControlStyle)controlStyle;
