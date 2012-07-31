@@ -287,7 +287,7 @@ NSString * const NGMoviePlayerControlViewtopButtonContainerKey = @"NGMoviePlayer
         self.remainingTimeLabel.frame = CGRectMake(scrubberRightOrigin - 65.f, self.scrubber.frame.origin.y, 55.f, 20.f);
         self.remainingTimeLabel.textAlignment = UITextAlignmentRight;
 
-        UIImage *zoomButtonImage = [UIImage imageNamed:@"NGMoviePlayer.bundle/zoomIn"];
+        UIImage *zoomButtonImage = [UIImage imageNamed:@"NGMoviePlayer.bundle/zoomOut"];
         self.zoomButton.frame = (self.zoomOutButtonPosition == NGMoviePlayerControlViewZoomOutButtonPositionRight ?
                                  CGRectMake(self.topControlsView.bounds.size.width - zoomButtonImage.size.width, 0.f,
                                             zoomButtonImage.size.width, _topControlsView.bounds.size.height) :
@@ -301,7 +301,7 @@ NSString * const NGMoviePlayerControlViewtopButtonContainerKey = @"NGMoviePlayer
 
         self.volumeControl.frame = CGRectMake(self.bounds.size.width-controlsViewHeight, self.bottomControlsView.frame.origin.y, controlsViewHeight,controlsViewHeight);
         self.zoomButton.frame = CGRectMake(self.topControlsView.bounds.size.width - controlsViewHeight, 0.f, controlsViewHeight, controlsViewHeight);
-        [self.zoomButton setImage:[UIImage imageNamed:@"NGMoviePlayer.bundle/zoomOut"] forState:UIControlStateNormal];
+        [self.zoomButton setImage:[UIImage imageNamed:@"NGMoviePlayer.bundle/zoomIn"] forState:UIControlStateNormal];
 
         CGFloat airPlayButtonOffset = 0.f;
 
