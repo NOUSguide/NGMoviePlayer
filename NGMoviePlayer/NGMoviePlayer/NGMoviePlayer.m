@@ -414,7 +414,7 @@ static char playerAirPlayVideoActiveContext;
                 });
             }];
 
-            [self.view showPlaceholderViewAnimated:YES];
+            [self.view showPlaceholderViewAnimated:(self.view.placeholderView.alpha != 1.f)];
         }
     }
 }

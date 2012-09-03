@@ -176,7 +176,7 @@ static char playerLayerReadyForDisplayContext;
                              [self restartFadeOutControlsViewTimer];
                              [self.delegate moviePlayerControl:self.controlsView didPerformAction:didAction];
                          }];
-
+        
         if (self.controlStyle == NGMoviePlayerControlStyleFullscreen) {
             [[UIApplication sharedApplication] setStatusBarHidden:(!controlsVisible) withAnimation:UIStatusBarAnimationFade];
         }
