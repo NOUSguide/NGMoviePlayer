@@ -398,6 +398,8 @@ static char playerAirPlayVideoActiveContext;
 - (void)setURL:(NSURL *)URL {
     if (_URL != URL) {
         _URL = URL;
+        
+        self.player = nil;
 
         if (URL != nil) {
             // Create Asset, and load
