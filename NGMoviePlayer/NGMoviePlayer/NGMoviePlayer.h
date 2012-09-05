@@ -9,6 +9,7 @@
 #import "NGMoviePlayerDelegate.h"
 #import "NGMoviePlayerView.h"
 #import "NGMoviePlayerControlView.h"
+#import "NGMoviePlayerScreenState.h"
 #import "NGMoviePlayerVideoGravity.h"
 #import "NGMoviePlayerAudioSessionCategory.h"
 #import "NGMoviePlayerViewController.h"

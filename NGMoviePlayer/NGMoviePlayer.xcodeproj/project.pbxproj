@@ -80,6 +80,7 @@
 		9B73C77F150F496C00A4069A /* NGWeak.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NGWeak.h; sourceTree = "<group>"; };
 		9B73C785150F49F500A4069A /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		9B73C78B150F5D7300A4069A /* NGMoviePlayerControlActionDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NGMoviePlayerControlActionDelegate.h; sourceTree = "<group>"; };
+		9B7D2B4115F76A46005E1BE2 /* NGMoviePlayerScreenState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NGMoviePlayerScreenState.h; sourceTree = "<group>"; };
 		9BE34D45150F96C9001CE6CD /* NGVolumeControl.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = NGVolumeControl.xcodeproj; path = ../NGVolumeControl/NGVolumeControl/NGVolumeControl.xcodeproj; sourceTree = "<group>"; };
 		9BFF8CE31521BFDF0028D3A2 /* NGMoviePlayerFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NGMoviePlayerFunctions.h; sourceTree = "<group>"; };
 		9BFF8CE41521BFDF0028D3A2 /* NGMoviePlayerFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NGMoviePlayerFunctions.m; sourceTree = "<group>"; };
@@ -152,6 +153,7 @@
 				9B04557E150644EE007F8E7C /* NGMoviePlayerLayerView.m */,
 				9B2030E815C2FED400CE8CC4 /* NGMoviePlayerPlaceholderView.h */,
 				9B2030E915C2FED400CE8CC4 /* NGMoviePlayerPlaceholderView.m */,
+				9B7D2B4115F76A46005E1BE2 /* NGMoviePlayerScreenState.h */,
 				9B0455851506482A007F8E7C /* NGMoviePlayerVideoGravity.h */,
 				9B045512150640BA007F8E7C /* NGMoviePlayerView.h */,
 				9B045513150640BA007F8E7C /* NGMoviePlayerView.m */,

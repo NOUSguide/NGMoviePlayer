@@ -266,7 +266,10 @@
 
     trackRect = CGRectInset(trackRect, 0.f, 2.f);
     trackRect.size.width *= percentage;
+    trackRect.size.width = MIN(trackRect.size.width, self.frame.size.width);
     trackRect = CGRectIntegral(trackRect);
+
+    NSLog(@"Playable: %f, Percentage: %f, width: %f", playableValue, percentage, trackRect.size.width);
     
     self.playableView.frame = trackRect;
 }

@@ -688,18 +688,23 @@ static char playerAirPlayVideoActiveContext;
 ////////////////////////////////////////////////////////////////////////
 
 - (CMTime)CMDuration {
-    // Pefered in HTTP Live Streaming.
+    CMTime duration = kCMTimeInvalid;
+    
+    // Peferred in HTTP Live Streaming
     if ([self.playerItem respondsToSelector:@selector(duration)] && // 4.3
         self.player.currentItem.status == AVPlayerItemStatusReadyToPlay) {
-        if (CMTIME_IS_VALID(self.playerItem.duration))
-            return self.playerItem.duration;
+
+        if (CMTIME_IS_VALID(self.playerItem.duration)) {
+            duration = self.playerItem.duration;
+        }
     }
 
-    else if (CMTIME_IS_VALID(self.player.currentItem.asset.duration)) {
-        return self.player.currentItem.asset.duration;
+    // when playing over AirPlay the previous duration always returns 1, so we check again
+    if ((!CMTIME_IS_VALID(duration) || duration.value/duration.timescale < 2) && CMTIME_IS_VALID(self.player.currentItem.asset.duration)) {
+        duration = self.player.currentItem.asset.duration;
     }
 
-    return kCMTimeInvalid;
+    return duration;
 }
 
 - (void)doneLoadingAsset:(AVAsset *)asset withKeys:(NSArray *)keys {

@@ -7,17 +7,12 @@
 #import "NGMoviePlayerVideoGravity.h"
 
 
+
 #define kNGControlVisibilityDuration        5.
 
 
-typedef enum {
-    NGMoviePlayerScreenStateDevice,
-    NGMoviePlayerScreenStateAirPlay,
-    NGMoviePlayerScreenStateExternal
-} NGMoviePlayerScreenState;
-
-
 static char playerLayerReadyForDisplayContext;
+
 
 @interface NGMoviePlayerView () <UIGestureRecognizerDelegate> {
     BOOL _statusBarVisible;
@@ -28,7 +23,6 @@ static char playerLayerReadyForDisplayContext;
 @property (nonatomic, strong, readwrite) NGMoviePlayerControlView *controlsView;  // re-defined as read/write
 @property (nonatomic, strong) NGMoviePlayerLayerView *playerLayerView;
 @property (nonatomic, strong) UIWindow *externalWindow;
-@property (nonatomic, readonly) NGMoviePlayerScreenState screenState;
 @property (nonatomic, strong) UIView *externalScreenPlaceholder;
 @property (nonatomic, strong) NSMutableSet *videoOverlayViews;
 
@@ -85,8 +79,15 @@ static char playerLayerReadyForDisplayContext;
 - (void)dealloc {
     AVPlayerLayer *playerLayer = (AVPlayerLayer *)[_playerLayerView layer];
 
+    [_placeholderView removeFromSuperview];
     [_playerLayerView removeFromSuperview];
+    [playerLayer removeFromSuperlayer];
     [playerLayer removeObserver:self forKeyPath:@"readyForDisplay"];
+
+    [_externalScreenPlaceholder removeFromSuperview];
+    for (UIView *view in _videoOverlayViews) {
+        [view removeFromSuperview];
+    }
 
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(fadeOutControls) object:nil];
 }
@@ -402,8 +403,25 @@ static char playerLayerReadyForDisplayContext;
         }
     }
 
+    UIView *superview = self.playerLayerView.superview;
+    
     for (UIView *overlayView in self.videoOverlayViews) {
-        [self.playerLayerView.superview insertSubview:overlayView aboveSubview:self.playerLayerView];
+        // we assume this means "stick to bottom"
+        if (overlayView.autoresizingMask & UIViewAutoresizingFlexibleTopMargin) {
+            overlayView.frame = CGRectMake(0.f, superview.frame.size.height - overlayView.frame.size.height,superview.bounds.size.width, overlayView.frame.size.height);
+        }
+
+        // we assume this means "stick to top"
+        else if (overlayView.autoresizingMask & UIViewAutoresizingFlexibleBottomMargin) {
+            overlayView.frame = CGRectMake(0.f, overlayView.frame.origin.y, superview.bounds.size.width, overlayView.frame.size.height);
+        }
+
+        // we assume this means fullscreen-overlay
+        else if (overlayView.autoresizingMask & (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight)) {
+            overlayView.frame = (CGRect){CGPointZero, superview.frame.size};
+        }
+
+        [superview insertSubview:overlayView aboveSubview:self.playerLayerView];
     }
 }
 

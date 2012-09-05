@@ -11,6 +11,7 @@
 
 #import "NGMoviePlayerControlStyle.h"
 #import "NGWeak.h"
+#import "NGMoviePlayerScreenState.h"
 
 
 @class NGMoviePlayerLayerView;
@@ -37,6 +38,8 @@
 
 @property (nonatomic, readonly) CGFloat topControlsViewHeight;
 @property (nonatomic, readonly) CGFloat bottomControlsViewHeight;
+
+@property (nonatomic, readonly) NGMoviePlayerScreenState screenState;
 
 /** Changes the visibility of the controls, can be animated with a fade */
 - (void)setControlsVisible:(BOOL)controlsVisible animated:(BOOL)animated;
