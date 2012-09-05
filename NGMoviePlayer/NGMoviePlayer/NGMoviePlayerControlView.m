@@ -232,6 +232,15 @@ NSString * const NGMoviePlayerControlViewtopButtonContainerKey = @"NGMoviePlayer
 #pragma mark - UIView
 ////////////////////////////////////////////////////////////////////////
 
+- (void)setAlpha:(CGFloat)alpha {
+    // otherwise the airPlayButton isn't positioned correctly on first show
+    if (alpha > 0.f) {
+        [self setNeedsLayout];
+    }
+
+    [super setAlpha:alpha];
+}
+
 - (void)layoutSubviews {
     [super layoutSubviews];
 
@@ -251,6 +260,7 @@ NSString * const NGMoviePlayerControlViewtopButtonContainerKey = @"NGMoviePlayer
 #pragma mark - NGMoviePlayerControlView
 ////////////////////////////////////////////////////////////////////////
 
+// TODO: Fix me, I'm horrible!
 - (void)layoutSubviewsForControlStyle:(NGMoviePlayerControlStyle)controlStyle {
     CGFloat controlsViewHeight = [self controlsViewHeightForControlStyle:self.controlStyle];
     CGFloat inlineControlsViewHeight = [self controlsViewHeightForControlStyle:NGMoviePlayerControlStyleInline];
@@ -304,11 +314,10 @@ NSString * const NGMoviePlayerControlViewtopButtonContainerKey = @"NGMoviePlayer
 
         CGFloat airPlayButtonOffset = 0.f;
 
+        self.airPlayButton.frame = CGRectMake(self.bounds.size.width-2*controlsViewHeight, 10.f, controlsViewHeight, controlsViewHeight);
+
         if (self.isAirPlayButtonVisible) {
-            self.airPlayButton.frame = CGRectMake(self.bounds.size.width-2*controlsViewHeight, 10.f, controlsViewHeight, controlsViewHeight);
-            airPlayButtonOffset = self.airPlayButton.frame.size.width + 8.f;
-        } else {
-            self.airPlayButton.frame = CGRectZero;
+            airPlayButtonOffset = self.airPlayButton.frame.size.width + 18.f;
         }
 
         self.playPauseButton.frame = CGRectMake(0.f, 0.f, controlsViewHeight, controlsViewHeight);
@@ -339,6 +348,7 @@ NSString * const NGMoviePlayerControlViewtopButtonContainerKey = @"NGMoviePlayer
 - (void)setScrubberFillColor:(UIColor *)scrubberFillColor {
     if (scrubberFillColor != _scrubberFillColor) {
         _scrubberFillColor = scrubberFillColor;
+
         self.volumeControl.minimumTrackColor = scrubberFillColor;
         [self setupScrubber:self.scrubber controlStyle:self.controlStyle];
     }
