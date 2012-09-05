@@ -124,7 +124,6 @@ NSString * const NGMoviePlayerControlViewtopButtonContainerKey = @"NGMoviePlayer
         _bottomControlsView.backgroundColor = [UIColor clearColor];
         [self addSubview:_bottomControlsView];
 
-        [NGVolumeControl preventSystemVolumePopup];
         _volumeControl = [[NGVolumeControl alloc] initWithFrame:CGRectZero];
         _volumeControl.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
         [_volumeControl addTarget:self action:@selector(handleVolumeChanged:) forControlEvents:UIControlEventValueChanged];
