@@ -12,6 +12,7 @@
 
 typedef enum {
     NGMoviePlayerScreenStateDevice,
+    NGMoviePlayerScreenStateAirPlay,
     NGMoviePlayerScreenStateExternal
 } NGMoviePlayerScreenState;
 
@@ -250,7 +251,13 @@ static char playerLayerReadyForDisplayContext;
 }
 
 - (NGMoviePlayerScreenState)screenState {
-    return self.externalWindow != nil || self.airPlayVideoActive ? NGMoviePlayerScreenStateExternal : NGMoviePlayerScreenStateDevice;
+    if (self.externalWindow != nil) {
+        return NGMoviePlayerScreenStateExternal;
+    } else if (self.airPlayVideoActive) {
+        return NGMoviePlayerScreenStateAirPlay;
+    } else {
+        return NGMoviePlayerScreenStateDevice;
+    }
 }
 
 - (UIView *)externalScreenPlaceholder {
@@ -291,6 +298,14 @@ static char playerLayerReadyForDisplayContext;
     }
 
     return _externalScreenPlaceholder;
+}
+
+- (CGFloat)topControlsViewHeight {
+    return CGRectGetMaxY(self.controlsView.topControlsView.frame);
+}
+
+- (CGFloat)bottomControlsViewHeight {
+    return  CGRectGetHeight(self.controlsView.frame) - CGRectGetMinY(self.controlsView.bottomControlsView.frame);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -375,8 +390,9 @@ static char playerLayerReadyForDisplayContext;
             break;
         }
 
-        default:
-        case NGMoviePlayerScreenStateDevice: {
+        case NGMoviePlayerScreenStateDevice:
+        case NGMoviePlayerScreenStateAirPlay:
+        default: {
             self.playerLayerView.frame = self.bounds;
             [self insertSubview:self.playerLayerView belowSubview:self.placeholderView];
             self.externalScreenPlaceholder = nil;
@@ -518,7 +534,7 @@ static char playerLayerReadyForDisplayContext;
         }
 
         // We don't want to hide controls when airPlay is active
-        else if (self.screenState == NGMoviePlayerScreenStateExternal) {
+        else if (self.screenState == NGMoviePlayerScreenStateExternal || self.screenState == NGMoviePlayerScreenStateAirPlay) {
             [self setControlsVisible:YES animated:YES];
         }
     }

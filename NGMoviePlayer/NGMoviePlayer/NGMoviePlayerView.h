@@ -35,6 +35,9 @@
 /** Controls whether the player controls are currently in fullscreen- or inlinestyle */
 @property (nonatomic, assign) NGMoviePlayerControlStyle controlStyle;
 
+@property (nonatomic, readonly) CGFloat topControlsViewHeight;
+@property (nonatomic, readonly) CGFloat bottomControlsViewHeight;
+
 /** Changes the visibility of the controls, can be animated with a fade */
 - (void)setControlsVisible:(BOOL)controlsVisible animated:(BOOL)animated;
 /** Hides the placeholder view with the play button */
