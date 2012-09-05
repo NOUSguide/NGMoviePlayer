@@ -17,6 +17,8 @@
 @property (nonatomic, assign) BOOL playButtonHidden;
 /** Defaults to nil */
 @property (nonatomic, copy) NSString *infoText;
+/** Defaults to nil */
+@property (nonatomic, strong) UIImage *image;
 
 
 - (void)addPlayButtonTarget:(id)target action:(SEL)action;

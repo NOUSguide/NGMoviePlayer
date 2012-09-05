@@ -305,7 +305,9 @@ static char playerLayerReadyForDisplayContext;
 }
 
 - (CGFloat)bottomControlsViewHeight {
-    return  CGRectGetHeight(self.controlsView.frame) - CGRectGetMinY(self.controlsView.bottomControlsView.frame);
+    CGFloat height = CGRectGetHeight(self.controlsView.frame);
+
+    return  height - CGRectGetMinY(self.controlsView.bottomControlsView.frame) + 2*(height - CGRectGetMaxY(self.controlsView.bottomControlsView.frame));
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -424,11 +426,13 @@ static char playerLayerReadyForDisplayContext;
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
     if (self.controlsVisible || self.placeholderView.alpha > 0.f) {
         id playButton = nil;
+        
         if ([self.placeholderView respondsToSelector:@selector(playButton)]) {
             playButton = [self.placeholderView performSelector:@selector(playButton)];
         }
 
         // We here rely on the fact that nil terminates a list, because playButton can be nil
+        // ATTENTION: DO NOT CONVERT THIS TO MODERN OBJC-SYNTAX @[]
         NSArray *controls = [NSArray arrayWithObjects:self.controlsView.topControlsView, self.controlsView.bottomControlsView, playButton, nil];
 
         // We dont want to to hide the controls when we tap em
@@ -528,14 +532,9 @@ static char playerLayerReadyForDisplayContext;
 
 - (void)handleSingleTap:(UITapGestureRecognizer *)tap {
     if ((tap.state & UIGestureRecognizerStateRecognized) == UIGestureRecognizerStateRecognized) {
-        if (self.placeholderView.alpha == 0.f && self.screenState == NGMoviePlayerScreenStateDevice) {
+        if (self.placeholderView.alpha == 0.f) {
             // Toggle control visibility on single tap
             [self setControlsVisible:!self.controlsVisible animated:YES];
-        }
-
-        // We don't want to hide controls when airPlay is active
-        else if (self.screenState == NGMoviePlayerScreenStateExternal || self.screenState == NGMoviePlayerScreenStateAirPlay) {
-            [self setControlsVisible:YES animated:YES];
         }
     }
 }

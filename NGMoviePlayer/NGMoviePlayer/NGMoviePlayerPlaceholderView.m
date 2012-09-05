@@ -13,6 +13,7 @@
 
 @property (nonatomic, strong, readwrite) UIButton *playButton;      // redefined as readwrite
 @property (nonatomic, strong) UILabel *infoLabel;
+@property (nonatomic, strong) UIImageView *imageView;
 
 - (void)handlePlayButtonPress:(id)sender;
 
@@ -34,6 +35,12 @@
         self.backgroundColor = [UIColor blackColor];
         self.contentMode = UIViewContentModeScaleAspectFill;
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+
+        _imageView = [[UIImageView alloc] initWithFrame:self.bounds];
+        _imageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        _imageView.contentMode = UIViewContentModeScaleAspectFill;
+        _imageView.hidden = YES;
+        [self addSubview:_imageView];
 
         UIImage *playImage = [UIImage imageNamed:@"NGMoviePlayer.bundle/playVideo"];
 
@@ -103,6 +110,15 @@
 
 - (void)addPlayButtonTarget:(id)target action:(SEL)action {
     [self.playButton addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
+}
+
+- (void)setImage:(UIImage *)image {
+    self.imageView.image = image;
+    self.imageView.hidden = (image == nil);
+}
+
+- (UIImage *)image {
+    return self.imageView.image;
 }
 
 ////////////////////////////////////////////////////////////////////////
