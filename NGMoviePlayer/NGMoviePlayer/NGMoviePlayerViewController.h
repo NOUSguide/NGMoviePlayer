@@ -7,15 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "NGMoviePlayerDelegate.h"
 
 
 @class NGMoviePlayer;
 
 
-@interface NGMoviePlayerViewController : UIViewController
+@interface NGMoviePlayerViewController : UIViewController <NGMoviePlayerDelegate>
 
 @property (nonatomic, strong, readonly) NGMoviePlayer *moviePlayer;
 
 - (id)initWithContentURL:(NSURL *)contentURL;
+
+/** Override to specify your custom subclass of NGMoviePlayer */
++ (Class)moviePlayerClass;
 
 @end

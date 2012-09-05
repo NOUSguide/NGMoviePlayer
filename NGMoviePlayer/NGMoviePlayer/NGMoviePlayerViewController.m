@@ -10,7 +10,7 @@
 #import "NGMoviePlayer.h"
 
 
-@interface NGMoviePlayerViewController () <NGMoviePlayerDelegate> {
+@interface NGMoviePlayerViewController () {
     UIStatusBarStyle _statusBarStyle;
     BOOL _statusBarHidden;
 }
@@ -35,7 +35,7 @@
         _statusBarStyle = [UIApplication sharedApplication].statusBarStyle;
         _statusBarHidden = [UIApplication sharedApplication].statusBarHidden;
 
-        _moviePlayer = [[NGMoviePlayer alloc] initWithURL:contentURL];
+        _moviePlayer = [[[[self class] moviePlayerClass] alloc] initWithURL:contentURL];
         _moviePlayer.delegate = self;
         _moviePlayer.autostartWhenReady = YES;
     }
@@ -45,6 +45,14 @@
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     return [self initWithContentURL:nil];
+}
+
+////////////////////////////////////////////////////////////////////////
+#pragma mark - Class Methods
+////////////////////////////////////////////////////////////////////////
+
++ (Class)moviePlayerClass {
+    return [NGMoviePlayer class];
 }
 
 ////////////////////////////////////////////////////////////////////////
