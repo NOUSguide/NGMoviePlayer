@@ -81,6 +81,7 @@
  ******************************************/
 
 - (void)moviePlayerDidStartToPlay;
+- (void)moviePlayerDidPausePlayback;
 
 - (void)moviePlayerWillShowControlsWithDuration:(NSTimeInterval)duration;
 - (void)moviePlayerDidShowControls;

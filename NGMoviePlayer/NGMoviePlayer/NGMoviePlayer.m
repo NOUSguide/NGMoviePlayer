@@ -298,9 +298,14 @@ static char playerAirPlayVideoActiveContext;
 - (void)pause {
     [self.player pause];
 
+    [self.playableDurationTimer invalidate];
+    self.playableDurationTimer = nil;
+
     if (_delegateFlags.didPausePlayback) {
         [self.delegate moviePlayerDidPausePlayback:self];
     }
+
+    [self moviePlayerDidPausePlayback];
 }
 
 - (void)togglePlaybackState {
@@ -316,6 +321,10 @@ static char playerAirPlayVideoActiveContext;
 ////////////////////////////////////////////////////////////////////////
 
 - (void)moviePlayerDidStartToPlay {
+    // do nothing here
+}
+
+- (void)moviePlayerDidPausePlayback {
     // do nothing here
 }
 
@@ -397,19 +406,18 @@ static char playerAirPlayVideoActiveContext;
     if (_URL != URL) {
         _URL = URL;
 
-        [self.player pause];
-        self.player = nil;
+        if (_view != nil) {
+            [self.player pause];
+            self.player = nil;
+        }
 
         if (URL != nil) {
-            // Create Asset, and load
-            [self setAsset:[AVURLAsset URLAssetWithURL:URL options:nil]];
             NSArray *keys = [NSArray arrayWithObjects:@"tracks", @"playable", nil];
 
+            [self setAsset:[AVURLAsset URLAssetWithURL:URL options:nil]];
             [self.asset loadValuesAsynchronouslyForKeys:keys completionHandler:^{
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    if (_URL != nil) {
-                        [self doneLoadingAsset:self.asset withKeys:keys];
-                    }
+                    [self doneLoadingAsset:self.asset withKeys:keys];
                 });
             }];
 
@@ -690,7 +698,7 @@ static char playerAirPlayVideoActiveContext;
 
 - (CMTime)CMDuration {
     CMTime duration = kCMTimeInvalid;
-    
+
     // Peferred in HTTP Live Streaming
     if ([self.playerItem respondsToSelector:@selector(duration)] && // 4.3
         self.player.currentItem.status == AVPlayerItemStatusReadyToPlay) {
@@ -822,7 +830,7 @@ static char playerAirPlayVideoActiveContext;
 
 - (void)skipTimerFired:(NSTimer *)timer {
     NGMoviePlayerControlAction action = [timer.userInfo intValue];
-
+    
     if (action == NGMoviePlayerControlActionBeginSkippingBackwards) {
         self.currentPlaybackTime -= self.timeToSkip++;
     } else if (action == NGMoviePlayerControlActionBeginSkippingForwards) {
