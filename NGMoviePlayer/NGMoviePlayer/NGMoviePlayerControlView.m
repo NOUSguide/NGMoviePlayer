@@ -29,7 +29,7 @@ NSString * const NGMoviePlayerControlViewVolumeControlKey = @"NGMoviePlayerContr
 NSString * const NGMoviePlayerControlViewZoomButtonKey = @"NGMoviePlayerControlViewZoomButtonKey";
 NSString * const NGMoviePlayerControlViewCurrentTimeLabelKey = @"NGMoviePlayerControlViewCurrentTimeLabelKey";
 NSString * const NGMoviePlayerControlViewRemainingTimeLabelKey = @"NGMoviePlayerControlViewRemainingTimeLabelKey";
-NSString * const NGMoviePlayerControlViewtopButtonContainerKey = @"NGMoviePlayerControlViewtopButtonContainerKey";
+NSString * const NGMoviePlayerControlViewTopButtonContainerKey = @"NGMoviePlayerControlViewTopButtonContainerKey";
 
 
 @interface NGMoviePlayerControlView () {
@@ -221,7 +221,7 @@ NSString * const NGMoviePlayerControlViewtopButtonContainerKey = @"NGMoviePlayer
                      _zoomButton, NGMoviePlayerControlViewZoomButtonKey,
                      _currentTimeLabel, NGMoviePlayerControlViewCurrentTimeLabelKey,
                      _remainingTimeLabel, NGMoviePlayerControlViewRemainingTimeLabelKey,
-                     _topButtonContainer, NGMoviePlayerControlViewtopButtonContainerKey,
+                     _topButtonContainer, NGMoviePlayerControlViewTopButtonContainerKey,
                      nil];
     }
 

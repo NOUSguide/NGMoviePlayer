@@ -35,6 +35,7 @@ static char playerLayerReadyForDisplayContext;
 - (void)handleSingleTap:(UITapGestureRecognizer *)tap;
 - (void)handleDoubleTap:(UITapGestureRecognizer *)tap;
 - (void)handlePlayButtonPress:(id)sender;
+- (void)volumeControlValueChanged:(id)sender;
 
 @end
 
@@ -489,6 +490,8 @@ static char playerLayerReadyForDisplayContext;
     _controlsView.alpha = 0.f;
     [self addSubview:_controlsView];
 
+    [_controlsView.volumeControl addTarget:self action:@selector(volumeControlValueChanged:) forControlEvents:UIControlEventValueChanged];
+
     // Placeholder
     NGMoviePlayerPlaceholderView *placeholderView = [[NGMoviePlayerPlaceholderView alloc] initWithFrame:self.bounds];
     [placeholderView addPlayButtonTarget:self action:@selector(handlePlayButtonPress:)];
@@ -570,6 +573,10 @@ static char playerLayerReadyForDisplayContext;
 
 - (void)handlePlayButtonPress:(id)playControl {
     [self.delegate moviePlayerControl:playControl didPerformAction:NGMoviePlayerControlActionStartToPlay];
+}
+
+- (void)volumeControlValueChanged:(id)sender {
+    [self restartFadeOutControlsViewTimer];
 }
 
 @end

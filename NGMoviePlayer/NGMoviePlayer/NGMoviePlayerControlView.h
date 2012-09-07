@@ -21,7 +21,7 @@ extern NSString * const NGMoviePlayerControlViewVolumeControlKey;
 extern NSString * const NGMoviePlayerControlViewZoomButtonKey;
 extern NSString * const NGMoviePlayerControlViewCurrentTimeLabelKey;
 extern NSString * const NGMoviePlayerControlViewRemainingTimeLabelKey;
-extern NSString * const NGMoviePlayerControlViewtopButtonContainerKey;
+extern NSString * const NGMoviePlayerControlViewTopButtonContainerKey;
 
 
 @protocol NGMoviePlayerControlActionDelegate;
