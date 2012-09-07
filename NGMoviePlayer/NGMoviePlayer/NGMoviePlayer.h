@@ -14,6 +14,7 @@
 #import "NGMoviePlayerAudioSessionCategory.h"
 #import "NGMoviePlayerViewController.h"
 #import "NGMoviePlayerPlaceholderView.h"
+#import "NGScrubber.h"
 #import "NGWeak.h"
 
 @interface NGMoviePlayer : NSObject

@@ -53,6 +53,7 @@ typedef enum {
 /** Force hiding of controls, default to NO */
 @property (nonatomic, assign) BOOL scrubberHidden;
 @property (nonatomic, assign) BOOL skipButtonsHidden;
+@property (nonatomic, readonly, getter = isAirPlayButtonVisible) BOOL airPlayButtonVisible;
 
 /** the color of the scrubber */
 @property (nonatomic, strong) UIColor *scrubberFillColor;

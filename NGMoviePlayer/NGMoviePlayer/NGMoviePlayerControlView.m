@@ -46,7 +46,6 @@ NSString * const NGMoviePlayerControlViewTopButtonContainerKey = @"NGMoviePlayer
 @property (nonatomic, strong) UILabel *remainingTimeLabel;
 @property (nonatomic, strong) UIView *topButtonContainer;
 @property (nonatomic, strong) UIImage *bottomControlFullscreenImage;
-@property (nonatomic, readonly, getter = isAirPlayButtonVisible) BOOL airPlayButtonVisible;
 @property (nonatomic, readonly, getter = isPlayingLivestream) BOOL playingLivestream;
 @property (nonatomic, strong) NSDictionary *controls;
 
@@ -184,7 +183,7 @@ NSString * const NGMoviePlayerControlViewTopButtonContainerKey = @"NGMoviePlayer
                      _scrubber, NGMoviePlayerControlViewScrubberKey,
                      _rewindButton, NGMoviePlayerControlViewRewindButtonKey,
                      _forwardButton, NGMoviePlayerControlViewForwardButtonKey,
-                     _airPlayButton, NGMoviePlayerControlViewAirPlayButtonKey,
+                     _airPlayButtonContainer, NGMoviePlayerControlViewAirPlayButtonKey,
                      _volumeControl, NGMoviePlayerControlViewVolumeControlKey,
                      _zoomButton, NGMoviePlayerControlViewZoomButtonKey,
                      _currentTimeLabel, NGMoviePlayerControlViewCurrentTimeLabelKey,
@@ -218,6 +217,23 @@ NSString * const NGMoviePlayerControlViewTopButtonContainerKey = @"NGMoviePlayer
     _topControlsView.frame = CGRectMake(0.f, (self.controlStyle == NGMoviePlayerControlStyleFullscreen ? 20.f : 0.f), self.bounds.size.width, [self controlsViewHeightForControlStyle:NGMoviePlayerControlStyleInline]);
     _bottomControlsView.frame = CGRectMake(offset, self.bounds.size.height-controlsViewHeight, self.bounds.size.width - 2.f*offset, controlsViewHeight-offset);
 
+    // center custom controls in top container
+    self.topButtonContainer.frame = CGRectMake(MAX((self.topControlsView.frame.size.width - self.topButtonContainer.frame.size.width)/2.f, 0.f),
+                                               0.f,
+                                               self.topButtonContainer.frame.size.width,
+                                               [self controlsViewHeightForControlStyle:NGMoviePlayerControlStyleInline]);
+
+    // update styling of bottom controls view
+    UIImageView *bottomControlsImageView = (UIImageView *)self.bottomControlsView;
+
+    if (self.controlStyle == NGMoviePlayerControlStyleFullscreen) {
+        bottomControlsImageView.backgroundColor = [UIColor clearColor];
+        bottomControlsImageView.image = self.bottomControlFullscreenImage;
+    } else if (self.controlStyle == NGMoviePlayerControlStyleInline) {
+        bottomControlsImageView.backgroundColor = [UIColor colorWithWhite:0.f alpha:kControlAlphaValue];
+        bottomControlsImageView.image = nil;
+    }
+
     if (self.layoutSubviewsBlock) {
         self.layoutSubviewsBlock(self.controlStyle, self.controls);
     } else {
@@ -230,25 +246,11 @@ NSString * const NGMoviePlayerControlViewTopButtonContainerKey = @"NGMoviePlayer
 ////////////////////////////////////////////////////////////////////////
 
 - (void)layoutSubviewsForControlStyle:(NGMoviePlayerControlStyle)controlStyle {
-    UIImageView *bottomControlsImageView = (UIImageView *)self.bottomControlsView;
-
     if (controlStyle == NGMoviePlayerControlStyleFullscreen) {
-        bottomControlsImageView.backgroundColor = [UIColor clearColor];
-        bottomControlsImageView.image = self.bottomControlFullscreenImage;
-
         [self layoutSubviewsForControlStyleFullscreen];
     } else if (controlStyle == NGMoviePlayerControlStyleInline) {
-        bottomControlsImageView.backgroundColor = [UIColor colorWithWhite:0.f alpha:kControlAlphaValue];
-        bottomControlsImageView.image = nil;
-
         [self layoutSubviewsForControlStyleInline];
     }
-
-    // center custom controls in top container
-    self.topButtonContainer.frame = CGRectMake(MAX((self.topControlsView.frame.size.width - self.topButtonContainer.frame.size.width)/2.f, 0.f),
-                                               0.f,
-                                               self.topButtonContainer.frame.size.width,
-                                               [self controlsViewHeightForControlStyle:NGMoviePlayerControlStyleInline]);
 }
 
 - (void)setControlStyle:(NGMoviePlayerControlStyle)controlStyle {
