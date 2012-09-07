@@ -264,7 +264,7 @@ static char playerLayerReadyForDisplayContext;
         externalScreenLabel.textAlignment = UITextAlignmentCenter;
         externalScreenLabel.backgroundColor = [UIColor clearColor];
         externalScreenLabel.textColor = [UIColor darkGrayColor];
-        externalScreenLabel.text = self.airPlayVideoActive ? @"AirPlay" : @"Mirroring";
+        externalScreenLabel.text = self.airPlayVideoActive ? @"AirPlay" : @"VGA";
         [externalScreenPlaceholderView addSubview:externalScreenLabel];
 
         UILabel *externalScreenDescriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, externalScreenLabel.frame.origin.y + (isIPad ? 35 : 20), 320, 30)];
@@ -368,7 +368,8 @@ static char playerLayerReadyForDisplayContext;
 
 - (void)positionViewsForState:(NGMoviePlayerScreenState)screenState {
     switch (screenState) {
-        case NGMoviePlayerScreenStateExternal: {
+        case NGMoviePlayerScreenStateExternal:
+        case NGMoviePlayerScreenStateAirPlay: {
             self.playerLayerView.frame = self.externalWindow.bounds;
             [self.externalWindow addSubview:self.playerLayerView];
             [self insertSubview:self.externalScreenPlaceholder belowSubview:self.placeholderView];
@@ -377,7 +378,6 @@ static char playerLayerReadyForDisplayContext;
         }
 
         case NGMoviePlayerScreenStateDevice:
-        case NGMoviePlayerScreenStateAirPlay:
         default: {
             self.playerLayerView.frame = self.bounds;
             [self insertSubview:self.playerLayerView belowSubview:self.placeholderView];
