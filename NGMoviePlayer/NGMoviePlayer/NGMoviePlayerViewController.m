@@ -17,14 +17,11 @@
 
 @property (nonatomic, strong, readwrite) NGMoviePlayer *moviePlayer; // overwrite as readwrite
 
-- (void)dismiss;
-
 @end
 
 
 @implementation NGMoviePlayerViewController
 
-@synthesize moviePlayer = _moviePlayer;
 
 ////////////////////////////////////////////////////////////////////////
 #pragma mark - Lifecycle

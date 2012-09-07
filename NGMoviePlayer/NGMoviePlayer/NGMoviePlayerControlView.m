@@ -14,8 +14,8 @@
 
 
 #define kControlAlphaValue                     0.6f
-#define kBottomControlHorizontalPadding        (self.controlStyle == NGMoviePlayerControlStyleFullscreen ? 20.f : 0.f)
 #define kMinWidthToDisplaySkipButtons          420.f
+#define kControlWidth                          (UI_USER_INTERFACE_IDIOM()  == UIUserInterfaceIdiomPhone ? 44.f : 50.f)
 
 
 NSString * const NGMoviePlayerControlViewTopControlsViewKey = @"NGMoviePlayerControlViewTopControlsViewKey";
@@ -39,6 +39,7 @@ NSString * const NGMoviePlayerControlViewTopButtonContainerKey = @"NGMoviePlayer
 @property (nonatomic, strong) UIButton *playPauseButton;
 @property (nonatomic, strong) UIButton *rewindButton;
 @property (nonatomic, strong) UIButton *forwardButton;
+@property (nonatomic, strong) UIControl *airPlayButtonContainer;
 @property (nonatomic, strong) MPVolumeView *airPlayButton;
 @property (nonatomic, strong) UIButton *zoomButton;
 @property (nonatomic, strong) UILabel *currentTimeLabel;
@@ -49,49 +50,10 @@ NSString * const NGMoviePlayerControlViewTopButtonContainerKey = @"NGMoviePlayer
 @property (nonatomic, readonly, getter = isPlayingLivestream) BOOL playingLivestream;
 @property (nonatomic, strong) NSDictionary *controls;
 
-- (CGFloat)controlsViewHeightForControlStyle:(NGMoviePlayerControlStyle)controlStyle;
-- (void)setupScrubber:(NGScrubber *)scrubber controlStyle:(NGMoviePlayerControlStyle)controlStyle;
-
-- (void)handlePlayPauseButtonPress:(id)sender;
-- (void)handleRewindButtonTouchDown:(id)sender;
-- (void)handleRewindButtonTouchUp:(id)sender;
-- (void)handleForwardButtonTouchDown:(id)sender;
-- (void)handleForwardButtonTouchUp:(id)sender;
-- (void)handleZoomButtonPress:(id)sender;
-
-- (void)handleBeginScrubbing:(id)sender;
-- (void)handleScrubbingValueChanged:(id)sender;
-- (void)handleEndScrubbing:(id)sender;
-
-- (void)handleVolumeChanged:(id)sender;
-
 @end
 
 
 @implementation NGMoviePlayerControlView
-
-@synthesize delegate = _delegate;
-@synthesize controlStyle = _controlStyle;
-@synthesize scrubber = _scrubber;
-@synthesize scrubberFillColor = _scrubberFillColor;
-@synthesize topControlsView = _topControlsView;
-@synthesize bottomControlsView = _bottomControlsView;
-@synthesize playPauseButton = _playPauseButton;
-@synthesize rewindButton = _rewindButton;
-@synthesize forwardButton = _forwardButton;
-@synthesize airPlayButton = _airPlayButton;
-@synthesize zoomButton = _zoomButton;
-@synthesize currentTimeLabel = _currentTimeLabel;
-@synthesize remainingTimeLabel = _remainingTimeLabel;
-@synthesize volumeControl = _volumeControl;
-@synthesize topButtonContainer = _topButtonContainer;
-@synthesize topControlsViewButtonPadding = _topControlsViewButtonPadding;
-@synthesize zoomOutButtonPosition = _zoomOutButtonPosition;
-@synthesize layoutSubviewsBlock = _layoutSubviewsBlock;
-@synthesize controls = _controls;
-@synthesize bottomControlFullscreenImage = _bottomControlFullscreenImage;
-@synthesize scrubberHidden = _scrubberHidden;
-@synthesize skipButtonsHidden = _skipButtonsHidden;
 
 ////////////////////////////////////////////////////////////////////////
 #pragma mark - Lifecycle
@@ -137,11 +99,17 @@ NSString * const NGMoviePlayerControlViewTopButtonContainerKey = @"NGMoviePlayer
 
         // We use the MPVolumeView just for displaying the AirPlay icon
         if ([AVPlayer instancesRespondToSelector:@selector(allowsAirPlayVideo)]) {
-            _airPlayButton = [[MPVolumeView alloc] initWithFrame:(CGRect) { .size = CGSizeMake(40.f, 40.f) }];
+            _airPlayButton = [[MPVolumeView alloc] initWithFrame:(CGRect) { .size = CGSizeMake(38.f, 24.f) }];
             _airPlayButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin;
+            _airPlayButton.contentMode = UIViewContentModeCenter;
             _airPlayButton.showsRouteButton = YES;
             _airPlayButton.showsVolumeSlider = NO;
-            [_bottomControlsView addSubview:_airPlayButton];
+
+            _airPlayButtonContainer = [[UIControl alloc] initWithFrame:CGRectMake(0.f, 0.f, kControlWidth, [self controlsViewHeightForControlStyle:NGMoviePlayerControlStyleInline])];
+            _airPlayButton.center = CGPointMake(_airPlayButtonContainer.frame.size.width/2.f, _airPlayButtonContainer.frame.size.height/2.f + 2.f);
+            [_airPlayButtonContainer addTarget:self action:@selector(handleAirPlayButtonPress:) forControlEvents:UIControlEventTouchUpInside];
+            [_airPlayButtonContainer addSubview:_airPlayButton];
+            [_bottomControlsView addSubview:_airPlayButtonContainer];
         }
 
         _rewindButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -233,7 +201,7 @@ NSString * const NGMoviePlayerControlViewTopButtonContainerKey = @"NGMoviePlayer
 ////////////////////////////////////////////////////////////////////////
 
 - (void)setAlpha:(CGFloat)alpha {
-    // otherwise the airPlayButton isn't positioned correctly on first show
+    // otherwise the airPlayButton isn't positioned correctly on first show-up
     if (alpha > 0.f) {
         [self setNeedsLayout];
     }
@@ -245,9 +213,10 @@ NSString * const NGMoviePlayerControlViewTopButtonContainerKey = @"NGMoviePlayer
     [super layoutSubviews];
 
     CGFloat controlsViewHeight = [self controlsViewHeightForControlStyle:self.controlStyle];
+    CGFloat offset = self.controlStyle == NGMoviePlayerControlStyleFullscreen ? 20.f : 0.f;
 
     _topControlsView.frame = CGRectMake(0.f, (self.controlStyle == NGMoviePlayerControlStyleFullscreen ? 20.f : 0.f), self.bounds.size.width, [self controlsViewHeightForControlStyle:NGMoviePlayerControlStyleInline]);
-    _bottomControlsView.frame = CGRectMake(kBottomControlHorizontalPadding, self.bounds.size.height-controlsViewHeight, self.bounds.size.width - kBottomControlHorizontalPadding*2.f, controlsViewHeight-kBottomControlHorizontalPadding);
+    _bottomControlsView.frame = CGRectMake(offset, self.bounds.size.height-controlsViewHeight, self.bounds.size.width - 2.f*offset, controlsViewHeight-offset);
 
     if (self.layoutSubviewsBlock) {
         self.layoutSubviewsBlock(self.controlStyle, self.controls);
@@ -260,80 +229,26 @@ NSString * const NGMoviePlayerControlViewTopButtonContainerKey = @"NGMoviePlayer
 #pragma mark - NGMoviePlayerControlView
 ////////////////////////////////////////////////////////////////////////
 
-// TODO: Fix me, I'm horrible!
 - (void)layoutSubviewsForControlStyle:(NGMoviePlayerControlStyle)controlStyle {
-    CGFloat controlsViewHeight = [self controlsViewHeightForControlStyle:self.controlStyle];
-    CGFloat inlineControlsViewHeight = [self controlsViewHeightForControlStyle:NGMoviePlayerControlStyleInline];
-    CGFloat buttonTopPadding = 23.f;
+    UIImageView *bottomControlsImageView = (UIImageView *)self.bottomControlsView;
 
     if (controlStyle == NGMoviePlayerControlStyleFullscreen) {
-        ((UIImageView *)self.bottomControlsView).image = self.bottomControlFullscreenImage;
-        self.bottomControlsView.backgroundColor = [UIColor clearColor];
+        bottomControlsImageView.backgroundColor = [UIColor clearColor];
+        bottomControlsImageView.image = self.bottomControlFullscreenImage;
 
-        if (self.isAirPlayButtonVisible) {
-            self.airPlayButton.frame = CGRectMake(_bottomControlsView.frame.size.width - 45.f, buttonTopPadding + 10.f, 40.f, 40.f);
-        } else {
-            self.airPlayButton.frame = CGRectMake(_bottomControlsView.frame.size.width - 5.f, buttonTopPadding + 10.f, 0.f, 0.f);
-        }
+        [self layoutSubviewsForControlStyleFullscreen];
+    } else if (controlStyle == NGMoviePlayerControlStyleInline) {
+        bottomControlsImageView.backgroundColor = [UIColor colorWithWhite:0.f alpha:kControlAlphaValue];
+        bottomControlsImageView.image = nil;
 
-        BOOL displaySkipButtons = !self.skipButtonsHidden && (_bottomControlsView.frame.size.width > kMinWidthToDisplaySkipButtons);
-        self.rewindButton.hidden = !displaySkipButtons;
-        self.forwardButton.hidden = !displaySkipButtons;
-
-        self.playPauseButton.frame = CGRectMake(5.f, buttonTopPadding, 40.f, 40.f);
-        self.volumeControl.frame = CGRectMake(self.airPlayButton.frame.origin.x - 20.f, _bottomControlsView.frame.origin.y + buttonTopPadding, 40.f, 40.f);
-        self.rewindButton.frame = CGRectMake(self.playPauseButton.frame.origin.x + self.playPauseButton.frame.size.width, buttonTopPadding, 40.f, 40.f);
-        self.forwardButton.frame = CGRectMake(self.volumeControl.frame.origin.x - 55.f, buttonTopPadding, 40.f, 40.f);
-
-        CGFloat scrubberLeftOrigin = (displaySkipButtons ? self.rewindButton.frame.origin.x + self.rewindButton.frame.size.width : self.playPauseButton.frame.origin.x + self.playPauseButton.frame.size.width);
-        CGFloat scrubberRightOrigin = (displaySkipButtons ? self.forwardButton.frame.origin.x : self.volumeControl.frame.origin.x - 20.f);
-        self.scrubber.frame = CGRectMake(scrubberLeftOrigin, buttonTopPadding + 10.f, scrubberRightOrigin - scrubberLeftOrigin, 20.f);
-        self.scrubber.hidden = self.scrubberHidden;
-
-        self.currentTimeLabel.frame = CGRectMake(scrubberLeftOrigin + 10.f, self.scrubber.frame.origin.y, 55.f, 20.f);
-        self.currentTimeLabel.textAlignment = UITextAlignmentLeft;
-
-        self.remainingTimeLabel.frame = CGRectMake(scrubberRightOrigin - 65.f, self.scrubber.frame.origin.y, 55.f, 20.f);
-        self.remainingTimeLabel.textAlignment = UITextAlignmentRight;
-
-        UIImage *zoomButtonImage = [UIImage imageNamed:@"NGMoviePlayer.bundle/zoomOut"];
-        self.zoomButton.frame = (self.zoomOutButtonPosition == NGMoviePlayerControlViewZoomOutButtonPositionRight ?
-                                 CGRectMake(self.topControlsView.bounds.size.width - zoomButtonImage.size.width, 0.f,
-                                            zoomButtonImage.size.width, _topControlsView.bounds.size.height) :
-                                 CGRectMake(0.f, 0.f, zoomButtonImage.size.width, _topControlsView.bounds.size.height));
-        [self.zoomButton setImage:zoomButtonImage forState:UIControlStateNormal];
-    } else {
-        ((UIImageView *)self.bottomControlsView).image = nil;
-        self.bottomControlsView.backgroundColor = [UIColor colorWithWhite:0.f alpha:kControlAlphaValue];
-        self.rewindButton.hidden = YES;
-        self.forwardButton.hidden = YES;
-
-        self.volumeControl.frame = CGRectMake(self.bounds.size.width-controlsViewHeight, self.bottomControlsView.frame.origin.y, controlsViewHeight,controlsViewHeight);
-        self.zoomButton.frame = CGRectMake(self.topControlsView.bounds.size.width - controlsViewHeight, 0.f, controlsViewHeight, controlsViewHeight);
-        [self.zoomButton setImage:[UIImage imageNamed:@"NGMoviePlayer.bundle/zoomIn"] forState:UIControlStateNormal];
-
-        CGFloat airPlayButtonOffset = 0.f;
-
-        self.airPlayButton.frame = CGRectMake(self.bounds.size.width-2*controlsViewHeight, 10.f, controlsViewHeight, controlsViewHeight);
-
-        if (self.isAirPlayButtonVisible) {
-            airPlayButtonOffset = self.airPlayButton.frame.size.width + 18.f;
-        }
-
-        self.playPauseButton.frame = CGRectMake(0.f, 0.f, controlsViewHeight, controlsViewHeight);
-
-        self.currentTimeLabel.frame = CGRectMake(20.f, 0.f, 55.f, controlsViewHeight);
-        self.currentTimeLabel.textAlignment = UITextAlignmentRight;
-        self.scrubber.frame = CGRectMake(80.f, 0.f, self.bottomControlsView.bounds.size.width - 160.f - airPlayButtonOffset, controlsViewHeight);
-        self.remainingTimeLabel.frame = CGRectMake(self.scrubber.frame.origin.x + self.scrubber.frame.size.width + 5.f, 0.f, 55.f, controlsViewHeight);
-        self.remainingTimeLabel.textAlignment = UITextAlignmentLeft;
+        [self layoutSubviewsForControlStyleInline];
     }
 
-    // center top controls
+    // center custom controls in top container
     self.topButtonContainer.frame = CGRectMake(MAX((self.topControlsView.frame.size.width - self.topButtonContainer.frame.size.width)/2.f, 0.f),
                                                0.f,
                                                self.topButtonContainer.frame.size.width,
-                                               inlineControlsViewHeight);
+                                               [self controlsViewHeightForControlStyle:NGMoviePlayerControlStyleInline]);
 }
 
 - (void)setControlStyle:(NGMoviePlayerControlStyle)controlStyle {
@@ -416,7 +331,7 @@ NSString * const NGMoviePlayerControlViewTopButtonContainerKey = @"NGMoviePlayer
 
 - (CGFloat)controlsViewHeightForControlStyle:(NGMoviePlayerControlStyle)controlStyle {
     if (controlStyle == NGMoviePlayerControlStyleFullscreen) {
-        return 85.f + kBottomControlHorizontalPadding;
+        return 105.f;
     } else {
         return 40.f;
     }
@@ -547,6 +462,113 @@ NSString * const NGMoviePlayerControlViewTopButtonContainerKey = @"NGMoviePlayer
 
 - (void)handleVolumeChanged:(id)sender {
     [self.delegate moviePlayerControl:sender didPerformAction:NGMoviePlayerControlActionVolumeChanged];
+}
+
+- (void)handleAirPlayButtonPress:(id)sender {
+    // forward touch event to airPlay-button
+    for (UIView *subview in self.airPlayButton.subviews) {
+        if ([subview isKindOfClass:[UIButton class]]) {
+            UIButton *button = (UIButton *)subview;
+
+            [button sendActionsForControlEvents:UIControlEventTouchUpInside];
+        }
+    }
+}
+
+- (void)layoutSubviewsForControlStyleInline {
+    CGFloat width = self.bounds.size.width;
+    CGFloat controlsViewHeight = [self controlsViewHeightForControlStyle:self.controlStyle];
+    CGFloat leftEdge = 0.f;
+    CGFloat rightEdge = width;   // the right edge of the last positioned button in the bottom controls view (starting from right)
+
+    // skip buttons always hidden in inline mode
+    self.rewindButton.hidden = YES;
+    self.forwardButton.hidden = YES;
+
+    // play button always on the left
+    self.playPauseButton.frame = CGRectMake(0.f, 0.f, kControlWidth, controlsViewHeight);
+    leftEdge = self.playPauseButton.frame.origin.x + self.playPauseButton.frame.size.width;
+
+    // volume control and zoom button are always on the right
+    self.zoomButton.frame = CGRectMake(width-kControlWidth, 0.f, kControlWidth, controlsViewHeight);
+    [self.zoomButton setImage:[UIImage imageNamed:@"NGMoviePlayer.bundle/zoomIn"] forState:UIControlStateNormal];
+
+    self.volumeControl.frame = CGRectMake(width-kControlWidth, self.bottomControlsView.frame.origin.y, kControlWidth, controlsViewHeight);
+    rightEdge = self.volumeControl.frame.origin.x;
+
+    // we always position the airplay button, but only update the left edge when the button is visible
+    // this is a workaround for a layout bug I can't remember
+    self.airPlayButtonContainer.frame = CGRectMake(rightEdge-kControlWidth, 0.f, kControlWidth, controlsViewHeight);
+    if (self.isAirPlayButtonVisible) {
+        rightEdge = self.airPlayButtonContainer.frame.origin.x;
+    }
+
+    self.currentTimeLabel.frame = CGRectMake(leftEdge, 0.f, 55.f, controlsViewHeight);
+    self.currentTimeLabel.textAlignment = UITextAlignmentCenter;
+    leftEdge = self.currentTimeLabel.frame.origin.x + self.currentTimeLabel.frame.size.width;
+
+    self.remainingTimeLabel.frame = CGRectMake(rightEdge-60.f, 0.f, 60.f, controlsViewHeight);
+    self.remainingTimeLabel.textAlignment = UITextAlignmentCenter;
+    rightEdge = self.remainingTimeLabel.frame.origin.x;
+
+    // scrubber uses remaining width
+    self.scrubber.frame = CGRectMake(leftEdge, 0.f, rightEdge - leftEdge, controlsViewHeight);
+}
+
+- (void)layoutSubviewsForControlStyleFullscreen {
+    BOOL displaySkipButtons = !self.skipButtonsHidden && (_bottomControlsView.frame.size.width > kMinWidthToDisplaySkipButtons);
+    CGFloat width = self.bottomControlsView.frame.size.width;
+    CGFloat controlsViewHeight = 44.f;
+    CGFloat outerPadding = UI_USER_INTERFACE_IDIOM()  == UIUserInterfaceIdiomPhone ? 5.f : 12.f;
+    CGFloat buttonTopPadding = 20.f;
+    CGFloat leftEdge = 0.f;
+    CGFloat rightEdge = width;   // the right edge of the last positioned button in the bottom controls view (starting from right)
+
+    // play button always on the left
+    self.playPauseButton.frame = CGRectMake(outerPadding, buttonTopPadding, kControlWidth, controlsViewHeight);
+    leftEdge = self.playPauseButton.frame.origin.x + self.playPauseButton.frame.size.width;
+
+    // zoom button can be left or right
+    UIImage *zoomButtonImage = [UIImage imageNamed:@"NGMoviePlayer.bundle/zoomOut"];
+    CGFloat zoomButtonWidth = MAX(zoomButtonImage.size.width, kControlWidth);
+    [self.zoomButton setImage:zoomButtonImage forState:UIControlStateNormal];
+    if (self.zoomOutButtonPosition == NGMoviePlayerControlViewZoomOutButtonPositionLeft) {
+        self.zoomButton.frame = CGRectMake(0.f, 0.f, zoomButtonWidth, _topControlsView.bounds.size.height);
+    } else {
+        self.zoomButton.frame = CGRectMake(self.frame.size.width - zoomButtonWidth, 0.f, zoomButtonWidth, _topControlsView.bounds.size.height);
+    }
+
+    // volume control is always right
+    self.volumeControl.frame = CGRectMake(width + self.bottomControlsView.frame.origin.x - kControlWidth - outerPadding, self.bottomControlsView.frame.origin.y + buttonTopPadding, kControlWidth, controlsViewHeight);
+    rightEdge = self.volumeControl.frame.origin.x - self.bottomControlsView.frame.origin.x;
+
+    // we always position the airplay button, but only update the left edge when the button is visible
+    // this is a workaround for a layout bug I can't remember
+    self.airPlayButtonContainer.frame = CGRectMake(rightEdge-kControlWidth, buttonTopPadding + 2.f, kControlWidth, controlsViewHeight);
+    if (self.isAirPlayButtonVisible) {
+        rightEdge = self.airPlayButtonContainer.frame.origin.x;
+    } 
+
+    // skip buttons can be shown or hidden
+    self.rewindButton.hidden = !displaySkipButtons;
+    self.forwardButton.hidden = !displaySkipButtons;
+
+    if (displaySkipButtons) {
+        self.rewindButton.frame = CGRectMake(leftEdge, buttonTopPadding, kControlWidth, controlsViewHeight);
+        self.forwardButton.frame = CGRectMake(rightEdge - kControlWidth, buttonTopPadding, kControlWidth, controlsViewHeight);
+
+        leftEdge = self.rewindButton.frame.origin.x + self.rewindButton.frame.size.width;
+        rightEdge = self.forwardButton.frame.origin.x;
+    }
+
+    self.scrubber.frame = CGRectMake(leftEdge, buttonTopPadding + 12.f, rightEdge - leftEdge, 20.f);
+    self.scrubber.hidden = self.scrubberHidden;
+
+    self.currentTimeLabel.frame = CGRectMake(leftEdge + 10.f, self.scrubber.frame.origin.y, 60.f, 20.f);
+    self.currentTimeLabel.textAlignment = UITextAlignmentLeft;
+
+    self.remainingTimeLabel.frame = CGRectMake(rightEdge - 70.f, self.scrubber.frame.origin.y, 60.f, 20.f);
+    self.remainingTimeLabel.textAlignment = UITextAlignmentRight;
 }
 
 @end

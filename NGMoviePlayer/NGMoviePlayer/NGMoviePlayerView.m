@@ -28,30 +28,12 @@ static char playerLayerReadyForDisplayContext;
 
 @property (nonatomic, readonly, getter = isAirPlayVideoActive) BOOL airPlayVideoActive;
 
-- (void)setup;
-- (void)fadeOutControls;
-- (void)setupExternalWindowForScreen:(UIScreen *)screen;
-
-- (void)handleSingleTap:(UITapGestureRecognizer *)tap;
-- (void)handleDoubleTap:(UITapGestureRecognizer *)tap;
-- (void)handlePlayButtonPress:(id)sender;
-- (void)volumeControlValueChanged:(id)sender;
-
 @end
 
 
 @implementation NGMoviePlayerView
 
 @dynamic playerLayer;
-
-@synthesize delegate = _delegate;
-@synthesize controlsView = _controlsView;
-@synthesize controlsVisible = _controlsVisible;
-@synthesize playerLayerView = _playerLayerView;
-@synthesize placeholderView = _placeholderView;
-@synthesize externalWindow = _externalWindow;
-@synthesize externalScreenPlaceholder = _externalScreenPlaceholder;
-@synthesize videoOverlayViews = _videoOverlayViews;
 
 ////////////////////////////////////////////////////////////////////////
 #pragma mark - Lifecycle

@@ -50,43 +50,12 @@ static char playerAirPlayVideoActiveContext;
 @property (nonatomic, ng_weak) NSTimer *skippingTimer;
 @property (nonatomic, ng_weak) NSTimer *playableDurationTimer;
 
-- (void)startObservingPlayerTimeChanges;
-- (void)stopObservingPlayerTimeChanges;
-
-- (void)beginScrubbing;
-- (void)endScrubbing;
-
-- (void)updateControlsViewForLivestreamStatus;
-
-- (void)skipTimerFired:(NSTimer *)timer;
-- (void)updatePlayableDurationTimerFired:(NSTimer *)timer;
-
-- (void)togglePlaybackState;
-
-// player is ready to play
-- (void)doneLoadingAsset:(AVAsset *)asset withKeys:(NSArray *)keys;
-
-- (void)playerItemDidPlayToEndTime:(NSNotification *)notification;
-
 @end
 
 @implementation NGMoviePlayer
 
 @dynamic player;
-
 @synthesize view = _view;
-@synthesize URL = _URL;
-@synthesize scrubbing = _scrubbing;
-@synthesize delegate = _delegate;
-@synthesize airPlayEnabled = _airPlayEnabled;
-@synthesize autostartWhenReady = _autostartWhenReady;
-@synthesize asset = _asset;
-@synthesize playerItem = _playerItem;
-@synthesize playerTimeObserver = _playerTimeObserver;
-@synthesize timeToSkip = _timeToSkip;
-@synthesize skippingTimer = _skippingTimer;
-@synthesize playableDurationTimer = _playableDurationTimer;
-@synthesize initialPlaybackTime = _initialPlaybackTime;
 
 ////////////////////////////////////////////////////////////////////////
 #pragma mark - Class Methods

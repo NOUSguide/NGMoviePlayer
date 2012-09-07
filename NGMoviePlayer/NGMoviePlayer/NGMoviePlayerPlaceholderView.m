@@ -15,15 +15,10 @@
 @property (nonatomic, strong, readwrite) UILabel *infoLabel;
 @property (nonatomic, strong) UIImageView *imageView;
 
-- (void)handlePlayButtonPress:(id)sender;
-
 @end
 
 
 @implementation NGMoviePlayerPlaceholderView
-
-@synthesize playButton = _playButton;
-@synthesize infoLabel = _infoLabel;
 
 ////////////////////////////////////////////////////////////////////////
 #pragma mark - Lifecycle

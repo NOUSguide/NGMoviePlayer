@@ -15,10 +15,6 @@
 
 @implementation NGSliderValuePopupView
 
-@synthesize time = _time;
-@synthesize font = _font;
-@synthesize text = _text;
-
 - (id)initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
         self.font = [UIFont boldSystemFontOfSize:15];
@@ -88,26 +84,10 @@
 @property (atomic, assign) CGPoint beganTrackingLocation;
 @property (nonatomic, strong) UIView *playableView;
 
-- (NSUInteger)indexOfLowerScrubbingSpeed:(NSArray*)scrubbingSpeedPositions forOffset:(CGFloat)verticalOffset;
-- (NSArray *)defaultScrubbingSpeeds;
-- (NSArray *)defaultScrubbingSpeedChangePositions;
-
-- (void)constructSlider;
-- (void)fadePopupViewInAndOut:(BOOL)aFadeIn;
-- (void)positionAndUpdatePopupView;
-
 @end
 
 
 @implementation NGScrubber
-
-@synthesize scrubbingSpeed = _scrubbingSpeed;
-@synthesize scrubbingSpeeds = _scrubbingSpeeds;
-@synthesize scrubbingSpeedChangePositions = _scrubbingSpeedChangePositions;
-@synthesize beganTrackingLocation = _beganTrackingLocation;
-@synthesize playableValue = _playableValue;
-@synthesize playableValueColor = _playableValueColor;
-@synthesize playableView = _playableView;
 
 ////////////////////////////////////////////////////////////////////////
 #pragma mark - Lifecycle
@@ -164,6 +144,17 @@
     [coder encodeObject:self.scrubbingSpeedChangePositions forKey:@"scrubbingSpeedChangePositions"];
     
     // No need to archive self.scrubbingSpeed as it is calculated from the arrays on init
+}
+
+////////////////////////////////////////////////////////////////////////
+#pragma mark - UIView
+////////////////////////////////////////////////////////////////////////
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+
+    // re-layout playable view
+    self.playableValue = self.playableValue;
 }
 
 ////////////////////////////////////////////////////////////////////////
