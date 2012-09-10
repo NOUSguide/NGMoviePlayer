@@ -219,7 +219,7 @@ static char playerAirPlayVideoActiveContext;
 
 - (void)play {
     if (self.player.status == AVPlayerStatusReadyToPlay) {
-        if (_seekToInitialPlaybackTimeBeforePlay) {
+        if (_seekToInitialPlaybackTimeBeforePlay && _initialPlaybackTime > 0.) {
             CMTime time = CMTimeMakeWithSeconds(_initialPlaybackTime, NSEC_PER_SEC);
             dispatch_block_t afterSeekAction = ^{
                 [self.view hidePlaceholderViewAnimated:YES];
@@ -233,7 +233,7 @@ static char playerAirPlayVideoActiveContext;
                 }
             };
 
-            if (_initialPlaybackTime != 0. && [self.player respondsToSelector:@selector(seekToTime:completionHandler:)]) {
+            if ([self.player respondsToSelector:@selector(seekToTime:completionHandler:)]) {
                 [self.view showPlaceholderViewAnimated:NO];
                 [self.player seekToTime:time completionHandler:^(BOOL finished) {
                     afterSeekAction();
@@ -245,6 +245,8 @@ static char playerAirPlayVideoActiveContext;
 
             _seekToInitialPlaybackTimeBeforePlay = NO;
         } else {
+            [self.view hidePlaceholderViewAnimated:YES];
+            
             if (_delegateFlags.didResumePlayback) {
                 [self.delegate moviePlayerDidResumePlayback:self];
             }

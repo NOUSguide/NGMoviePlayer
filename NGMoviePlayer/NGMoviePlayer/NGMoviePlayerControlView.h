@@ -44,6 +44,8 @@ typedef enum {
 @property (nonatomic, strong) UIView *topControlsView;
 @property (nonatomic, strong) UIView *bottomControlsView;
 
+@property (nonatomic, readonly) NSArray *topControlsViewButtons;
+
 /** the slider indicating the current playback time */
 @property (nonatomic, strong, readonly) NGScrubber *scrubber;
 @property (nonatomic, assign) NSTimeInterval playableDuration;

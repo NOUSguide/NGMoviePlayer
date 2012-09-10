@@ -34,6 +34,7 @@ NSString * const NGMoviePlayerControlViewTopButtonContainerKey = @"NGMoviePlayer
 
 @interface NGMoviePlayerControlView () {
     BOOL _statusBarHidden;
+    NSMutableArray *_topControlsViewButtons;
 }
 
 @property (nonatomic, strong) UIButton *playPauseButton;
@@ -67,6 +68,8 @@ NSString * const NGMoviePlayerControlViewTopButtonContainerKey = @"NGMoviePlayer
         _topControlsView = [[UIView alloc] initWithFrame:CGRectZero];
         _topControlsView.backgroundColor = [UIColor colorWithWhite:0.f alpha:kControlAlphaValue];
         [self addSubview:_topControlsView];
+
+        _topControlsViewButtons = [NSMutableArray new];
 
         _topButtonContainer = [[UIView alloc] initWithFrame:CGRectZero];
         _topButtonContainer.backgroundColor = [UIColor clearColor];
@@ -325,6 +328,8 @@ NSString * const NGMoviePlayerControlViewTopButtonContainerKey = @"NGMoviePlayer
     button.frame = CGRectMake(maxX, 0.f, button.frame.size.width, height);
     [self.topButtonContainer addSubview:button];
     self.topButtonContainer.frame = CGRectMake(0.f, 0.f, maxX + button.frame.size.width, height);
+
+    [_topControlsViewButtons addObject:button];
 }
 
 ////////////////////////////////////////////////////////////////////////
