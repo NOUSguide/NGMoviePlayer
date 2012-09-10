@@ -9,30 +9,9 @@
 #import "NGMoviePlayerControlStyle.h"
 #import "NGWeak.h"
 
-extern NSString * const NGMoviePlayerControlViewTopControlsViewKey;
-extern NSString * const NGMoviePlayerControlViewBottomControlsViewKey;
-extern NSString * const NGMoviePlayerControlViewPlayPauseButtonKey;
-extern NSString * const NGMoviePlayerControlViewScrubberKey;
-extern NSString * const NGMoviePlayerControlViewRewindButtonKey;
-extern NSString * const NGMoviePlayerControlViewForwardButtonKey;
-extern NSString * const NGMoviePlayerControlViewAirPlayButtonKey;
-extern NSString * const NGMoviePlayerControlViewVolumeViewKey;
-extern NSString * const NGMoviePlayerControlViewVolumeControlKey;
-extern NSString * const NGMoviePlayerControlViewZoomButtonKey;
-extern NSString * const NGMoviePlayerControlViewCurrentTimeLabelKey;
-extern NSString * const NGMoviePlayerControlViewRemainingTimeLabelKey;
-extern NSString * const NGMoviePlayerControlViewTopButtonContainerKey;
 
-
+@class NGMoviePlayerLayout;
 @protocol NGMoviePlayerControlActionDelegate;
-@class NGScrubber;
-@class NGVolumeControl;
-
-
-typedef enum {
-    NGMoviePlayerControlViewZoomOutButtonPositionRight = 0,
-    NGMoviePlayerControlViewZoomOutButtonPositionLeft
-} NGMoviePlayerControlViewZoomOutButtonPosition;
 
 
 @interface NGMoviePlayerControlView : UIView
@@ -41,38 +20,17 @@ typedef enum {
 
 /** Controls whether the player controls are currently in fullscreen- or inlinestyle */
 @property (nonatomic, assign) NGMoviePlayerControlStyle controlStyle;
-@property (nonatomic, strong) UIView *topControlsView;
-@property (nonatomic, strong) UIView *bottomControlsView;
 
 @property (nonatomic, readonly) NSArray *topControlsViewButtons;
-
-/** the slider indicating the current playback time */
-@property (nonatomic, strong, readonly) NGScrubber *scrubber;
 @property (nonatomic, assign) NSTimeInterval playableDuration;
-/** the super-fancy volume control */
-@property (nonatomic, strong) NGVolumeControl *volumeControl;
-
-/** Force hiding of controls, default to NO */
-@property (nonatomic, assign) BOOL scrubberHidden;
-@property (nonatomic, assign) BOOL skipButtonsHidden;
 @property (nonatomic, readonly, getter = isAirPlayButtonVisible) BOOL airPlayButtonVisible;
 
-/** the color of the scrubber */
-@property (nonatomic, strong) UIColor *scrubberFillColor;
 
-/** the padding between the buttons in topControlsView */
-@property (nonatomic) CGFloat topControlsViewButtonPadding;
-
-/** the position of the zoomout-button in fullscreen-style */
-@property (nonatomic) NGMoviePlayerControlViewZoomOutButtonPosition zoomOutButtonPosition;
-
-@property (nonatomic, copy) void (^layoutSubviewsBlock)(NGMoviePlayerControlStyle controlStyle, NSDictionary *controls);
+/******************************************
+ @name Updating
+ ******************************************/
 
 - (void)updateScrubberWithCurrentTime:(NSTimeInterval)currentTime duration:(NSTimeInterval)duration;
 - (void)updateButtonsWithPlaybackStatus:(BOOL)isPlaying;
-
-- (void)layoutSubviewsForControlStyle:(NGMoviePlayerControlStyle)controlStyle;
-
-- (void)addTopControlsViewButton:(UIButton *)button;
 
 @end

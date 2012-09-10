@@ -1,6 +1,8 @@
 #import "NGMoviePlayer.h"
 #import "NGMoviePlayerView.h"
 #import "NGMoviePlayerControlView.h"
+#import "NGMoviePlayerControlView+NGPrivate.h"
+#import "NGMoviePlayerLayout+NGPrivate.h"
 #import "NGScrubber.h"
 #import "NGMoviePlayerLayerView.h"
 #import "NGMoviePlayerControlActionDelegate.h"
@@ -15,6 +17,7 @@ static char playerItemDurationContext;
 static char playerCurrentItemContext;
 static char playerRateContext;
 static char playerAirPlayVideoActiveContext;
+
 
 @interface NGMoviePlayer () <NGMoviePlayerControlActionDelegate> {
     // flags for methods implemented in the delegate
@@ -224,7 +227,6 @@ static char playerAirPlayVideoActiveContext;
             dispatch_block_t afterSeekAction = ^{
                 [self.view hidePlaceholderViewAnimated:YES];
 
-                [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
                 [self moviePlayerDidStartToPlay];
                 [self updateControlsViewForLivestreamStatus];
 
@@ -271,6 +273,8 @@ static char playerAirPlayVideoActiveContext;
 
     [self.playableDurationTimer invalidate];
     self.playableDurationTimer = nil;
+    [self.skippingTimer invalidate];
+    self.skippingTimer = nil;
 
     if (_delegateFlags.didPausePlayback) {
         [self.delegate moviePlayerDidPausePlayback:self];
@@ -332,6 +336,9 @@ static char playerAirPlayVideoActiveContext;
     if (_view == nil) {
         _view = [[NGMoviePlayerView alloc] initWithFrame:CGRectZero];
         _view.delegate = self;
+
+        // layout that is used per default
+        self.layout = [NGMoviePlayerDefaultLayout new];
     }
 
     return _view;
@@ -482,12 +489,22 @@ static char playerAirPlayVideoActiveContext;
     }
 }
 
+- (void)setLayout:(NGMoviePlayerLayout *)layout {
+    layout.moviePlayer = self;
+    self.view.controlsView.layout = layout;
+
+    [layout invalidateLayout];
+}
+
+- (NGMoviePlayerLayout *)layout {
+    return self.view.controlsView.layout;
+}
+
 ////////////////////////////////////////////////////////////////////////
 #pragma mark - Notifications
 ////////////////////////////////////////////////////////////////////////
 
 - (void)playerItemDidPlayToEndTime:(NSNotification *)notification {
-    [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
     [self.player pause];
 
     _seekToInitialPlaybackTimeBeforePlay = YES;
@@ -797,11 +814,18 @@ static char playerAirPlayVideoActiveContext;
 
 - (void)updateControlsViewForLivestreamStatus {
     BOOL isLivestream = self.playingLivestream;
-    
-    self.view.controlsView.scrubberHidden = isLivestream;
 
-    if (isLivestream) {
-        self.view.controlsView.skipButtonsHidden = YES;
+    NGMoviePlayerLayout *layout = self.layout;
+
+    // TODO: Instead of hardcoding, tell layout if we are playing a livestream and let the layout decide
+    if ([layout isKindOfClass:[NGMoviePlayerDefaultLayout class]]) {
+        NGMoviePlayerDefaultLayout *defaultLayout = (NGMoviePlayerDefaultLayout *)layout;
+
+        defaultLayout.scrubberHidden = isLivestream;
+
+        if (isLivestream) {
+            defaultLayout.skipButtonsHidden = YES;
+        }
     }
 }
 

@@ -2,6 +2,7 @@
 #import "NGVolumeControl.h"
 #import "NGMoviePlayerLayerView.h"
 #import "NGMoviePlayerControlView.h"
+#import "NGMoviePlayerControlView+NGPrivate.h"
 #import "NGMoviePlayerPlaceholderView.h"
 #import "NGMoviePlayerControlActionDelegate.h"
 #import "NGMoviePlayerVideoGravity.h"

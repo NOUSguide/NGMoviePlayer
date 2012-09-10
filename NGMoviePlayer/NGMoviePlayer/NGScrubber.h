@@ -17,7 +17,11 @@
 @property (atomic, strong) NSArray *scrubbingSpeedChangePositions;
 
 @property (nonatomic, assign) float playableValue;
+
 @property (nonatomic, strong) UIColor *playableValueColor;
+@property (nonatomic, strong) UIColor *fillColor;
 @property (nonatomic, assign) CGFloat playableValueRoundedRectRadius;
+
+
 
 @end

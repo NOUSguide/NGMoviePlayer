@@ -16,6 +16,10 @@
 #import "NGMoviePlayerPlaceholderView.h"
 #import "NGScrubber.h"
 #import "NGWeak.h"
+#import "NGMoviePlayerLayout.h"
+#import "NGMoviePlayerDefaultLayout.h"
+#import "NGMoviePlayerSystemLayout.h"
+
 
 @interface NGMoviePlayer : NSObject
 
@@ -52,6 +56,9 @@
 @property (nonatomic, readonly) NSTimeInterval playableDuration;
 /** initialPlaybackTime for playing the video */
 @property (nonatomic, assign) NSTimeInterval initialPlaybackTime;
+
+
+@property (nonatomic, strong) NGMoviePlayerLayout *layout;
 
 /**
  By changing the audio session category you can influence how your audio output interacts with
