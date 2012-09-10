@@ -136,14 +136,14 @@ static char playerLayerReadyForDisplayContext;
 }
 
 - (void)setControlsVisible:(BOOL)controlsVisible animated:(BOOL)animated {
+    if (controlsVisible) {
+        [self bringSubviewToFront:self.controlsView];
+    } else {
+        [self.controlsView.volumeControl setExpanded:NO animated:YES];
+    }
+    
     if (controlsVisible != _controlsVisible) {
         _controlsVisible = controlsVisible;
-
-        if (controlsVisible) {
-            [self bringSubviewToFront:self.controlsView];
-        } else {
-            [self.controlsView.volumeControl setExpanded:NO animated:YES];
-        }
 
         NSTimeInterval duration = animated ? kNGFadeDuration : 0.;
         NGMoviePlayerControlAction willAction = controlsVisible ? NGMoviePlayerControlActionWillShowControls : NGMoviePlayerControlActionWillHideControls;

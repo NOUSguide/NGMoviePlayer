@@ -219,7 +219,7 @@ static char playerAirPlayVideoActiveContext;
 
 - (void)play {
     if (self.player.status == AVPlayerStatusReadyToPlay) {
-        if (_seekToInitialPlaybackTimeBeforePlay && _initialPlaybackTime > 0.) {
+        if (_seekToInitialPlaybackTimeBeforePlay && _initialPlaybackTime >= 0.) {
             CMTime time = CMTimeMakeWithSeconds(_initialPlaybackTime, NSEC_PER_SEC);
             dispatch_block_t afterSeekAction = ^{
                 [self.view hidePlaceholderViewAnimated:YES];
@@ -796,7 +796,13 @@ static char playerAirPlayVideoActiveContext;
 }
 
 - (void)updateControlsViewForLivestreamStatus {
-    self.view.controlsView.scrubberHidden = self.playingLivestream;
+    BOOL isLivestream = self.playingLivestream;
+    
+    self.view.controlsView.scrubberHidden = isLivestream;
+
+    if (isLivestream) {
+        self.view.controlsView.skipButtonsHidden = YES;
+    }
 }
 
 - (void)skipTimerFired:(NSTimer *)timer {
