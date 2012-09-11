@@ -336,9 +336,10 @@
     CGRect thumbRect = [self thumbRectForBounds:self.bounds 
                                       trackRect:[self trackRectForBounds:self.bounds]
                                           value:self.value];
-    CGRect popupRect = CGRectOffset(thumbRect, 0.f, -floorf(thumbRect.size.height * 1.5f));
+    CGFloat height = 35.f;
+    CGRect popupRect = CGRectOffset(thumbRect, 0.f, -height - 5.f);
     
-    valuePopupView.frame = CGRectInset(popupRect, -25.f, -10.f);
+    valuePopupView.frame = CGRectInset(popupRect, -25.f, (CGRectGetHeight(popupRect) - height)/2.f);
     valuePopupView.time = self.value;
 }
 

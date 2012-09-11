@@ -20,7 +20,8 @@ typedef enum {
     NGMoviePlayerControlActionWillShowControls,
     NGMoviePlayerControlActionDidShowControls,
     NGMoviePlayerControlActionWillHideControls,
-    NGMoviePlayerControlActionDidHideControls
+    NGMoviePlayerControlActionDidHideControls,
+    NGMoviePlayerControlActionAirPlayMenuActivated
 } NGMoviePlayerControlAction;
 
 

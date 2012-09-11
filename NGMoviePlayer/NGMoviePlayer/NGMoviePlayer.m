@@ -303,6 +303,10 @@ static char playerAirPlayVideoActiveContext;
     // do nothing here
 }
 
+- (void)moviePlayerDidUpdateCurrentPlaybackTime:(NSTimeInterval)currentPlaybackTime {
+    // do nothing here
+}
+
 - (void)moviePlayerWillShowControlsWithDuration:(NSTimeInterval)duration {
     // do nothing here
 }
@@ -673,6 +677,11 @@ static char playerAirPlayVideoActiveContext;
             break;
         }
 
+        case NGMoviePlayerControlActionAirPlayMenuActivated: {
+            [self.view restartFadeOutControlsViewTimer];
+            break;
+        }
+
         default:
             // do nothing
             break;
@@ -796,8 +805,10 @@ static char playerAirPlayVideoActiveContext;
                                                                                    [strongSelf.view updateWithCurrentTime:strongSelf.currentPlaybackTime
                                                                                                                  duration:strongSelf.duration];
 
+                                                                                   [strongSelf moviePlayerDidUpdateCurrentPlaybackTime:strongSelf.currentPlaybackTime];
+
                                                                                    if (strongSelf->_delegateFlags.didUpdateCurrentTime) {
-                                                                                       [self.delegate moviePlayer:strongSelf didUpdateCurrentTime:strongSelf.currentPlaybackTime];
+                                                                                       [strongSelf.delegate moviePlayer:strongSelf didUpdateCurrentTime:strongSelf.currentPlaybackTime];
                                                                                    }
                                                                                }
                                                                            }

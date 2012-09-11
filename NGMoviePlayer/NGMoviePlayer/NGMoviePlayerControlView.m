@@ -266,6 +266,8 @@
             [button sendActionsForControlEvents:UIControlEventTouchUpInside];
         }
     }
+
+    [self.delegate moviePlayerControl:self.airPlayControl didPerformAction:NGMoviePlayerControlActionAirPlayMenuActivated];
 }
 
 @end
