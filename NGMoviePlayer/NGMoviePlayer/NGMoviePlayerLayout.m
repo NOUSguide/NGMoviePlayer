@@ -73,6 +73,10 @@
     return self.moviePlayer.view.controlStyle;
 }
 
+- (BOOL)isPlayingLivestream {
+    return self.moviePlayer.playingLivestream;
+}
+
 - (CGFloat)width {
     return self.moviePlayer.view.controlsView.bounds.size.width;
 }

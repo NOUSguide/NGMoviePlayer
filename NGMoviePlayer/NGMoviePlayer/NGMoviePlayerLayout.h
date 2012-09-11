@@ -41,6 +41,7 @@
 @property (nonatomic, ng_weak, readonly) NGMoviePlayer *moviePlayer;
 @property (nonatomic, readonly) NGMoviePlayerControlView *controlsView;
 @property (nonatomic, readonly) NGMoviePlayerControlStyle controlStyle;
+@property (nonatomic, readonly, getter = isPlayingLivestream) BOOL playingLivestream;
 
 @property (nonatomic, readonly) CGFloat width;
 @property (nonatomic, readonly) CGFloat height;

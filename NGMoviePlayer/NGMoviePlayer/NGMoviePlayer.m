@@ -813,20 +813,8 @@ static char playerAirPlayVideoActiveContext;
 }
 
 - (void)updateControlsViewForLivestreamStatus {
-    BOOL isLivestream = self.playingLivestream;
-
-    NGMoviePlayerLayout *layout = self.layout;
-
-    // TODO: Instead of hardcoding, tell layout if we are playing a livestream and let the layout decide
-    if ([layout isKindOfClass:[NGMoviePlayerDefaultLayout class]]) {
-        NGMoviePlayerDefaultLayout *defaultLayout = (NGMoviePlayerDefaultLayout *)layout;
-
-        defaultLayout.scrubberHidden = isLivestream;
-
-        if (isLivestream) {
-            defaultLayout.skipButtonsHidden = YES;
-        }
-    }
+    // layout might change when playing livestream
+    [self.layout invalidateLayout];
 }
 
 - (void)skipTimerFired:(NSTimer *)timer {

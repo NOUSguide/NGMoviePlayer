@@ -15,7 +15,9 @@
 #define kControlWidth                          (UI_USER_INTERFACE_IDIOM()  == UIUserInterfaceIdiomPhone ? 44.f : 50.f)
 
 
-@interface NGMoviePlayerDefaultLayout ()
+@interface NGMoviePlayerDefaultLayout () {
+    NSMutableArray *_topControlsButtons;
+}
 
 @property (nonatomic, readonly) UIImage *bottomControlFullscreenImage;
 
@@ -33,6 +35,9 @@
 - (id)init {
     if ((self = [super init])) {
         _scrubberFillColor = [UIColor grayColor];
+        _minWidthToDisplaySkipButtons = kMinWidthToDisplaySkipButtons;
+
+        _topControlsButtons = [NSMutableArray array];
     }
 
     return self;
@@ -61,6 +66,14 @@
 
 - (void)customizeControlsWithControlStyle:(NGMoviePlayerControlStyle)controlStyle {
     [self setupScrubber:self.scrubberControl controlStyle:controlStyle];
+
+    // hide controls when playing livestream
+    BOOL isLivestream = self.playingLivestream;
+
+    self.scrubberHidden = isLivestream;
+    if (isLivestream) {
+        self.skipButtonsHidden = YES;
+    }
 }
 
 - (void)layoutTopControlsViewWithControlStyle:(NGMoviePlayerControlStyle)controlStyle {
@@ -137,6 +150,20 @@
     button.frame = CGRectMake(maxX, 0.f, button.frame.size.width, height);
     [self.topControlsContainerView addSubview:button];
     self.topControlsContainerView.frame = CGRectMake(0.f, 0.f, maxX + button.frame.size.width, height);
+
+    [_topControlsButtons addObject:button];
+}
+
+- (CGFloat)topControlsViewHeightForControlStyle:(NGMoviePlayerControlStyle)controlStyle {
+    return [self bottomControlsViewHeightForControlStyle:NGMoviePlayerControlStyleInline];
+}
+
+- (CGFloat)bottomControlsViewHeightForControlStyle:(NGMoviePlayerControlStyle)controlStyle {
+    if (controlStyle == NGMoviePlayerControlStyleFullscreen) {
+        return 105.f;
+    } else {
+        return 40.f;
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -214,18 +241,6 @@
     scrubber.playableValue = scrubber.playableValue;
 }
 
-- (CGFloat)topControlsViewHeightForControlStyle:(NGMoviePlayerControlStyle)controlStyle {
-    return [self bottomControlsViewHeightForControlStyle:NGMoviePlayerControlStyleInline];
-}
-
-- (CGFloat)bottomControlsViewHeightForControlStyle:(NGMoviePlayerControlStyle)controlStyle {
-    if (controlStyle == NGMoviePlayerControlStyleFullscreen) {
-        return 105.f;
-    } else {
-        return 40.f;
-    }
-}
-
 - (UIImage *)bottomControlFullscreenImage {
     if (_bottomControlFullscreenImage == nil) {
         _bottomControlFullscreenImage = [UIImage imageNamed:@"NGMoviePlayer.bundle/fullscreen-hud"];
@@ -282,7 +297,7 @@
 }
 
 - (void)layoutSubviewsForControlStyleFullscreen {
-    BOOL displaySkipButtons = NO; // TODO !self.skipButtonsHidden && (self.bottomControlsView.frame.size.width > kMinWidthToDisplaySkipButtons);
+    BOOL displaySkipButtons = !self.skipButtonsHidden && (self.bottomControlsView.frame.size.width > self.minWidthToDisplaySkipButtons);
     CGFloat width = self.bottomControlsView.frame.size.width;
     CGFloat controlsViewHeight = 44.f;
     CGFloat outerPadding = UI_USER_INTERFACE_IDIOM()  == UIUserInterfaceIdiomPhone ? 5.f : 12.f;
@@ -298,11 +313,11 @@
     UIImage *zoomButtonImage = [UIImage imageNamed:@"NGMoviePlayer.bundle/zoomOut"];
     CGFloat zoomButtonWidth = MAX(zoomButtonImage.size.width, kControlWidth);
     [self.zoomControl setImage:zoomButtonImage forState:UIControlStateNormal];
-    //TODO if (self.zoomOutButtonPosition == NGMoviePlayerControlViewZoomOutButtonPositionLeft) {
-    //    self.zoomControl.frame = CGRectMake(0.f, 0.f, zoomButtonWidth, self.topControlsView.bounds.size.height);
-    //} else {
+    if (self.zoomOutButtonPosition == NGMoviePlayerControlViewZoomOutButtonPositionLeft) {
+        self.zoomControl.frame = CGRectMake(0.f, 0.f, zoomButtonWidth, self.topControlsView.bounds.size.height);
+    } else {
         self.zoomControl.frame = CGRectMake(self.width - zoomButtonWidth, 0.f, zoomButtonWidth, self.topControlsView.bounds.size.height);
-    //}
+    }
 
     // volume control is always right
     self.volumeControl.frame = CGRectMake(rightEdge + self.bottomControlsView.frame.origin.x - kControlWidth - outerPadding, self.bottomControlsView.frame.origin.y + buttonTopPadding, kControlWidth, controlsViewHeight);
@@ -328,7 +343,7 @@
     }
 
     self.scrubberControl.frame = CGRectMake(leftEdge, buttonTopPadding + 12.f, rightEdge - leftEdge, 20.f);
-    //TODO self.scrubberControl.hidden = self.scrubberHidden;
+    self.scrubberControl.hidden = self.scrubberHidden;
 
     self.currentTimeLabel.frame = CGRectMake(leftEdge + 10.f, self.scrubberControl.frame.origin.y, 60.f, 20.f);
     self.currentTimeLabel.textAlignment = UITextAlignmentLeft;
