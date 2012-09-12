@@ -440,7 +440,7 @@ static char playerAirPlayVideoActiveContext;
 }
 
 - (BOOL)isPlayingLivestream {
-    return self.URL != nil && self.player != nil && (isnan(self.duration) || self.duration <= 0.);
+    return self.URL != nil && (isnan(self.duration) || self.duration <= 0.);
 }
 
 - (void)setVideoGravity:(NGMoviePlayerVideoGravity)videoGravity {

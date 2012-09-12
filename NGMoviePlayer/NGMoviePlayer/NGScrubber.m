@@ -246,7 +246,7 @@
         _playableValue = playableValue;
     }
     
-    if (playableValue == 0) {
+    if (playableValue == 0 || isnan(playableValue)) {
         self.playableView.frame = CGRectZero;
         return;
     }

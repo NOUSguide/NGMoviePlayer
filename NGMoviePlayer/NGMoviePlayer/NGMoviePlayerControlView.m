@@ -111,6 +111,7 @@
         [_bottomControlsView addSubview:_forwardControl];
 
         _playPauseControl = [UIButton buttonWithType:UIButtonTypeCustom];
+        _playPauseControl.frame = CGRectMake(0.f, 0.f, 44.f, 44.f);
         _playPauseControl.contentMode = UIViewContentModeCenter;
         _playPauseControl.showsTouchWhenHighlighted = YES;
         _playPauseControl.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
