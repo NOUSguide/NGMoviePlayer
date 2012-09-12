@@ -321,7 +321,7 @@
 - (void)constructSlider {
     valuePopupView = [[NGSliderValuePopupView alloc] initWithFrame:CGRectZero];
     valuePopupView.backgroundColor = [UIColor clearColor];
-    valuePopupView.alpha = 0.0;
+    valuePopupView.alpha = 0.f;
     [self addSubview:valuePopupView];
 }
 

@@ -115,6 +115,7 @@ static char playerAirPlayVideoActiveContext;
     [_skippingTimer invalidate];
     [_playableDurationTimer invalidate];
     _delegate = nil;
+    _view.delegate = nil;
     _view.controlsView.delegate = nil;
     [_view removeFromSuperview];
 
