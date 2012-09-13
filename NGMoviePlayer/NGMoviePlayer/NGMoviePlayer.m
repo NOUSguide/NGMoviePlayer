@@ -76,10 +76,7 @@ static char playerAirPlayVideoActiveContext;
 
 + (void)initialize {
     if (self == [NGMoviePlayer class]) {
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
-            [self setAudioSessionCategory:NGMoviePlayerAudioSessionCategoryPlayback];
-        });
+        [self setAudioSessionCategory:NGMoviePlayerAudioSessionCategoryPlayback];
     }
 }
 
@@ -130,6 +127,10 @@ static char playerAirPlayVideoActiveContext;
     if ([AVPlayer instancesRespondToSelector:@selector(allowsAirPlayVideo)]) {
         [player removeObserver:self forKeyPath:@"airPlayVideoActive"];
     }
+
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:AVPlayerItemDidPlayToEndTimeNotification
+                                                  object:_playerItem];
 
     _playerItem = nil;
 }
@@ -249,7 +250,7 @@ static char playerAirPlayVideoActiveContext;
             _seekToInitialPlaybackTimeBeforePlay = NO;
         } else {
             [self.view hidePlaceholderViewAnimated:YES];
-            
+
             if (_delegateFlags.didResumePlayback) {
                 [self.delegate moviePlayerDidResumePlayback:self];
             }
@@ -796,12 +797,13 @@ static char playerAirPlayVideoActiveContext;
 - (void)startObservingPlayerTimeChanges {
     if (self.playerTimeObserver == nil) {
         __ng_weak NGMoviePlayer *weakSelf = self;
+
         self.playerTimeObserver = [self.player addPeriodicTimeObserverForInterval:CMTimeMakeWithSeconds(.5, NSEC_PER_SEC)
                                                                             queue:dispatch_get_main_queue()
                                                                        usingBlock:^(CMTime time) {
                                                                            __strong NGMoviePlayer *strongSelf = weakSelf;
 
-                                                                           if (strongSelf != nil) {
+                                                                           if (strongSelf != nil && [strongSelf isKindOfClass:[NGMoviePlayer class]]) {
                                                                                if (CMTIME_IS_VALID(strongSelf.player.currentTime) && CMTIME_IS_VALID(strongSelf.CMDuration)) {
                                                                                    [strongSelf.view updateWithCurrentTime:strongSelf.currentPlaybackTime
                                                                                                                  duration:strongSelf.duration];
