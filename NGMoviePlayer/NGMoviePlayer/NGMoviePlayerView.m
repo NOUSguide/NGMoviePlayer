@@ -384,6 +384,7 @@ static char playerLayerReadyForDisplayContext;
         default: {
             self.playerLayerView.frame = self.bounds;
             [self insertSubview:self.playerLayerView belowSubview:self.placeholderView];
+            [self.externalScreenPlaceholder removeFromSuperview];
             self.externalScreenPlaceholder = nil;
             break;
         }
