@@ -38,6 +38,9 @@
         _minWidthToDisplaySkipButtons = kMinWidthToDisplaySkipButtons;
 
         _topControlsButtons = [NSMutableArray array];
+        _topControlsViewAlignment = NGMoviePlayerControlViewTopControlsViewAlignmentCenter;
+        _zoomOutButtonPosition = NGMoviePlayerControlViewZoomOutButtonPositionRight;
+        _topControlsViewButtonPadding = 35.f;
     }
 
     return self;
@@ -82,11 +85,18 @@
                                             self.width,
                                             [self topControlsViewHeightForControlStyle:controlStyle]);
 
-    // center custom controls in top container
-    self.topControlsContainerView.frame = CGRectMake(MAX((self.topControlsView.frame.size.width - self.topControlsContainerView.frame.size.width)/2.f, 0.f),
-                                                     0.f,
-                                                     self.topControlsContainerView.frame.size.width,
-                                                     [self topControlsViewHeightForControlStyle:controlStyle]);
+    if (self.topControlsViewAlignment == NGMoviePlayerControlViewTopControlsViewAlignmentCenter) {
+        // center custom controls in top container
+        self.topControlsContainerView.frame = CGRectMake(MAX((self.topControlsView.frame.size.width - self.topControlsContainerView.frame.size.width)/2.f, 0.f),
+                                                         0.f,
+                                                         self.topControlsContainerView.frame.size.width,
+                                                         [self topControlsViewHeightForControlStyle:controlStyle]);
+    } else {
+        self.topControlsContainerView.frame = CGRectMake(2.f,
+                                                         0.f,
+                                                         self.topControlsContainerView.frame.size.width,
+                                                         [self topControlsViewHeightForControlStyle:controlStyle]);
+    }
 }
 
 - (void)layoutBottomControlsViewWithControlStyle:(NGMoviePlayerControlStyle)controlStyle {
@@ -152,6 +162,14 @@
     self.topControlsContainerView.frame = CGRectMake(0.f, 0.f, maxX + button.frame.size.width, height);
 
     [_topControlsButtons addObject:button];
+}
+
+- (void)setTopControlsViewButtonPadding:(CGFloat)topControlsViewButtonPadding {
+    if (topControlsViewButtonPadding != _topControlsViewButtonPadding) {
+        _topControlsViewButtonPadding = topControlsViewButtonPadding;
+
+        [self layoutTopControlsViewButtons];
+    }
 }
 
 - (CGFloat)topControlsViewHeightForControlStyle:(NGMoviePlayerControlStyle)controlStyle {
@@ -350,6 +368,19 @@
 
     self.remainingTimeLabel.frame = CGRectMake(rightEdge - 70.f, self.scrubberControl.frame.origin.y, 60.f, 20.f);
     self.remainingTimeLabel.textAlignment = UITextAlignmentRight;
+}
+
+- (void)layoutTopControlsViewButtons {
+    CGFloat maxX = 0.f;
+    CGFloat height = [self topControlsViewHeightForControlStyle:self.controlStyle];
+
+    for (UIView *button in self.topControlsButtons) {
+        button.frame = CGRectMake(maxX, 0.f, button.frame.size.width, height);
+        maxX = button.frame.origin.x + button.frame.size.width + self.topControlsViewButtonPadding;
+    }
+    
+    maxX -= self.topControlsViewButtonPadding;
+    self.topControlsContainerView.frame = CGRectMake(0.f, 0.f, maxX, height);
 }
 
 @end

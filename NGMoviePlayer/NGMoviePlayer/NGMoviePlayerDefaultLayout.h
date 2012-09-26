@@ -14,6 +14,11 @@ typedef enum {
     NGMoviePlayerControlViewZoomOutButtonPositionLeft
 } NGMoviePlayerControlViewZoomOutButtonPosition;
 
+typedef enum {
+    NGMoviePlayerControlViewTopControlsViewAlignmentCenter = 0,
+    NGMoviePlayerControlViewTopControlsViewAlignmentLeft
+} NGMoviePlayerControlViewTopControlsViewAlignment;
+
 
 @interface NGMoviePlayerDefaultLayout : NGMoviePlayerLayout
 
@@ -27,6 +32,8 @@ typedef enum {
 @property (nonatomic, strong) UIColor *scrubberFillColor;
 /** the padding between the buttons in topControlsView */
 @property (nonatomic, assign) CGFloat topControlsViewButtonPadding;
+/** the position of the zoomout-button in fullscreen-style */
+@property (nonatomic, assign) NGMoviePlayerControlViewTopControlsViewAlignment topControlsViewAlignment;
 /** the position of the zoomout-button in fullscreen-style */
 @property (nonatomic, assign) NGMoviePlayerControlViewZoomOutButtonPosition zoomOutButtonPosition;
 

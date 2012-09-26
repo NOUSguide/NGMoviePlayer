@@ -91,7 +91,7 @@ static char playerAirPlayVideoActiveContext;
         _airPlayEnabled = [AVPlayer instancesRespondToSelector:@selector(allowsAirPlayVideo)];
         _rateToRestoreAfterScrubbing = 1.;
         _initialPlaybackTime = initialPlaybackTime;
-
+        
         // calling setter here on purpose
         self.URL = URL;
     }
@@ -131,8 +131,6 @@ static char playerAirPlayVideoActiveContext;
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:AVPlayerItemDidPlayToEndTimeNotification
                                                   object:_playerItem];
-
-    _playerItem = nil;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -154,7 +152,7 @@ static char playerAirPlayVideoActiveContext;
             case AVPlayerStatusReadyToPlay: {
                 // TODO: Enable buttons & scrubber
                 if (!self.scrubbing) {
-                    if (self.autostartWhenReady && self.view.superview != nil) {
+                    if (self.autostartWhenReady && self.view.superview != nil && [UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
                         [self play];
                     }
                 }
