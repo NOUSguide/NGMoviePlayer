@@ -213,6 +213,7 @@ static char playerLayerReadyForDisplayContext;
 - (void)setControlStyle:(NGMoviePlayerControlStyle)controlStyle {
     if (controlStyle != self.controlsView.controlStyle) {
         self.controlsView.controlStyle = controlStyle;
+        [self.controlsView updateButtonsWithPlaybackStatus:self.playerLayer.player.rate > 0.f];
 
         BOOL isIPad = [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad;
 

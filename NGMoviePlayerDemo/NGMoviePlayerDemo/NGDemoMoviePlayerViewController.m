@@ -6,9 +6,9 @@
 //  Copyright (c) 2012 NOUS Wissensmanagement GmbH. All rights reserved.
 //
 
-#import "NGMoviePlayerViewController.h"
+#import "NGDemoMoviePlayerViewController.h"
 
-@interface NGMoviePlayerViewController () {
+@interface NGDemoMoviePlayerViewController () {
     NSUInteger activeCount_;
 }
 
@@ -18,7 +18,7 @@
 
 @end
 
-@implementation NGMoviePlayerViewController
+@implementation NGDemoMoviePlayerViewController
 
 @synthesize containerView = _containerView;
 @synthesize moviePlayer = _moviePlayer;

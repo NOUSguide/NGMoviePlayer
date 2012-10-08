@@ -10,6 +10,6 @@
 #import "NGMoviePlayer.h"
 #import "PSPushPopPressView.h"
 
-@interface NGMoviePlayerViewController : UIViewController <PSPushPopPressViewDelegate, NGMoviePlayerDelegate>
+@interface NGDemoMoviePlayerViewController : UIViewController <PSPushPopPressViewDelegate, NGMoviePlayerDelegate>
 
 @end

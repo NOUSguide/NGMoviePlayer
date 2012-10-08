@@ -16,11 +16,12 @@
 		9B045571150641B0007F8E7C /* libNGMoviePlayer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B04556E150641A3007F8E7C /* libNGMoviePlayer.a */; };
 		9B045598150754DD007F8E7C /* NGMoviePlayer.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9B045597150754DD007F8E7C /* NGMoviePlayer.bundle */; };
 		9B73C774150F46DF00A4069A /* PSPushPopPressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B73C75B150F46DF00A4069A /* PSPushPopPressView.m */; };
-		9B73C77E150F471B00A4069A /* NGMoviePlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B73C77D150F471B00A4069A /* NGMoviePlayerViewController.m */; };
+		9B73C77E150F471B00A4069A /* NGDemoMoviePlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B73C77D150F471B00A4069A /* NGDemoMoviePlayerViewController.m */; };
 		9B73C782150F49AC00A4069A /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B73C781150F49AC00A4069A /* AVFoundation.framework */; };
 		9B73C784150F49B500A4069A /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B73C783150F49B500A4069A /* MediaPlayer.framework */; };
 		9B73C788150F4A0300A4069A /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B73C787150F4A0300A4069A /* CoreMedia.framework */; };
 		9B73C78A150F4A2F00A4069A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B73C789150F4A2F00A4069A /* QuartzCore.framework */; };
+		9BE2533E1622D83E0078BA49 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9BE2533D1622D83E0078BA49 /* Default-568h@2x.png */; };
 		9BE34D44150F9438001CE6CD /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BE34D43150F9438001CE6CD /* AudioToolbox.framework */; };
 		9BE34D52150F982D001CE6CD /* NGVolumeControl.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9BE34D51150F982D001CE6CD /* NGVolumeControl.bundle */; };
 /* End PBXBuildFile section */
@@ -57,12 +58,13 @@
 		9B045597150754DD007F8E7C /* NGMoviePlayer.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = NGMoviePlayer.bundle; path = ../NGMoviePlayer/Resources/NGMoviePlayer.bundle; sourceTree = "<group>"; };
 		9B73C75A150F46DF00A4069A /* PSPushPopPressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSPushPopPressView.h; sourceTree = "<group>"; };
 		9B73C75B150F46DF00A4069A /* PSPushPopPressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSPushPopPressView.m; sourceTree = "<group>"; };
-		9B73C77C150F471B00A4069A /* NGMoviePlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NGMoviePlayerViewController.h; sourceTree = "<group>"; };
-		9B73C77D150F471B00A4069A /* NGMoviePlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NGMoviePlayerViewController.m; sourceTree = "<group>"; };
+		9B73C77C150F471B00A4069A /* NGDemoMoviePlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NGDemoMoviePlayerViewController.h; sourceTree = "<group>"; };
+		9B73C77D150F471B00A4069A /* NGDemoMoviePlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NGDemoMoviePlayerViewController.m; sourceTree = "<group>"; };
 		9B73C781150F49AC00A4069A /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		9B73C783150F49B500A4069A /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		9B73C787150F4A0300A4069A /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		9B73C789150F4A2F00A4069A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		9BE2533D1622D83E0078BA49 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		9BE34D43150F9438001CE6CD /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		9BE34D51150F982D001CE6CD /* NGVolumeControl.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = NGVolumeControl.bundle; path = ../NGVolumeControl/NGVolumeControl/Resources/NGVolumeControl.bundle; sourceTree = "<group>"; };
 		9BFF8CE81521CF810028D3A2 /* HCI.m4v */ = {isa = PBXFileReference; lastKnownFileType = file; path = HCI.m4v; sourceTree = "<group>"; };
@@ -91,6 +93,7 @@
 		9B0455401506418C007F8E7C = {
 			isa = PBXGroup;
 			children = (
+				9BE2533D1622D83E0078BA49 /* Default-568h@2x.png */,
 				9B0455551506418C007F8E7C /* NGMoviePlayerDemo */,
 				9B045596150754CD007F8E7C /* Resources */,
 				9B04554E1506418C007F8E7C /* Frameworks */,
@@ -128,8 +131,8 @@
 			children = (
 				9B04555E1506418C007F8E7C /* AppDelegate.h */,
 				9B04555F1506418C007F8E7C /* AppDelegate.m */,
-				9B73C77C150F471B00A4069A /* NGMoviePlayerViewController.h */,
-				9B73C77D150F471B00A4069A /* NGMoviePlayerViewController.m */,
+				9B73C77C150F471B00A4069A /* NGDemoMoviePlayerViewController.h */,
+				9B73C77D150F471B00A4069A /* NGDemoMoviePlayerViewController.m */,
 				9B0455561506418C007F8E7C /* Supporting Files */,
 			);
 			path = NGMoviePlayerDemo;
@@ -245,6 +248,7 @@
 				9B04555A1506418C007F8E7C /* InfoPlist.strings in Resources */,
 				9B045598150754DD007F8E7C /* NGMoviePlayer.bundle in Resources */,
 				9BE34D52150F982D001CE6CD /* NGVolumeControl.bundle in Resources */,
+				9BE2533E1622D83E0078BA49 /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -258,7 +262,7 @@
 				9B04555C1506418C007F8E7C /* main.m in Sources */,
 				9B0455601506418C007F8E7C /* AppDelegate.m in Sources */,
 				9B73C774150F46DF00A4069A /* PSPushPopPressView.m in Sources */,
-				9B73C77E150F471B00A4069A /* NGMoviePlayerViewController.m in Sources */,
+				9B73C77E150F471B00A4069A /* NGDemoMoviePlayerViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "NGMoviePlayerViewController.h"
+#import "NGDemoMoviePlayerViewController.h"
 
 @implementation AppDelegate
 
@@ -17,7 +17,7 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 
-    NGMoviePlayerViewController *viewController = [[NGMoviePlayerViewController alloc] initWithNibName:nil bundle:nil];
+    NGDemoMoviePlayerViewController *viewController = [[NGDemoMoviePlayerViewController alloc] initWithNibName:nil bundle:nil];
     self.window.rootViewController = viewController;
     
     self.window.backgroundColor = [UIColor blackColor];

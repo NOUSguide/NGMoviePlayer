@@ -209,7 +209,13 @@
 }
 
 - (void)updateButtonsWithPlaybackStatus:(BOOL)isPlaying {
-    UIImage *image = isPlaying ? [UIImage imageNamed:@"NGMoviePlayer.bundle/pause"] : [UIImage imageNamed:@"NGMoviePlayer.bundle/play"];
+    UIImage *image = nil;
+
+    if (self.controlStyle == NGMoviePlayerControlStyleInline) {
+        image = isPlaying ? [UIImage imageNamed:@"NGMoviePlayer.bundle/pause"] : [UIImage imageNamed:@"NGMoviePlayer.bundle/play"];
+    } else {
+        image = isPlaying ? [UIImage imageNamed:@"NGMoviePlayer.bundle/pauseFullscreen"] : [UIImage imageNamed:@"NGMoviePlayer.bundle/playFullscreen"];
+    }
 
     [self.playPauseControl setImage:image forState:UIControlStateNormal];
 }
