@@ -155,6 +155,11 @@ static char playerLayerReadyForDisplayContext;
         [self.delegate moviePlayerControl:self.controlsView didPerformAction:willAction];
 
         [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(fadeOutControls) object:nil];
+        // rasterization fades out the view as a whole instead of setting alpha on each subview
+        // it's similar to setting UIViewGroupOpacity, but only for this particular view
+        self.controlsView.layer.shouldRasterize = YES;
+        self.controlsView.layer.rasterizationScale = [UIScreen mainScreen].scale;
+
         [UIView animateWithDuration:duration
                               delay:0.
                             options:UIViewAnimationOptionCurveEaseInOut
@@ -163,6 +168,8 @@ static char playerLayerReadyForDisplayContext;
                          } completion:^(BOOL finished) {
                              [self restartFadeOutControlsViewTimer];
                              [self.delegate moviePlayerControl:self.controlsView didPerformAction:didAction];
+
+                             self.controlsView.layer.shouldRasterize = NO;
                          }];
         
         if (self.controlStyle == NGMoviePlayerControlStyleFullscreen) {
