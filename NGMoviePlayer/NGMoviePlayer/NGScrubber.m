@@ -157,6 +157,13 @@
     self.playableValue = self.playableValue;
 }
 
+- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
+    CGRect bounds = self.bounds;
+    bounds = CGRectInset(bounds, -10.f, -10.f);
+
+    return CGRectContainsPoint(bounds, point);
+}
+
 ////////////////////////////////////////////////////////////////////////
 #pragma mark - UIControl
 ////////////////////////////////////////////////////////////////////////
@@ -179,7 +186,7 @@
         // Fade in and update the popup view
         CGPoint touchPoint = [touch locationInView:self];
         // Check if the knob is touched. Only in this case show the popup-view
-        if(CGRectContainsPoint(CGRectInset(thumbRect, -12.0, -12.0), touchPoint)) {
+        if(CGRectContainsPoint(CGRectInset(thumbRect, -20.f, -20.f), touchPoint)) {
             [self positionAndUpdatePopupView];
             [self fadePopupViewInAndOut:YES]; 
         }
