@@ -6,7 +6,7 @@
 #import "NGMoviePlayerPlaceholderView.h"
 #import "NGMoviePlayerControlActionDelegate.h"
 #import "NGMoviePlayerVideoGravity.h"
-
+#import "NGScrubber.h"
 
 
 #define kNGControlVisibilityDuration        5.
@@ -155,10 +155,11 @@ static char playerLayerReadyForDisplayContext;
         [self.delegate moviePlayerControl:self.controlsView didPerformAction:willAction];
 
         [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(fadeOutControls) object:nil];
+        // Doesn't work on device (doesn't fade but jumps from alpha 0 to 1) -> currently deactivated
         // rasterization fades out the view as a whole instead of setting alpha on each subview
         // it's similar to setting UIViewGroupOpacity, but only for this particular view
-        self.controlsView.layer.shouldRasterize = YES;
-        self.controlsView.layer.rasterizationScale = [UIScreen mainScreen].scale;
+        // self.controlsView.scrubberControl.layer.shouldRasterize = YES;
+        // self.controlsView.scrubberControl.layer.rasterizationScale = [UIScreen mainScreen].scale;
 
         [UIView animateWithDuration:duration
                               delay:0.
@@ -169,7 +170,7 @@ static char playerLayerReadyForDisplayContext;
                              [self restartFadeOutControlsViewTimer];
                              [self.delegate moviePlayerControl:self.controlsView didPerformAction:didAction];
 
-                             self.controlsView.layer.shouldRasterize = NO;
+                             //self.controlsView.scrubberControl.layer.shouldRasterize = NO;
                          }];
         
         if (self.controlStyle == NGMoviePlayerControlStyleFullscreen) {
