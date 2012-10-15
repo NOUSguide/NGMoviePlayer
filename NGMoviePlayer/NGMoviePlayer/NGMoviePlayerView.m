@@ -440,6 +440,10 @@ static char playerLayerReadyForDisplayContext;
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
     if (self.controlsVisible || self.placeholderView.alpha > 0.f) {
         id playButton = nil;
+
+        if (self.controlsView.volumeControl.expanded) {
+            return NO;
+        }
         
         if ([self.placeholderView respondsToSelector:@selector(playButton)]) {
             playButton = [self.placeholderView performSelector:@selector(playButton)];
@@ -451,7 +455,7 @@ static char playerLayerReadyForDisplayContext;
 
         // We dont want to to hide the controls when we tap em
         for (UIView *view in controls) {
-            if (CGRectContainsPoint(view.frame, [touch locationInView:view.superview])) {
+            if ([view pointInside:[touch locationInView:view] withEvent:nil]) {
                 return NO;
             }
         }
