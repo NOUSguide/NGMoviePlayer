@@ -77,14 +77,14 @@
 
         // We use the MPVolumeView just for displaying the AirPlay icon
         if ([AVPlayer instancesRespondToSelector:@selector(allowsAirPlayVideo)]) {
-            _airPlayControl = [[MPVolumeView alloc] initWithFrame:(CGRect) { .size = CGSizeMake(38.f, 24.f) }];
-            _airPlayControl.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin;
+            _airPlayControl = [[MPVolumeView alloc] initWithFrame:(CGRect) { .size = CGSizeMake(38.f, 22.f) }];
+            _airPlayControl.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin;
             _airPlayControl.contentMode = UIViewContentModeCenter;
             _airPlayControl.showsRouteButton = YES;
             _airPlayControl.showsVolumeSlider = NO;
 
-            _airPlayControlContainer = [[UIControl alloc] initWithFrame:CGRectMake(0.f, 0.f, 44.f, 40.f)];
-            _airPlayControl.center = CGPointMake(_airPlayControlContainer.frame.size.width/2.f, _airPlayControlContainer.frame.size.height/2.f + 2.f);
+            _airPlayControlContainer = [[UIControl alloc] initWithFrame:CGRectMake(0.f, 0.f, 60.f, 44.f)];
+            _airPlayControl.center = CGPointMake(_airPlayControlContainer.frame.size.width/2.f, _airPlayControlContainer.frame.size.height/2.f - 2.f);
             [_airPlayControlContainer addTarget:self action:@selector(handleAirPlayButtonPress:) forControlEvents:UIControlEventTouchUpInside];
             [_airPlayControlContainer addSubview:_airPlayControl];
             [_bottomControlsView addSubview:_airPlayControlContainer];
