@@ -21,6 +21,8 @@
 /** Controls whether the player controls are currently in fullscreen- or inlinestyle */
 @property (nonatomic, assign) NGMoviePlayerControlStyle controlStyle;
 
+@property (nonatomic, assign) NGMoviePlayerControlScrubbingTimeDisplay scrubbingTimeDisplay;
+
 @property (nonatomic, readonly) NSArray *topControlsViewButtons;
 @property (nonatomic, assign) NSTimeInterval playableDuration;
 @property (nonatomic, readonly, getter = isAirPlayButtonVisible) BOOL airPlayButtonVisible;

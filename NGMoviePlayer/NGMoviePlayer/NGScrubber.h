@@ -22,6 +22,7 @@
 @property (nonatomic, strong) UIColor *fillColor;
 @property (nonatomic, assign) CGFloat playableValueRoundedRectRadius;
 
-
+// defaults to YES
+@property (nonatomic, assign) BOOL showPopupDuringScrubbing;
 
 @end

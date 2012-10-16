@@ -100,6 +100,7 @@
         self.scrubbingSpeed = [[self.scrubbingSpeeds objectAtIndex:0] floatValue];
         
         _playableValueColor = [UIColor colorWithWhite:1.f alpha:0.7f];
+        _showPopupDuringScrubbing = YES;
         
         _playableView = [[UIView alloc] initWithFrame:CGRectZero];
         _playableView.userInteractionEnabled = NO;
@@ -333,6 +334,11 @@
 }
 
 - (void)fadePopupViewInAndOut:(BOOL)fadeIn {
+    if (!self.showPopupDuringScrubbing) {
+        valuePopupView.alpha = 0.f;
+        return;
+    }
+
     [UIView animateWithDuration:0.4
                      animations:^{
                          valuePopupView.alpha = fadeIn ? 1.f : 0.f;

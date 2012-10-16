@@ -153,6 +153,9 @@
         [_bottomControlsView addSubview:_remainingTimeLabel];
 
         _statusBarHidden = [UIApplication sharedApplication].statusBarHidden;
+
+        _controlStyle = NGMoviePlayerControlStyleInline;
+        _scrubbingTimeDisplay = NGMoviePlayerControlScrubbingTimeDisplayPopup;
     }
 
     return self;
@@ -188,6 +191,14 @@
         _controlStyle = controlStyle;
 
         [self.layout updateControlStyle:controlStyle];
+    }
+}
+
+- (void)setScrubbingTimeDisplay:(NGMoviePlayerControlScrubbingTimeDisplay)scrubbingTimeDisplay {
+    if (scrubbingTimeDisplay != _scrubbingTimeDisplay) {
+        _scrubbingTimeDisplay = scrubbingTimeDisplay;
+
+        self.scrubberControl.showPopupDuringScrubbing = (scrubbingTimeDisplay == NGMoviePlayerControlScrubbingTimeDisplayPopup);
     }
 }
 
@@ -253,6 +264,10 @@
 }
 
 - (void)handleScrubbingValueChanged:(id)sender {
+    if (self.scrubbingTimeDisplay == NGMoviePlayerControlScrubbingTimeDisplayCurrentTime) {
+        self.currentTimeLabel.text = NGMoviePlayerGetTimeFormatted(self.scrubberControl.value);
+    }
+
     [self.delegate moviePlayerControl:sender didPerformAction:NGMoviePlayerControlActionScrubbingValueChanged];
 }
 

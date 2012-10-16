@@ -10,3 +10,9 @@ typedef enum {
     NGMoviePlayerControlStyleInline,
     NGMoviePlayerControlStyleFullscreen
 } NGMoviePlayerControlStyle;
+
+typedef enum {
+    NGMoviePlayerControlScrubbingTimeDisplayPopup,
+    NGMoviePlayerControlScrubbingTimeDisplayCurrentTime,
+    NGMoviePlayerControlScrubbingTimeDisplayNone
+} NGMoviePlayerControlScrubbingTimeDisplay;
