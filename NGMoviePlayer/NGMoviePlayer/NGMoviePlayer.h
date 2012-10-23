@@ -67,7 +67,6 @@
  */
 + (void)setAudioSessionCategory:(NGMoviePlayerAudioSessionCategory)audioSessionCategory;
 
-- (id)init;
 - (id)initWithURL:(NSURL *)URL;
 - (id)initWithURL:(NSURL *)URL initialPlaybackTime:(NSTimeInterval)initialPlaybackTime;
 

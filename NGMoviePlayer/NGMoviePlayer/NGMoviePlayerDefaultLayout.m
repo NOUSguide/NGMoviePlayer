@@ -69,14 +69,6 @@
 
 - (void)customizeControlsWithControlStyle:(NGMoviePlayerControlStyle)controlStyle {
     [self setupScrubber:self.scrubberControl controlStyle:controlStyle];
-
-    // hide controls when playing livestream
-    BOOL isLivestream = self.playingLivestream;
-
-    self.scrubberHidden = isLivestream;
-    if (isLivestream) {
-        self.skipButtonsHidden = YES;
-    }
 }
 
 - (void)layoutTopControlsViewWithControlStyle:(NGMoviePlayerControlStyle)controlStyle {
@@ -315,21 +307,17 @@
 }
 
 - (void)layoutSubviewsForControlStyleFullscreen {
-    BOOL displaySkipButtons = !self.skipButtonsHidden && (self.bottomControlsView.frame.size.width > self.minWidthToDisplaySkipButtons);
-    CGFloat width = self.bottomControlsView.frame.size.width;
-    CGFloat controlsViewHeight = 44.f;
-    CGFloat outerPadding = UI_USER_INTERFACE_IDIOM()  == UIUserInterfaceIdiomPhone ? 5.f : 12.f;
-    CGFloat buttonTopPadding = 20.f;
-    CGFloat leftEdge = 0.f;
-    CGFloat rightEdge = width;   // the right edge of the last positioned button in the bottom controls view (starting from right)
-
-    // play button always on the left
-    self.playPauseControl.frame = CGRectMake(outerPadding, buttonTopPadding, kControlWidth, controlsViewHeight);
-    leftEdge = self.playPauseControl.frame.origin.x + self.playPauseControl.frame.size.width;
+    BOOL displaySkipButtons = !self.skipButtonsHidden && !self.playingLivestream && (self.bottomControlsView.frame.size.width > self.minWidthToDisplaySkipButtons);
+    CGFloat width = self.bottomControlsView.bounds.size.width;
+    CGFloat outerPadding = UI_USER_INTERFACE_IDIOM()  == UIUserInterfaceIdiomPhone ? 5.f : 10.f;
+    CGFloat controlWidth = UI_USER_INTERFACE_IDIOM()  == UIUserInterfaceIdiomPhone ? 44.f : 50.f;
+    CGFloat offset = UI_USER_INTERFACE_IDIOM()  == UIUserInterfaceIdiomPhone ? 54.f : 66.f;
+    CGFloat controlHeight = 44.f;
+    CGFloat topY = 2.f;
 
     // zoom button can be left or right
     UIImage *zoomButtonImage = [UIImage imageNamed:@"NGMoviePlayer.bundle/zoomOut"];
-    CGFloat zoomButtonWidth = MAX(zoomButtonImage.size.width, kControlWidth);
+    CGFloat zoomButtonWidth = MAX(zoomButtonImage.size.width, 50.f);
     [self.zoomControl setImage:zoomButtonImage forState:UIControlStateNormal];
     if (self.zoomOutButtonPosition == NGMoviePlayerControlViewZoomOutButtonPositionLeft) {
         self.zoomControl.frame = CGRectMake(0.f, 0.f, zoomButtonWidth, self.topControlsView.bounds.size.height);
@@ -337,37 +325,26 @@
         self.zoomControl.frame = CGRectMake(self.width - zoomButtonWidth, 0.f, zoomButtonWidth, self.topControlsView.bounds.size.height);
     }
 
-    // volume control is always right
-    self.volumeControl.frame = CGRectMake(rightEdge + self.bottomControlsView.frame.origin.x - kControlWidth - outerPadding, self.bottomControlsView.frame.origin.y + buttonTopPadding, kControlWidth, controlsViewHeight);
-    rightEdge = self.volumeControl.frame.origin.x - self.bottomControlsView.frame.origin.x;
-
-    // we always position the airplay button, but only update the left edge when the button is visible
-    // this is a workaround for a layout bug I can't remember
-    self.airPlayControlContainer.frame = CGRectMake(rightEdge-kControlWidth, buttonTopPadding + 2.f, kControlWidth, controlsViewHeight);
-    if (self.airPlayControlVisible) {
-        rightEdge = self.airPlayControlContainer.frame.origin.x;
-    }
-
-    // skip buttons can be shown or hidden
+    // play/skip segment centered in first row
+    self.playPauseControl.center = CGPointMake(width/2.f, topY + controlHeight/2.f);
+    self.rewindControl.frame = CGRectOffset(self.playPauseControl.frame, -offset, 0.f);
+    self.forwardControl.frame = CGRectOffset(self.playPauseControl.frame, offset, 0.f);
     self.rewindControl.hidden = !displaySkipButtons;
     self.forwardControl.hidden = !displaySkipButtons;
 
-    if (displaySkipButtons) {
-        self.rewindControl.frame = CGRectMake(leftEdge, buttonTopPadding, kControlWidth, controlsViewHeight);
-        self.forwardControl.frame = CGRectMake(rightEdge - kControlWidth, buttonTopPadding, kControlWidth, controlsViewHeight);
+    // volume right-aligned in first row
+    self.volumeControl.frame = CGRectMake(width + self.bottomControlsView.frame.origin.x - controlWidth - outerPadding, self.bottomControlsView.frame.origin.y + topY, controlWidth, controlHeight);
+    // airplay left-aligned
+    self.airPlayControlContainer.frame = CGRectMake(outerPadding, topY+2.f, controlWidth, controlHeight);
 
-        leftEdge = self.rewindControl.frame.origin.x + self.rewindControl.frame.size.width;
-        rightEdge = self.forwardControl.frame.origin.x;
-    }
+    // next row of controls
+    topY += controlHeight + 5.f;
 
-    self.scrubberControl.frame = CGRectMake(leftEdge, buttonTopPadding + 12.f, rightEdge - leftEdge, 20.f);
-    self.scrubberControl.hidden = self.scrubberHidden;
-
-    self.currentTimeLabel.frame = CGRectMake(leftEdge + 10.f, self.scrubberControl.frame.origin.y, 60.f, 20.f);
-    self.currentTimeLabel.textAlignment = UITextAlignmentLeft;
-
-    self.remainingTimeLabel.frame = CGRectMake(rightEdge - 70.f, self.scrubberControl.frame.origin.y, 60.f, 20.f);
-    self.remainingTimeLabel.textAlignment = UITextAlignmentRight;
+    self.currentTimeLabel.frame = CGRectMake(outerPadding, topY, 55.f, 20.f);
+    self.currentTimeLabel.textAlignment = UITextAlignmentCenter;
+    self.remainingTimeLabel.frame = CGRectMake(width - 55.f - outerPadding, topY, 55.f, 20.f);
+    self.remainingTimeLabel.textAlignment = UITextAlignmentCenter;
+    self.scrubberControl.frame = CGRectMake(CGRectGetMaxX(self.currentTimeLabel.frame) + 8.f, topY, self.remainingTimeLabel.frame.origin.x - CGRectGetMaxX(self.currentTimeLabel.frame) - 16.f, 20.f);
 }
 
 - (void)layoutTopControlsViewButtons {
