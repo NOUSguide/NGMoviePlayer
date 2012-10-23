@@ -81,7 +81,7 @@
 
 - (void)layoutTopControlsViewWithControlStyle:(NGMoviePlayerControlStyle)controlStyle {
     self.topControlsView.frame = CGRectMake(0.f,
-                                            (self.controlStyle == NGMoviePlayerControlStyleFullscreen ? 20.f : 0.f),
+                                            0.f,
                                             self.width,
                                             [self topControlsViewHeightForControlStyle:controlStyle]);
 
