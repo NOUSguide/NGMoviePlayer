@@ -187,11 +187,16 @@
 ////////////////////////////////////////////////////////////////////////
 
 - (void)setControlStyle:(NGMoviePlayerControlStyle)controlStyle {
-    if (controlStyle != _controlStyle) {
-        _controlStyle = controlStyle;
+    _controlStyle = controlStyle;
+    [self.layout updateControlStyle:controlStyle];
+}
 
-        [self.layout updateControlStyle:controlStyle];
+- (void)setLayout:(NGMoviePlayerLayout *)layout {
+    if (layout != _layout) {
+        _layout = layout;
     }
+
+    [layout updateControlStyle:self.controlStyle];
 }
 
 - (void)setScrubbingTimeDisplay:(NGMoviePlayerControlScrubbingTimeDisplay)scrubbingTimeDisplay {
