@@ -376,16 +376,26 @@ static char playerLayerReadyForDisplayContext;
 
 - (void)updateViewsForCurrentScreenState {
     [self positionViewsForState:self.screenState];
+
+    [self setControlsVisible:NO];
+
+    int64_t delayInSeconds = 1.;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        [self setControlsVisible:YES animated:YES];
+    });
 }
 
 - (void)positionViewsForState:(NGMoviePlayerScreenState)screenState {
+    UIView *viewBeneathOverlayViews = self.playerLayerView;
+
     switch (screenState) {
         case NGMoviePlayerScreenStateExternal:
         case NGMoviePlayerScreenStateAirPlay: {
             self.playerLayerView.frame = self.externalWindow.bounds;
             [self.externalWindow addSubview:self.playerLayerView];
             [self insertSubview:self.externalScreenPlaceholder belowSubview:self.placeholderView];
-            [self bringSubviewToFront:self.controlsView];
+            viewBeneathOverlayViews = self.externalScreenPlaceholder;
             break;
         }
 
@@ -417,8 +427,10 @@ static char playerLayerReadyForDisplayContext;
             overlayView.frame = (CGRect){CGPointZero, superview.frame.size};
         }
 
-        [superview insertSubview:overlayView aboveSubview:self.playerLayerView];
+        [superview insertSubview:overlayView aboveSubview:viewBeneathOverlayViews];
     }
+
+    [self bringSubviewToFront:self.controlsView];
 }
 
 - (void)externalScreenDidConnect:(NSNotification *)notification {
