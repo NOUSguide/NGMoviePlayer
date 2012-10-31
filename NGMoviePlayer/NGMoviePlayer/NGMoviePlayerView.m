@@ -25,7 +25,7 @@ static char playerLayerReadyForDisplayContext;
 @property (nonatomic, strong) NGMoviePlayerLayerView *playerLayerView;
 @property (nonatomic, strong) UIWindow *externalWindow;
 @property (nonatomic, strong) UIView *externalScreenPlaceholder;
-@property (nonatomic, strong) NSMutableSet *videoOverlayViews;
+@property (nonatomic, strong) UIView *videoOverlaySuperview;
 
 @property (nonatomic, readonly, getter = isAirPlayVideoActive) BOOL airPlayVideoActive;
 
@@ -69,9 +69,7 @@ static char playerLayerReadyForDisplayContext;
     [playerLayer removeObserver:self forKeyPath:@"readyForDisplay"];
 
     [_externalScreenPlaceholder removeFromSuperview];
-    for (UIView *view in _videoOverlayViews) {
-        [view removeFromSuperview];
-    }
+    [_videoOverlaySuperview removeFromSuperview];
 
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIScreenDidConnectNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIScreenDidDisconnectNotification object:nil];
@@ -324,14 +322,15 @@ static char playerLayerReadyForDisplayContext;
 
 - (void)addVideoOverlayView:(UIView *)overlayView {
     if (overlayView != nil) {
-        if (_videoOverlayViews == nil) {
-            _videoOverlayViews = [NSMutableSet set];
+        if (_videoOverlaySuperview == nil) {
+            UIView *superview = self.playerLayerView.superview;
+            
+            _videoOverlaySuperview = [[UIView alloc] initWithFrame:superview.bounds];
+            _videoOverlaySuperview.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+            [superview insertSubview:_videoOverlaySuperview aboveSubview:self.playerLayerView];
         }
 
-        UIView *superview = self.playerLayerView.superview;
-
-        [superview insertSubview:overlayView aboveSubview:self.playerLayerView];
-        [self.videoOverlayViews addObject:overlayView];
+        [self.videoOverlaySuperview addSubview:overlayView];
     }
 }
 
@@ -410,25 +409,9 @@ static char playerLayerReadyForDisplayContext;
     }
 
     UIView *superview = self.playerLayerView.superview;
-    
-    for (UIView *overlayView in self.videoOverlayViews) {
-        // we assume this means "stick to bottom"
-        if (overlayView.autoresizingMask & UIViewAutoresizingFlexibleTopMargin) {
-            overlayView.frame = CGRectMake(0.f, superview.frame.size.height - overlayView.frame.size.height,superview.bounds.size.width, overlayView.frame.size.height);
-        }
 
-        // we assume this means "stick to top"
-        else if (overlayView.autoresizingMask & UIViewAutoresizingFlexibleBottomMargin) {
-            overlayView.frame = CGRectMake(0.f, overlayView.frame.origin.y, superview.bounds.size.width, overlayView.frame.size.height);
-        }
-
-        // we assume this means fullscreen-overlay
-        else if (overlayView.autoresizingMask & (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight)) {
-            overlayView.frame = (CGRect){CGPointZero, superview.frame.size};
-        }
-
-        [superview insertSubview:overlayView aboveSubview:viewBeneathOverlayViews];
-    }
+    self.videoOverlaySuperview.frame = self.playerLayerView.frame;
+    [superview insertSubview:self.videoOverlaySuperview aboveSubview:viewBeneathOverlayViews];
 
     [self bringSubviewToFront:self.controlsView];
 }
