@@ -142,7 +142,7 @@ static char playerLayerReadyForDisplayContext;
     } else {
         [self.controlsView.volumeControl setExpanded:NO animated:YES];
     }
-    
+
     if (controlsVisible != _controlsVisible) {
         _controlsVisible = controlsVisible;
 
@@ -170,7 +170,7 @@ static char playerLayerReadyForDisplayContext;
 
                              //self.controlsView.scrubberControl.layer.shouldRasterize = NO;
                          }];
-        
+
         if (self.controlStyle == NGMoviePlayerControlStyleFullscreen) {
             [[UIApplication sharedApplication] setStatusBarHidden:(!controlsVisible) withAnimation:UIStatusBarAnimationFade];
         }
@@ -324,7 +324,7 @@ static char playerLayerReadyForDisplayContext;
     if (overlayView != nil) {
         if (_videoOverlaySuperview == nil) {
             UIView *superview = self.playerLayerView.superview;
-            
+
             _videoOverlaySuperview = [[UIView alloc] initWithFrame:superview.bounds];
             _videoOverlaySuperview.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
             [superview insertSubview:_videoOverlaySuperview aboveSubview:self.playerLayerView];
@@ -378,11 +378,13 @@ static char playerLayerReadyForDisplayContext;
 
     [self setControlsVisible:NO];
 
-    int64_t delayInSeconds = 1.;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        [self setControlsVisible:YES animated:YES];
-    });
+    if (self.placeholderView.superview == nil) {
+        int64_t delayInSeconds = 1.;
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+            [self setControlsVisible:YES animated:YES];
+        });
+    }
 }
 
 - (void)positionViewsForState:(NGMoviePlayerScreenState)screenState {
@@ -447,7 +449,7 @@ static char playerLayerReadyForDisplayContext;
         if (self.controlsView.volumeControl.expanded) {
             return NO;
         }
-        
+
         if ([self.placeholderView respondsToSelector:@selector(playButton)]) {
             playButton = [self.placeholderView performSelector:@selector(playButton)];
         }
