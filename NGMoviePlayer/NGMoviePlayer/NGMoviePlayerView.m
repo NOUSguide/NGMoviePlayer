@@ -389,10 +389,17 @@ static char playerLayerReadyForDisplayContext;
     UIView *viewBeneathOverlayViews = self.playerLayerView;
 
     switch (screenState) {
-        case NGMoviePlayerScreenStateExternal:
-        case NGMoviePlayerScreenStateAirPlay: {
+        case NGMoviePlayerScreenStateExternal: {
             self.playerLayerView.frame = self.externalWindow.bounds;
             [self.externalWindow addSubview:self.playerLayerView];
+            [self insertSubview:self.externalScreenPlaceholder belowSubview:self.placeholderView];
+            viewBeneathOverlayViews = self.externalScreenPlaceholder;
+            break;
+        }
+
+        case NGMoviePlayerScreenStateAirPlay: {
+            self.playerLayerView.frame = self.bounds;
+            [self insertSubview:self.playerLayerView belowSubview:self.placeholderView];
             [self insertSubview:self.externalScreenPlaceholder belowSubview:self.placeholderView];
             viewBeneathOverlayViews = self.externalScreenPlaceholder;
             break;
