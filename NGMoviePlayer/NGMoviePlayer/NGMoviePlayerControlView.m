@@ -271,6 +271,7 @@
 - (void)handleScrubbingValueChanged:(id)sender {
     if (self.scrubbingTimeDisplay == NGMoviePlayerControlScrubbingTimeDisplayCurrentTime) {
         self.currentTimeLabel.text = NGMoviePlayerGetTimeFormatted(self.scrubberControl.value);
+        self.remainingTimeLabel.text = NGMoviePlayerGetRemainingTimeFormatted(self.scrubberControl.value, self.scrubberControl.maximumValue);
     }
 
     [self.delegate moviePlayerControl:sender didPerformAction:NGMoviePlayerControlActionScrubbingValueChanged];
