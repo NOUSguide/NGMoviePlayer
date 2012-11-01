@@ -10,7 +10,7 @@
 
 #define kNGInitialTimeToSkip                    10.     // this value gets added the first time (seconds)
 #define kNGRepeatedTimeToSkipStartValue          5.     // this is the starting value the gets added repeatedly while user presses button (increases over time)
-#define kNGDefaultSeekingToleranceTime           1.
+#define kNGDefaultSeekingToleranceTime           2.
 
 
 static char playerItemStatusContext;
@@ -227,6 +227,7 @@ static char playerAirPlayVideoActiveContext;
     if (self.player.status == AVPlayerStatusReadyToPlay) {
         if (_seekToInitialPlaybackTimeBeforePlay && _initialPlaybackTime >= 0.) {
             CMTime time = CMTimeMakeWithSeconds(_initialPlaybackTime, NSEC_PER_SEC);
+            CMTime tolerance = self.seekingToleranceCMTime;
             dispatch_block_t afterSeekAction = ^{
                 [self.view hidePlaceholderViewAnimated:YES];
 
@@ -241,13 +242,13 @@ static char playerAirPlayVideoActiveContext;
             if ([self.player respondsToSelector:@selector(seekToTime:toleranceBefore:toleranceAfter:completionHandler:)]) {
                 [self.view showPlaceholderViewAnimated:NO];
                 [self.player seekToTime:time
-                        toleranceBefore:self.seekingToleranceCMTime
-                         toleranceAfter:self.seekingToleranceCMTime
+                        toleranceBefore:tolerance
+                         toleranceAfter:tolerance
                       completionHandler:^(BOOL finished) {
                     afterSeekAction();
                 }];
             } else {
-                [self.player seekToTime:time toleranceBefore:self.seekingToleranceCMTime toleranceAfter:self.seekingToleranceCMTime];
+                [self.player seekToTime:time toleranceBefore:tolerance toleranceAfter:tolerance];
                 afterSeekAction();
             }
 
@@ -463,19 +464,20 @@ static char playerAirPlayVideoActiveContext;
     currentTime = MIN(currentTime,self.duration);
 
     CMTime time = CMTimeMakeWithSeconds(currentTime, NSEC_PER_SEC);
+    CMTime tolerance = self.seekingToleranceCMTime;
 
     // completion handler only supported in iOS 5
     if ([self.player respondsToSelector:@selector(seekToTime:toleranceBefore:toleranceAfter:completionHandler:)]) {
         [self.player seekToTime:time
-                toleranceBefore:self.seekingToleranceCMTime
-                 toleranceAfter:self.seekingToleranceCMTime
+                toleranceBefore:tolerance
+                 toleranceAfter:tolerance
               completionHandler:^(BOOL finished) {
                   if (finished) {
                       [self.view updateWithCurrentTime:self.currentPlaybackTime duration:self.duration];
                   }
               }];
     } else {
-        [self.player seekToTime:time toleranceBefore:self.seekingToleranceCMTime toleranceAfter:self.seekingToleranceCMTime];
+        [self.player seekToTime:time toleranceBefore:tolerance toleranceAfter:tolerance];
         [self.view updateWithCurrentTime:currentTime duration:self.duration];
     }
 }
