@@ -56,6 +56,8 @@
 @property (nonatomic, readonly) NSTimeInterval playableDuration;
 /** initialPlaybackTime for playing the video */
 @property (nonatomic, assign) NSTimeInterval initialPlaybackTime;
+/** tolerance offset in seconds that can be used when seeking to a specific time, use greater values for faster seeking. Defaults to 1 second */
+@property (nonatomic, assign) NSTimeInterval seekingToleranceTime;
 
 
 @property (nonatomic, strong) NGMoviePlayerLayout *layout;

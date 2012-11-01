@@ -10,6 +10,7 @@
 
 #define kNGInitialTimeToSkip                    10.     // this value gets added the first time (seconds)
 #define kNGRepeatedTimeToSkipStartValue          5.     // this is the starting value the gets added repeatedly while user presses button (increases over time)
+#define kNGDefaultSeekingToleranceTime           1.
 
 
 static char playerItemStatusContext;
@@ -91,6 +92,7 @@ static char playerAirPlayVideoActiveContext;
         _airPlayEnabled = [AVPlayer instancesRespondToSelector:@selector(allowsAirPlayVideo)];
         _rateToRestoreAfterScrubbing = 1.;
         _initialPlaybackTime = initialPlaybackTime;
+        _seekingToleranceTime = kNGDefaultSeekingToleranceTime;
         
         // calling setter here on purpose
         self.URL = URL;
@@ -239,13 +241,13 @@ static char playerAirPlayVideoActiveContext;
             if ([self.player respondsToSelector:@selector(seekToTime:toleranceBefore:toleranceAfter:completionHandler:)]) {
                 [self.view showPlaceholderViewAnimated:NO];
                 [self.player seekToTime:time
-                        toleranceBefore:kCMTimeZero
-                         toleranceAfter:kCMTimeZero
+                        toleranceBefore:self.seekingToleranceCMTime
+                         toleranceAfter:self.seekingToleranceCMTime
                       completionHandler:^(BOOL finished) {
                     afterSeekAction();
                 }];
             } else {
-                [self.player seekToTime:time toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
+                [self.player seekToTime:time toleranceBefore:self.seekingToleranceCMTime toleranceAfter:self.seekingToleranceCMTime];
                 afterSeekAction();
             }
 
@@ -465,15 +467,15 @@ static char playerAirPlayVideoActiveContext;
     // completion handler only supported in iOS 5
     if ([self.player respondsToSelector:@selector(seekToTime:toleranceBefore:toleranceAfter:completionHandler:)]) {
         [self.player seekToTime:time
-                toleranceBefore:kCMTimeZero
-                 toleranceAfter:kCMTimeZero
+                toleranceBefore:self.seekingToleranceCMTime
+                 toleranceAfter:self.seekingToleranceCMTime
               completionHandler:^(BOOL finished) {
                   if (finished) {
                       [self.view updateWithCurrentTime:self.currentPlaybackTime duration:self.duration];
                   }
               }];
     } else {
-        [self.player seekToTime:time toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
+        [self.player seekToTime:time toleranceBefore:self.seekingToleranceCMTime toleranceAfter:self.seekingToleranceCMTime];
         [self.view updateWithCurrentTime:currentTime duration:self.duration];
     }
 }
@@ -848,6 +850,10 @@ static char playerAirPlayVideoActiveContext;
 
 - (void)updatePlayableDurationTimerFired:(NSTimer *)timer {
     self.view.controlsView.playableDuration = self.playableDuration;
+}
+
+- (CMTime)seekingToleranceCMTime {
+    return CMTimeMakeWithSeconds(self.seekingToleranceTime, NSEC_PER_SEC);
 }
 
 @end
