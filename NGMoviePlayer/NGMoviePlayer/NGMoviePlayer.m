@@ -236,13 +236,16 @@ static char playerAirPlayVideoActiveContext;
                 }
             };
 
-            if ([self.player respondsToSelector:@selector(seekToTime:completionHandler:)]) {
+            if ([self.player respondsToSelector:@selector(seekToTime:toleranceBefore:toleranceAfter:completionHandler:)]) {
                 [self.view showPlaceholderViewAnimated:NO];
-                [self.player seekToTime:time completionHandler:^(BOOL finished) {
+                [self.player seekToTime:time
+                        toleranceBefore:kCMTimeZero
+                         toleranceAfter:kCMTimeZero
+                      completionHandler:^(BOOL finished) {
                     afterSeekAction();
                 }];
             } else {
-                [self.player seekToTime:time];
+                [self.player seekToTime:time toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
                 afterSeekAction();
             }
 
@@ -460,15 +463,18 @@ static char playerAirPlayVideoActiveContext;
     CMTime time = CMTimeMakeWithSeconds(currentTime, NSEC_PER_SEC);
 
     // completion handler only supported in iOS 5
-    if ([self.player respondsToSelector:@selector(seekToTime:completionHandler:)]) {
+    if ([self.player respondsToSelector:@selector(seekToTime:toleranceBefore:toleranceAfter:completionHandler:)]) {
         [self.player seekToTime:time
+                toleranceBefore:kCMTimeZero
+                 toleranceAfter:kCMTimeZero
               completionHandler:^(BOOL finished) {
                   if (finished) {
                       [self.view updateWithCurrentTime:self.currentPlaybackTime duration:self.duration];
                   }
               }];
     } else {
-        [self.player seekToTime:time];
+        [self.player seekToTime:time toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
+        [self.view updateWithCurrentTime:currentTime duration:self.duration];
     }
 }
 
