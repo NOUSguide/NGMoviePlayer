@@ -421,6 +421,7 @@ static char playerLayerReadyForDisplayContext;
     [superview insertSubview:self.videoOverlaySuperview aboveSubview:viewBeneathOverlayViews];
 
     [self bringSubviewToFront:self.controlsView];
+    [self bringSubviewToFront:self.placeholderView];
 }
 
 - (void)externalScreenDidConnect:(NSNotification *)notification {
