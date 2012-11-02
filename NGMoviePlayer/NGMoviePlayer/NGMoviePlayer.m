@@ -11,6 +11,7 @@
 #define kNGInitialTimeToSkip                    10.     // this value gets added the first time (seconds)
 #define kNGRepeatedTimeToSkipStartValue          5.     // this is the starting value the gets added repeatedly while user presses button (increases over time)
 #define kNGDefaultSeekingToleranceTime           2.
+#define kNGDefaultInitialPlaybackToleranceTime   1000.
 
 
 static char playerItemStatusContext;
@@ -93,6 +94,7 @@ static char playerAirPlayVideoActiveContext;
         _rateToRestoreAfterScrubbing = 1.;
         _initialPlaybackTime = initialPlaybackTime;
         _seekingToleranceTime = kNGDefaultSeekingToleranceTime;
+        _initialPlaybackToleranceTime = kNGDefaultInitialPlaybackToleranceTime;
         
         // calling setter here on purpose
         self.URL = URL;
@@ -227,7 +229,7 @@ static char playerAirPlayVideoActiveContext;
     if (self.player.status == AVPlayerStatusReadyToPlay) {
         if (_seekToInitialPlaybackTimeBeforePlay && _initialPlaybackTime >= 0.) {
             CMTime time = CMTimeMakeWithSeconds(_initialPlaybackTime, NSEC_PER_SEC);
-            CMTime tolerance = self.seekingToleranceCMTime;
+            CMTime tolerance = self.initialPlaybackToleranceCMTime;
             dispatch_block_t afterSeekAction = ^{
                 [self.view hidePlaceholderViewAnimated:YES];
 
@@ -855,7 +857,19 @@ static char playerAirPlayVideoActiveContext;
 }
 
 - (CMTime)seekingToleranceCMTime {
-    return CMTimeMakeWithSeconds(self.seekingToleranceTime, NSEC_PER_SEC);
+    if (self.seekingToleranceTime >= 1000.) {
+        return kCMTimePositiveInfinity;
+    } else {
+        return CMTimeMakeWithSeconds(self.seekingToleranceTime, NSEC_PER_SEC);
+    }
+}
+
+- (CMTime)initialPlaybackToleranceCMTime {
+    if (self.initialPlaybackToleranceTime >= 1000.) {
+        return kCMTimePositiveInfinity;
+    } else {
+        return CMTimeMakeWithSeconds(self.initialPlaybackToleranceTime, NSEC_PER_SEC);
+    }
 }
 
 @end

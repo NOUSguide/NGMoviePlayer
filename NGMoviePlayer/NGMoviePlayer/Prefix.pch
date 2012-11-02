@@ -11,4 +11,4 @@
 #endif
 
 
-#define kNGFadeDuration                     0.4
+#define kNGFadeDuration                     0.33

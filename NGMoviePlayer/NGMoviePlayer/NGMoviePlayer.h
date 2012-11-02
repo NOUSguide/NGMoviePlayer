@@ -56,7 +56,11 @@
 @property (nonatomic, readonly) NSTimeInterval playableDuration;
 /** initialPlaybackTime for playing the video */
 @property (nonatomic, assign) NSTimeInterval initialPlaybackTime;
-/** tolerance offset in seconds that can be used when seeking to a specific time, use greater values for faster seeking. Defaults to 2 seconds */
+
+
+/** tolerance offset in seconds that is used when playing from an initial playback time, use greater values for faster seeking. Defaults to kCMTimePositiveInfinity seconds */
+@property (nonatomic, assign) NSTimeInterval initialPlaybackToleranceTime;
+/** tolerance offset in seconds that is used when seeking to a specific time, use greater values for faster seeking. Defaults to 2 seconds */
 @property (nonatomic, assign) NSTimeInterval seekingToleranceTime;
 
 
