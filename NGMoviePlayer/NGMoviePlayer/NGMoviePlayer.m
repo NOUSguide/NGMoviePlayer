@@ -261,6 +261,8 @@ static char playerAirPlayVideoActiveContext;
             if (_delegateFlags.didResumePlayback) {
                 [self.delegate moviePlayerDidResumePlayback:self];
             }
+
+            [self moviePlayerDidResumePlayback];
         }
 
         [self.player play];
@@ -309,6 +311,10 @@ static char playerAirPlayVideoActiveContext;
 }
 
 - (void)moviePlayerDidPausePlayback {
+    // do nothing here
+}
+
+- (void)moviePlayerDidResumePlayback {
     // do nothing here
 }
 
