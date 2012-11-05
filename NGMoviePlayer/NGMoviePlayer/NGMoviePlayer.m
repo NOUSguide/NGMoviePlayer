@@ -865,6 +865,8 @@ static char playerAirPlayVideoActiveContext;
 - (CMTime)seekingToleranceCMTime {
     if (self.seekingToleranceTime >= 1000.) {
         return kCMTimePositiveInfinity;
+    } else if (self.seekingToleranceTime <= 0.001) {
+        return kCMTimeZero;
     } else {
         return CMTimeMakeWithSeconds(self.seekingToleranceTime, NSEC_PER_SEC);
     }
@@ -873,6 +875,8 @@ static char playerAirPlayVideoActiveContext;
 - (CMTime)initialPlaybackToleranceCMTime {
     if (self.initialPlaybackToleranceTime >= 1000.) {
         return kCMTimePositiveInfinity;
+    } else if (self.initialPlaybackToleranceTime <= 0.001) {
+        return kCMTimeZero;
     } else {
         return CMTimeMakeWithSeconds(self.initialPlaybackToleranceTime, NSEC_PER_SEC);
     }
