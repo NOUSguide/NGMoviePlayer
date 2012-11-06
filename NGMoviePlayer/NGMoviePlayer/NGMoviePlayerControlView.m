@@ -183,6 +183,10 @@
 }
 
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
+    if (self.volumeControl.expanded) {
+        return [super pointInside:point withEvent:event];
+    }
+
     BOOL insideTopControlsView = CGRectContainsPoint(self.topControlsView.frame, point);
     BOOL insideBottomControlsView = CGRectContainsPoint(self.bottomControlsView.frame, point);
 
