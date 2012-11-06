@@ -182,6 +182,13 @@
     [self.layout layoutControlsWithControlStyle:self.controlStyle];
 }
 
+- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
+    BOOL insideTopControlsView = CGRectContainsPoint(self.topControlsView.frame, point);
+    BOOL insideBottomControlsView = CGRectContainsPoint(self.bottomControlsView.frame, point);
+
+    return  insideTopControlsView || insideBottomControlsView;
+}
+
 ////////////////////////////////////////////////////////////////////////
 #pragma mark - NGMoviePlayerControlView
 ////////////////////////////////////////////////////////////////////////
