@@ -9,15 +9,6 @@
 #import "NGMoviePlayerPlaceholderView.h"
 
 
-@interface NGMoviePlayerPlaceholderView ()
-
-@property (nonatomic, strong, readwrite) UIButton *playButton;      // redefined as readwrite
-@property (nonatomic, strong, readwrite) UILabel *infoLabel;
-@property (nonatomic, strong) UIImageView *imageView;
-
-@end
-
-
 @implementation NGMoviePlayerPlaceholderView
 
 ////////////////////////////////////////////////////////////////////////
