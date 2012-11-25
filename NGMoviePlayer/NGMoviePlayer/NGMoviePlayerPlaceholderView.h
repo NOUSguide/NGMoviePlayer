@@ -23,6 +23,7 @@
 @property (nonatomic, strong) UIImage *image;
 
 
+- (void)resetToInitialState;
 - (void)addPlayButtonTarget:(id)target action:(SEL)action;
 
 @end
