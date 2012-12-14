@@ -203,6 +203,12 @@ static char playerLayerReadyForDisplayContext;
 }
 
 - (void)showPlaceholderViewAnimated:(BOOL)animated {
+    if ([self.placeholderView isKindOfClass:[NGMoviePlayerPlaceholderView class]]) {
+        NGMoviePlayerPlaceholderView *placeholderView = (NGMoviePlayerPlaceholderView *)self.placeholderView;
+
+        [placeholderView resetToInitialState];
+    }
+
     if (animated) {
         self.placeholderView.alpha = 0.f;
         [self addSubview:self.placeholderView];

@@ -11,9 +11,7 @@
 
 @interface NGMoviePlayerPlaceholderView ()
 
-@property (nonatomic, strong, readwrite) UIButton *playButton;      // redefined as readwrite
-@property (nonatomic, strong, readwrite) UILabel *infoLabel;
-@property (nonatomic, strong) UIImageView *imageView;
+@property (nonatomic, strong) UIActivityIndicatorView *activityView;
 
 @end
 
@@ -116,20 +114,27 @@
     return self.imageView.image;
 }
 
+- (void)resetToInitialState {
+    [self.activityView stopAnimating];
+    [self.activityView removeFromSuperview];
+    self.playButton.hidden = NO;
+}
+
 ////////////////////////////////////////////////////////////////////////
 #pragma mark - Private
 ////////////////////////////////////////////////////////////////////////
 
 - (void)handlePlayButtonPress:(id)sender {
-    UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    [self.activityView removeFromSuperview];
 
-    activityView.hidesWhenStopped = YES;
-    activityView.center = self.playButton.center;
-    activityView.autoresizingMask = self.playButton.autoresizingMask;
-    [self.playButton.superview addSubview:activityView];
-    [self.playButton removeFromSuperview];
+    self.activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    self.activityView.hidesWhenStopped = YES;
+    self.activityView.center = self.playButton.center;
+    self.activityView.autoresizingMask = self.playButton.autoresizingMask;
+    [self.playButton.superview addSubview:self.activityView];
+    self.playButton.hidden = YES;
 
-    [activityView startAnimating];
+    [self.activityView startAnimating];
 }
 
 @end
