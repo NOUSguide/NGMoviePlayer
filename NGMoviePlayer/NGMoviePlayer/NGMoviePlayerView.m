@@ -172,7 +172,11 @@ static char playerLayerReadyForDisplayContext;
                          }];
 
         if (self.controlStyle == NGMoviePlayerControlStyleFullscreen) {
-            [[UIApplication sharedApplication] setStatusBarHidden:(!controlsVisible) withAnimation:UIStatusBarAnimationFade];
+            if (animated) {
+                [[UIApplication sharedApplication] setStatusBarHidden:(!controlsVisible) withAnimation:UIStatusBarAnimationFade];
+            } else {
+                [[UIApplication sharedApplication] setStatusBarHidden:(!controlsVisible) withAnimation:UIStatusBarAnimationNone];
+            }
         }
     }
 }
