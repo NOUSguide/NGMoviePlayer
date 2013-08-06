@@ -57,7 +57,7 @@
 #pragma mark - NGMoviePlayer
 ////////////////////////////////////////////////////////////////////////
 
-- (void)player:(NGMoviePlayer *)player didChangeControlStyle:(NGMoviePlayerControlStyle)controlStyle {
+- (void)moviePlayer:(NGMoviePlayer *)moviePlayer didChangeControlStyle:(NGMoviePlayerControlStyle)controlStyle {
     if (controlStyle == NGMoviePlayerControlStyleInline) {
         [self.pppView moveToOriginalFrameAnimated:YES];
     } else {
@@ -65,15 +65,15 @@
     }
 }
 
-- (void)player:(NGMoviePlayer *)player didChangePlaybackRate:(float)rate {
+- (void)moviePlayer:(NGMoviePlayer *)moviePlayer didChangePlaybackRate:(float)rate {
     NSLog(@"PlaybackRate chagned %f", rate);
 }
 
-- (void)playbackDidFinishWithPlayer:(NGMoviePlayer *)player {
-    NSLog(@"Playbackfinished with Player: %@", player);
+- (void)moviePlayer:(NGMoviePlayer *)moviePlayer didFinishPlaybackOfURL:(NSURL *)URL {
+    NSLog(@"Playbackfinished with Player: %@", moviePlayer);
 }
 
-- (void)player:(NGMoviePlayer *)player didChangeStatus:(AVPlayerStatus)playerStatus {
+- (void)moviePlayer:(NGMoviePlayer *)moviePlayer didChangeStatus:(AVPlayerStatus)playerStatus {
     NSLog(@"Status chaned: %d", playerStatus);
 }
 

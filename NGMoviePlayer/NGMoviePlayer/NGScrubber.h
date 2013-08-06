@@ -18,9 +18,9 @@
 
 @property (nonatomic, assign) float playableValue;
 
-@property (nonatomic, strong) UIColor *playableValueColor;
-@property (nonatomic, strong) UIColor *fillColor;
-@property (nonatomic, assign) CGFloat playableValueRoundedRectRadius;
+@property (nonatomic, strong) UIColor *playableValueColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIColor *fillColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, assign) CGFloat playableValueRoundedRectRadius UI_APPEARANCE_SELECTOR;
 
 // defaults to YES
 @property (nonatomic, assign) BOOL showPopupDuringScrubbing;
