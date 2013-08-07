@@ -9,7 +9,8 @@
 #import "NGMoviePlayerDefaultLayout.h"
 #import "NGScrubber.h"
 #import "NGVolumeControl.h"
-
+#import "NGMoviePlayer.h"
+#import "NGMoviePlayerView.h"
 
 #define kMinWidthToDisplaySkipButtons          420.f
 #define kControlWidth                          (UI_USER_INTERFACE_IDIOM()  == UIUserInterfaceIdiomPhone ? 44.f : 50.f)
@@ -72,20 +73,29 @@
 }
 
 - (void)layoutTopControlsViewWithControlStyle:(NGMoviePlayerControlStyle)controlStyle {
+    CGFloat topControlsViewTop = 0.f;
+    
+    CGSize windowSize = self.moviePlayer.view.window.bounds.size;
+    CGSize playerViewSize = self.moviePlayer.view.frame.size;
+    CGSize playerViewInvertedSize = CGSizeMake(playerViewSize.height, playerViewSize.width);
+    if (CGSizeEqualToSize(windowSize, playerViewSize) || CGSizeEqualToSize(windowSize, playerViewInvertedSize)) {
+        topControlsViewTop = 20.f;
+    }
+
     self.topControlsView.frame = CGRectMake(0.f,
-                                            0.f,
+                                            topControlsViewTop,
                                             self.width,
                                             [self topControlsViewHeightForControlStyle:controlStyle]);
 
     if (self.topControlsViewAlignment == NGMoviePlayerControlViewTopControlsViewAlignmentCenter) {
         // center custom controls in top container
         self.topControlsContainerView.frame = CGRectMake(MAX((self.topControlsView.frame.size.width - self.topControlsContainerView.frame.size.width)/2.f, 0.f),
-                                                         0.f,
+                                                         topControlsViewTop,
                                                          self.topControlsContainerView.frame.size.width,
                                                          [self topControlsViewHeightForControlStyle:controlStyle]);
     } else {
         self.topControlsContainerView.frame = CGRectMake(2.f,
-                                                         0.f,
+                                                         topControlsViewTop,
                                                          self.topControlsContainerView.frame.size.width,
                                                          [self topControlsViewHeightForControlStyle:controlStyle]);
     }
