@@ -36,6 +36,9 @@
 /** Controls whether the player controls are currently in fullscreen- or inlinestyle */
 @property (nonatomic, assign) NGMoviePlayerControlStyle controlStyle;
 
+/** indicates, if status bar should be shown when displaying controls in fullscreen. default YES */
+@property (nonatomic, assign) BOOL shouldShowStatusBarInFullScreenMode;
+
 @property (nonatomic, readonly) CGFloat topControlsViewHeight;
 @property (nonatomic, readonly) CGFloat bottomControlsViewHeight;
 
