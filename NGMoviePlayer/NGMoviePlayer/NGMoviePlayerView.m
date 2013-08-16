@@ -45,7 +45,7 @@ static char playerLayerReadyForDisplayContext;
         self.clipsToBounds = YES;
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         self.backgroundColor = [UIColor clearColor];
-
+        _shouldShowStatusBarInFullScreenMode = YES;
         [self setup];
     }
 
@@ -172,10 +172,11 @@ static char playerLayerReadyForDisplayContext;
                          }];
 
         if (self.controlStyle == NGMoviePlayerControlStyleFullscreen) {
+            BOOL statusBarHidden = (!controlsVisible || !self.shouldShowStatusBarInFullScreenMode);
             if (animated) {
-                [[UIApplication sharedApplication] setStatusBarHidden:(!controlsVisible) withAnimation:UIStatusBarAnimationFade];
+                [[UIApplication sharedApplication] setStatusBarHidden:statusBarHidden withAnimation:UIStatusBarAnimationFade];
             } else {
-                [[UIApplication sharedApplication] setStatusBarHidden:(!controlsVisible) withAnimation:UIStatusBarAnimationNone];
+                [[UIApplication sharedApplication] setStatusBarHidden:statusBarHidden withAnimation:UIStatusBarAnimationNone];
             }
         }
     }

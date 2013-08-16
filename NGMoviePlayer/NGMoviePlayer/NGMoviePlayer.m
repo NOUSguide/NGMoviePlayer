@@ -407,9 +407,9 @@ static char playerAirPlayVideoActiveContext;
             [self.player pause];
             [self.player removeObserver:self forKeyPath:@"rate"];
             [self.player removeObserver:self forKeyPath:@"currentItem"];
-            if ([AVPlayer instancesRespondToSelector:@selector(allowsAirPlayVideo)]) {
+          /*  if ([AVPlayer instancesRespondToSelector:@selector(allowsAirPlayVideo)]) {
                 [self.player removeObserver:self forKeyPath:@"airPlayVideoActive"];
-            }
+            }*/
             
             self.player = nil;
         }
