@@ -53,8 +53,8 @@
         
         [_text drawInRect:textRect 
                  withFont:self.font 
-            lineBreakMode:UILineBreakModeWordWrap 
-                alignment:UITextAlignmentCenter];    
+            lineBreakMode:NSLineBreakByWordWrapping
+                alignment:NSTextAlignmentCenter];
     }
 }
 
