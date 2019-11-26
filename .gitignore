@@ -8,12 +8,7 @@ build/*
 !default.mode2v3
 *.perspectivev3
 !default.perspectivev3
-*.xcworkspace
 !default.xcworkspace
-
-# Xcode 4
-*.xcworkspace
-xcuserdata
 
 profile
 *.moved-aside
@@ -23,3 +18,4 @@ profile
 profile
 
 Development
+Pods/Pods.xcodeproj/xcuserdata

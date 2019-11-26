@@ -12,8 +12,6 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.frameworks   = 'Foundation', 'MediaPlayer', 'AVFoundation', 'CoreMedia', 'QuartzCore', 'UIKit'
   s.authors      = { 'PocketScience GmbH' => 'office@pocketscience.com' }
-  s.dependency   = 'NGVolumeControl', '~> 1.0'
-  s.dependency   = 'PSPushPopPressView', '~> 1.0'
 
   s.prefix_header_contents = '
 #ifdef __OBJC__
@@ -26,4 +24,6 @@ Pod::Spec.new do |s|
 
 #define kNGFadeDuration                     0.33
     '
+  s.dependency 'NGVolumeControl', '~> 1.0'
+  s.dependency 'PSPushPopPressView', '~> 1.0'
 end
