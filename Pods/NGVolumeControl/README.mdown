@@ -1,0 +1,24 @@
+<img src="http://office.nousguide.com/nouslogosmall.png" alt="NOUSguide Inc." title="NOUSguide Inc." title" style="display:block; margin: 10px auto 30px auto;" class="center">
+
+# NGVolumeControl
+
+A custom (and customizable) volume control for iOS with a quick-gesture to change volume (touch down, slide finger, touch up).
+
+## Usage
+
+``` objective-c
+	NGVolumeControl *volumeControl = [[NGVolumeControl alloc] initWithFrame:CGRectMake(0.f, 0.f, 35.f, 35.f)];
+    
+    volumeControl.expandDirection = NGVolumeControlExpandDirectionUp;
+    volumeControl.minimumTrackColor = [UIColor redColor];
+```
+
+## Credits
+
+NGVolumeControl was created by [Matthias Tretter](https://github.com/myell0w/) ([@myell0w](http://twitter.com/myell0w)).
+
+## License
+
+NGVolumeControl is available under the MIT license, see the LICENSE file for more info.
+
+For usage without attribution contact [NOUSguide](mailto:info@nousguide.com).

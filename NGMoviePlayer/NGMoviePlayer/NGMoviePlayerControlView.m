@@ -138,7 +138,7 @@
         _currentTimeLabel.shadowColor = [UIColor blackColor];
         _currentTimeLabel.shadowOffset = CGSizeMake(0.f, 1.f);
         _currentTimeLabel.font = [UIFont boldSystemFontOfSize:13.];
-        _currentTimeLabel.textAlignment = UITextAlignmentRight;
+        _currentTimeLabel.textAlignment = NSTextAlignmentRight;
         _currentTimeLabel.autoresizingMask = UIViewAutoresizingFlexibleRightMargin;
         [_bottomControlsView addSubview:_currentTimeLabel];
 
@@ -148,7 +148,7 @@
         _remainingTimeLabel.shadowColor = [UIColor blackColor];
         _remainingTimeLabel.shadowOffset = CGSizeMake(0.f, 1.f);
         _remainingTimeLabel.font = [UIFont boldSystemFontOfSize:13.];
-        _remainingTimeLabel.textAlignment = UITextAlignmentLeft;
+        _remainingTimeLabel.textAlignment = NSTextAlignmentLeft;
         _remainingTimeLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
         [_bottomControlsView addSubview:_remainingTimeLabel];
 

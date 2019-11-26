@@ -1,0 +1,26 @@
+{
+  "name": "NGVolumeControl",
+  "platforms": {
+    "ios": "8.0"
+  },
+  "version": "1.0.2",
+  "license": "",
+  "summary": "A custom (and customizable) volume control for iOS.",
+  "description": "A custom (and customizable) volume control for iOS with a quick-gesture to change volume (touch down, slide finger, touch up).",
+  "homepage": "http://pocketscience.com/",
+  "source": {
+    "git": "https://github.com/NOUSguide/NGVolumeControl.git",
+    "tag": "1.0.2"
+  },
+  "source_files": "NGVolumeControl/*/*.{h,m}",
+  "resources": "NGVolumeControl/Resources/NGVolumeControl.bundle",
+  "requires_arc": true,
+  "frameworks": [
+    "Foundation",
+    "MediaPlayer"
+  ],
+  "authors": {
+    "PocketScience GmbH": "office@pocketscience.com"
+  },
+  "prefix_header_contents": "#ifdef __OBJC__\n    #import <Foundation/Foundation.h>\n    #import <MediaPlayer/MediaPlayer.h>\n    #import <QuartzCore/QuartzCore.h>\n#endif"
+}

@@ -1,0 +1,23 @@
+{
+  "name": "PSPushPopPressView",
+  "platforms": {
+    "ios": "8.0"
+  },
+  "version": "1.0.1",
+  "license": "MIT",
+  "summary": "Zoom, Rotate, Drag – everything at the same time. A view-container for direct manipulation",
+  "description": "Zoom, Rotate, Drag – everything at the same time. A view-container for direct manipulation, inspired by Our Choice from Push Pop Press. http://twitter.com/steipete",
+  "homepage": "https://github.com/steipete/PSPushPopPressView",
+  "authors": {
+    "Peter Steinberger": "me@petersteinberger.com"
+  },
+  "source": {
+    "git": "https://github.com/NOUSguide/PSPushPopPressView.git",
+    "tag": "1.0.1"
+  },
+  "source_files": [
+    "PSPushPopPressView.h",
+    "PSPushPopPressView.m"
+  ],
+  "requires_arc": true
+}

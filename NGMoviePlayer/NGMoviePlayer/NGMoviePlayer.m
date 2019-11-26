@@ -209,7 +209,7 @@ static char playerAirPlayVideoActiveContext;
             [self.view updateViewsForCurrentScreenState];
 
             if (_delegateFlags.didChangeAirPlayActive) {
-                BOOL airPlayVideoActive = self.player.airPlayVideoActive;
+                BOOL airPlayVideoActive = self.player.externalPlaybackActive;
 
                 [self.delegate moviePlayer:self didChangeAirPlayActive:airPlayVideoActive];
             }
@@ -236,7 +236,7 @@ static char playerAirPlayVideoActiveContext;
                 [self moviePlayerDidStartToPlay];
                 [self updateControlsViewForLivestreamStatus];
 
-                if (_delegateFlags.didStartPlayback) {
+                if (self->_delegateFlags.didStartPlayback) {
                     [self.delegate moviePlayer:self didStartPlaybackOfURL:self.URL];
                 }
             };
@@ -371,8 +371,8 @@ static char playerAirPlayVideoActiveContext;
     if (player != self.view.playerLayer.player) {
         // Support AirPlay?
         if (self.airPlayEnabled) {
-            [player setAllowsAirPlayVideo:YES];
-            [player setUsesAirPlayVideoWhileAirPlayScreenIsActive:YES];
+            [player setAllowsExternalPlayback:YES];
+            [player setUsesExternalPlaybackWhileExternalScreenIsActive:YES];
 
             [self.view.playerLayer.player removeObserver:self forKeyPath:@"airPlayVideoActive"];
 
@@ -396,7 +396,7 @@ static char playerAirPlayVideoActiveContext;
 }
 
 - (BOOL)isAirPlayVideoActive {
-    return [AVPlayer instancesRespondToSelector:@selector(isAirPlayVideoActive)] && self.player.airPlayVideoActive;
+    return [AVPlayer instancesRespondToSelector:@selector(isAirPlayVideoActive)] && self.player.externalPlaybackActive;
 }
 
 - (void)setURL:(NSURL *)URL {

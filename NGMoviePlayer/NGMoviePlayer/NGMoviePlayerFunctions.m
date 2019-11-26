@@ -19,9 +19,9 @@ NSString* NGMoviePlayerGetTimeFormatted(NSTimeInterval currentTime) {
     minutes = ((NSInteger)minutes) % 60;
     
     if (hours > 0) {
-        return [NSString stringWithFormat:@"%d:%02d:%02d", hours, minutes, seconds];
+        return [NSString stringWithFormat:@"%ld:%02ld:%02ld", (long)hours, (long)minutes, (long)seconds];
     } else {
-        return [NSString stringWithFormat:@"%d:%02d", minutes, seconds];
+        return [NSString stringWithFormat:@"%ld:%02ld", (long)minutes, (long)seconds];
     }
 
 }

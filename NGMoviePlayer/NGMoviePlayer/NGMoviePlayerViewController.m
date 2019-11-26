@@ -63,15 +63,13 @@
     [self.moviePlayer addToSuperview:self.view withFrame:self.view.bounds];
 }
 
-- (void)viewDidUnload {
-    [super viewDidUnload];
-
+- (void)dealloc {
     [self.moviePlayer.view removeFromSuperview];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    self.wantsFullScreenLayout = YES;
+    self.edgesForExtendedLayout = UIRectEdgeAll;
 
     if (animated) {
         [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
@@ -100,12 +98,16 @@
     [[UIApplication sharedApplication] setStatusBarStyle:_statusBarStyle animated:animated];
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        return YES;
-    }
+- (BOOL)shouldAutorotate {
+    return YES;
+}
 
-    return interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown;
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        return UIInterfaceOrientationMaskAll;
+    }
+    
+    return UIInterfaceOrientationMaskAllButUpsideDown;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -134,7 +136,7 @@
     if (self.navigationController != nil) {
         [self.navigationController popViewControllerAnimated:YES];
     } else {
-        [self dismissModalViewControllerAnimated:YES];
+        [self dismissViewControllerAnimated:YES completion:nil];
     }
 }
 

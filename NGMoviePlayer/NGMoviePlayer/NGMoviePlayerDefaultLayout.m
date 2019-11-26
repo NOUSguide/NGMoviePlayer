@@ -305,11 +305,11 @@
     }
 
     self.currentTimeLabel.frame = CGRectMake(leftEdge, 0.f, 55.f, controlsViewHeight);
-    self.currentTimeLabel.textAlignment = UITextAlignmentCenter;
+    self.currentTimeLabel.textAlignment = NSTextAlignmentCenter;
     leftEdge = self.currentTimeLabel.frame.origin.x + self.currentTimeLabel.frame.size.width;
 
     self.remainingTimeLabel.frame = CGRectMake(rightEdge-60.f, 0.f, 60.f, controlsViewHeight);
-    self.remainingTimeLabel.textAlignment = UITextAlignmentCenter;
+    self.remainingTimeLabel.textAlignment = NSTextAlignmentCenter;
     rightEdge = self.remainingTimeLabel.frame.origin.x;
 
     // scrubber uses remaining width
@@ -351,9 +351,9 @@
     topY += controlHeight + 5.f;
 
     self.currentTimeLabel.frame = CGRectMake(outerPadding, topY, 55.f, 20.f);
-    self.currentTimeLabel.textAlignment = UITextAlignmentCenter;
+    self.currentTimeLabel.textAlignment = NSTextAlignmentCenter;
     self.remainingTimeLabel.frame = CGRectMake(width - 55.f - outerPadding, topY, 55.f, 20.f);
-    self.remainingTimeLabel.textAlignment = UITextAlignmentCenter;
+    self.remainingTimeLabel.textAlignment = NSTextAlignmentCenter;
     self.scrubberControl.frame = CGRectMake(CGRectGetMaxX(self.currentTimeLabel.frame) + 8.f, topY, self.remainingTimeLabel.frame.origin.x - CGRectGetMaxX(self.currentTimeLabel.frame) - 16.f, 20.f);
 }
 

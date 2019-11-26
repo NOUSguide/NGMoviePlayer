@@ -50,8 +50,8 @@
         _infoLabel.textColor = [UIColor whiteColor];
         _infoLabel.font = [UIFont systemFontOfSize:14.f];
         _infoLabel.numberOfLines = 0;
-        _infoLabel.lineBreakMode = UILineBreakModeWordWrap | UILineBreakModeTailTruncation;
-        _infoLabel.textAlignment = UITextAlignmentCenter;
+        _infoLabel.lineBreakMode = NSLineBreakByWordWrapping | NSLineBreakByTruncatingTail;
+        _infoLabel.textAlignment = NSTextAlignmentCenter;
         _infoLabel.hidden = YES;
         [self addSubview:_infoLabel];
     }

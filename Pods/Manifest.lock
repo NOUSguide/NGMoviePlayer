@@ -1,0 +1,31 @@
+PODS:
+  - NGVolumeControl (1.0.2)
+  - PSPushPopPressView (1.0.1)
+
+DEPENDENCIES:
+  - NGVolumeControl (from `https://github.com/NOUSguide/NGVolumeControl.git`, tag `1.0.2`)
+  - PSPushPopPressView (from `https://github.com/NOUSguide/PSPushPopPressView.git`, tag `1.0.1`)
+
+EXTERNAL SOURCES:
+  NGVolumeControl:
+    :git: https://github.com/NOUSguide/NGVolumeControl.git
+    :tag: 1.0.2
+  PSPushPopPressView:
+    :git: https://github.com/NOUSguide/PSPushPopPressView.git
+    :tag: 1.0.1
+
+CHECKOUT OPTIONS:
+  NGVolumeControl:
+    :git: https://github.com/NOUSguide/NGVolumeControl.git
+    :tag: 1.0.2
+  PSPushPopPressView:
+    :git: https://github.com/NOUSguide/PSPushPopPressView.git
+    :tag: 1.0.1
+
+SPEC CHECKSUMS:
+  NGVolumeControl: f938cadc4fb405e6a4dd4485909a4d65853d9014
+  PSPushPopPressView: 1559db585e7fcfc1ebde5291f4a1e2ac94da70e9
+
+PODFILE CHECKSUM: 4be980f933ae89bd57e2b5ad32bd57875341a857
+
+COCOAPODS: 1.8.4

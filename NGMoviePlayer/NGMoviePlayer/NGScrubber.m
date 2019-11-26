@@ -47,14 +47,20 @@
     // Draw the text
     if (self.text) {
         [[UIColor colorWithWhite:1.f alpha:0.8f] set];
-        CGSize s = [_text sizeWithFont:self.font];
+        CGSize s = [_text sizeWithAttributes:@{ NSFontAttributeName: self.font }];
         CGFloat yOffset = (roundedRect.size.height - s.height) / 2;
         CGRect textRect = CGRectMake(roundedRect.origin.x, yOffset, roundedRect.size.width, s.height);
         
-        [_text drawInRect:textRect 
-                 withFont:self.font 
-            lineBreakMode:NSLineBreakByWordWrapping
-                alignment:NSTextAlignmentCenter];
+        NSMutableParagraphStyle *paragraphStype = [[NSMutableParagraphStyle alloc] init];
+        [paragraphStype setParagraphStyle:[NSParagraphStyle defaultParagraphStyle]];
+        [paragraphStype setLineBreakMode:NSLineBreakByWordWrapping];
+        [paragraphStype setAlignment:NSTextAlignmentCenter];
+        
+        [_text drawInRect:textRect
+           withAttributes:@{
+               NSFontAttributeName: self.font,
+               NSParagraphStyleAttributeName: paragraphStype
+           }];
     }
 }
 
@@ -203,7 +209,7 @@
         CGFloat trackingOffset = currentLocation.x - previousLocation.x;
         
         // Find the scrubbing speed that curresponds to the touch's vertical offset
-        CGFloat verticalOffset = fabsf(currentLocation.y - self.beganTrackingLocation.y);
+        CGFloat verticalOffset = fabs(currentLocation.y - self.beganTrackingLocation.y);
         NSUInteger scrubbingSpeedChangePosIndex = [self indexOfLowerScrubbingSpeed:self.scrubbingSpeedChangePositions forOffset:verticalOffset];        
         
         if (scrubbingSpeedChangePosIndex == NSNotFound) {
@@ -221,7 +227,7 @@
         if (((self.beganTrackingLocation.y < currentLocation.y) && (currentLocation.y < previousLocation.y)) ||
             ((self.beganTrackingLocation.y > currentLocation.y) && (currentLocation.y > previousLocation.y)) ) {
             // We are getting closer to the slider, go closer to the real location
-			thumbAdjustment = (_realPositionValue - self.value) / ( 1 + fabsf(currentLocation.y - self.beganTrackingLocation.y));
+            thumbAdjustment = (_realPositionValue - self.value) / ( 1 + fabs(currentLocation.y - self.beganTrackingLocation.y));
         }
         
 		self.value += valueAdjustment + thumbAdjustment;
@@ -341,7 +347,7 @@
 
     [UIView animateWithDuration:0.4
                      animations:^{
-                         valuePopupView.alpha = fadeIn ? 1.f : 0.f;
+        self->valuePopupView.alpha = fadeIn ? 1.f : 0.f;
                      }];
 }
 
