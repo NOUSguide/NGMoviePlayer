@@ -1,12 +1,12 @@
 Pod::Spec.new do |s|
   s.platform     = :ios, '8.0'
   s.name         = 'NGMoviePlayer'
-  s.version      = '1.0.1'
+  s.version      = '1.0.2'
   s.license      = 'MIT'
   s.summary      = 'A custom movie player control for iOS.'
   s.description  = 'A custom (and customizable) movie player control for iOS.'
   s.homepage     = "http://nousdigital.com/"
-  s.source       = { :git => 'https://github.com/NOUSguide/NGMoviePlayer.git', :tag => '1.0.1' }
+  s.source       = { :git => 'https://github.com/NOUSguide/NGMoviePlayer.git', :tag => '1.0.2' }
   s.source_files = 'NGMoviePlayer/*/*.{h,m}'
   s.resource     = 'NGMoviePlayer/Resources/NGMoviePlayer.bundle'
   s.requires_arc = true
@@ -24,6 +24,6 @@ Pod::Spec.new do |s|
 
 #define kNGFadeDuration                     0.33
     '
-  s.dependency 'NGVolumeControl', '~> 1.0'
+  s.dependency 'NGVolumeControlKit', '~> 1.0'
   s.dependency 'PSPushPopPressView', '~> 1.0'
 end

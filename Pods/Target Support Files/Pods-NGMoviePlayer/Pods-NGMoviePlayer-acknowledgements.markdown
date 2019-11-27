@@ -1,7 +1,7 @@
 # Acknowledgements
 This application makes use of the following third party libraries:
 
-## NGVolumeControl
+## NGVolumeControlKit
 
 Copyright (c) 2012 NOUSguide Inc. (http://www.nousguide.com/)
 

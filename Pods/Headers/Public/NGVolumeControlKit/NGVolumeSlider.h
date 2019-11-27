@@ -1,0 +1,1 @@
+../../../NGVolumeControlKit/NGVolumeControl/NGVolumeControl/NGVolumeSlider.h

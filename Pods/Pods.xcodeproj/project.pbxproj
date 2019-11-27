@@ -7,31 +7,31 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0EF711F8A975956835290290658E379F /* PSPushPopPressView.m in Sources */ = {isa = PBXBuildFile; fileRef = B612453DFEACC33FDEB024A6FA3302B8 /* PSPushPopPressView.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
-		32FC6AB0201D16A625411F52868C6F9C /* NGGeometryFunctions.h in Headers */ = {isa = PBXBuildFile; fileRef = B4185BBB0F373C865768C4028677BBD6 /* NGGeometryFunctions.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		5515CC979A7553930CE0B2DCCAF167DC /* NGVolumeControl+NGCustomize.h in Headers */ = {isa = PBXBuildFile; fileRef = F0853622895B5EDF9FD04CCCAFE3E8C3 /* NGVolumeControl+NGCustomize.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		5A1C3FF55464FF50060F320BF7A1A2E9 /* Pods-NGMoviePlayer-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2129F66731C4BC3DA076DB2C9651D946 /* Pods-NGMoviePlayer-dummy.m */; };
-		69B9FB5A5EB981ACD842C3AA9277FA38 /* NGVolumeControlKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 38063763FE71813E7F99AD190EF4BE6B /* NGVolumeControlKit.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		75C558BC634C31E846D7035302F7AFC0 /* NGVolumeControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 39EB2BE6C5CAD2E44E612FFD1A25029E /* NGVolumeControl.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
-		76E58CA06BFC99C8C76BD64917C7DE92 /* NGVolumeControl.h in Headers */ = {isa = PBXBuildFile; fileRef = B6187EA9F8E49FC3256C94BF119021FC /* NGVolumeControl.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		8752A33AA818F390005152C987D51E7D /* NGVolumeControlExpandDirection.h in Headers */ = {isa = PBXBuildFile; fileRef = BB525B36DB6E097FE397D741F6B1FDD4 /* NGVolumeControlExpandDirection.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		A2BF08320ACE2A13FB2C179E9BA7435A /* PSPushPopPressView-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 96B13852E1E25D3CC6315D5965A79DCC /* PSPushPopPressView-dummy.m */; };
-		A7B5D7462437DE27FE5A96DCAC646BCC /* NGVolumeSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = B8DC69212C178099FEC5937CDD807A87 /* NGVolumeSlider.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
-		AF7B0DAF6A756222AA771DCAC82CA6E9 /* NGVolumeSlider.h in Headers */ = {isa = PBXBuildFile; fileRef = EB0FA72A80AA57C67C03E7B5BBD95910 /* NGVolumeSlider.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		E4C2299E6CE6202C56EF56088CD76EC4 /* PSPushPopPressView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AE081D91A90D2636BCF71179272001B /* PSPushPopPressView.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		F0800AC84EDC7FE6813C71C7EAE50CC1 /* NGVolumeControl-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F2B2C170321D33659F09FFE4C41656E /* NGVolumeControl-dummy.m */; };
-		F36A51974BAA1784B8834D98CE516E55 /* NGVolumeControlDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C13BD76A984F19BF81298BDB9879F0C /* NGVolumeControlDelegate.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		0B6D54AB62B980BE6B184A59D73CF910 /* NGVolumeControlKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 5EDD5FE6574B9A81352D80E920A199F7 /* NGVolumeControlKit.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		0EF711F8A975956835290290658E379F /* PSPushPopPressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C681BC0319EDD21190A573A524A55A1 /* PSPushPopPressView.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		1C81AB64331A266F154C0CE16FA1F37C /* Pods-NGMoviePlayer-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2129F66731C4BC3DA076DB2C9651D946 /* Pods-NGMoviePlayer-dummy.m */; };
+		2AA4D61BA03F0E5AF3A77BCCC98CC571 /* NGVolumeSlider.h in Headers */ = {isa = PBXBuildFile; fileRef = 19CAD2E9B210593CA61D77E0AD5CB459 /* NGVolumeSlider.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		5CB3E686BBCADFCD51F9912BE481E4C7 /* NGVolumeControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 64BF07C3B730BEE1E0D76E56ED5F84AE /* NGVolumeControl.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		A2BF08320ACE2A13FB2C179E9BA7435A /* PSPushPopPressView-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 919171B58BA9AD4A88050524CAAD191B /* PSPushPopPressView-dummy.m */; };
+		BB5C02E253BC451BF277301A3A465D85 /* NGVolumeControlExpandDirection.h in Headers */ = {isa = PBXBuildFile; fileRef = F401367475417018FFA07BC8161A6215 /* NGVolumeControlExpandDirection.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		BF1FAE96C01973C8D8CB873710C92B71 /* NGVolumeControlDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C9888D6AE7341EC4207A46ADFA38700 /* NGVolumeControlDelegate.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		C1A25E8414944F6BCD94FBCB654E6A3B /* NGVolumeControl.h in Headers */ = {isa = PBXBuildFile; fileRef = 8EBF993F874183F81B568EA948B1C2B0 /* NGVolumeControl.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		CB81513B1A6DA852390C290E07BB5633 /* NGGeometryFunctions.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AE5EA4E485C522360A580AA3CAFB671 /* NGGeometryFunctions.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		CCCEFB977B93A0F95A208430EEA76610 /* NGVolumeControlKit-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD800ECD1890575DF03A987E1612BC6 /* NGVolumeControlKit-dummy.m */; };
+		E4C2299E6CE6202C56EF56088CD76EC4 /* PSPushPopPressView.h in Headers */ = {isa = PBXBuildFile; fileRef = FDA6064AC2CDDAD49C0C009B02C03AB4 /* PSPushPopPressView.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		EB20626B0FCD00E591E20435575B35D2 /* NGVolumeControl+NGCustomize.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B2B1228A23ED3FEFC64720E23E2835 /* NGVolumeControl+NGCustomize.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		FD4A1F006045409A12F8AF910C7E677B /* NGVolumeSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = D4C56C5F12BA6718B2DEE5764CB59BEF /* NGVolumeSlider.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		C0FC0D6D04AD3C912A313A3785983D29 /* PBXContainerItemProxy */ = {
+		100A52AAAC7272C4DDF5E3C01642BBB0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = C3E2FDDF54FC408FF39DC2A8CD2CA42F;
-			remoteInfo = NGVolumeControl;
+			remoteGlobalIDString = E8B5733BCE2A0BF026139898B59CE9F1;
+			remoteInfo = NGVolumeControlKit;
 		};
-		E7D5BE7492C140241B258D464C10ED34 /* PBXContainerItemProxy */ = {
+		A9EE2EE42A0B33BB2D8AC9A7908017B5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
@@ -41,44 +41,37 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		01B3962DB79569375B620348C660E588 /* PSPushPopPressView-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "PSPushPopPressView-prefix.pch"; sourceTree = "<group>"; };
-		0F2B2C170321D33659F09FFE4C41656E /* NGVolumeControl-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "NGVolumeControl-dummy.m"; sourceTree = "<group>"; };
+		010DAE5BBA0E03218BD6547011008EAC /* PSPushPopPressView.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = PSPushPopPressView.xcconfig; sourceTree = "<group>"; };
+		047B7DA0CB31B1785E6DB52A540BC4AD /* NGVolumeControlKit-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "NGVolumeControlKit-prefix.pch"; sourceTree = "<group>"; };
+		09CE08B65E928A9792D29307C088BB8A /* NGVolumeControlKit.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = NGVolumeControlKit.xcconfig; sourceTree = "<group>"; };
+		19CAD2E9B210593CA61D77E0AD5CB459 /* NGVolumeSlider.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = NGVolumeSlider.h; path = NGVolumeControl/NGVolumeControl/NGVolumeSlider.h; sourceTree = "<group>"; };
+		1C681BC0319EDD21190A573A524A55A1 /* PSPushPopPressView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = PSPushPopPressView.m; sourceTree = "<group>"; };
 		2129F66731C4BC3DA076DB2C9651D946 /* Pods-NGMoviePlayer-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-NGMoviePlayer-dummy.m"; sourceTree = "<group>"; };
 		292C09892920233EBC150FD49DCEC4FE /* Pods-NGMoviePlayer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-NGMoviePlayer.release.xcconfig"; sourceTree = "<group>"; };
-		2A3B90192E09BF8720C31788E012ED48 /* NGVolumeControl.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; name = NGVolumeControl.bundle; path = NGVolumeControl/Resources/NGVolumeControl.bundle; sourceTree = "<group>"; };
-		38063763FE71813E7F99AD190EF4BE6B /* NGVolumeControlKit.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = NGVolumeControlKit.h; path = NGVolumeControl/NGVolumeControlKit/NGVolumeControlKit.h; sourceTree = "<group>"; };
 		3845C201A14EAC2786B1276F5DD4E297 /* Pods-NGMoviePlayer-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-NGMoviePlayer-acknowledgements.plist"; sourceTree = "<group>"; };
-		39EB2BE6C5CAD2E44E612FFD1A25029E /* NGVolumeControl.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = NGVolumeControl.m; path = NGVolumeControl/NGVolumeControl/NGVolumeControl.m; sourceTree = "<group>"; };
-		504EACBE8BD3B6EA8DE8542FAEFED65A /* NGVolumeControl-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "NGVolumeControl-prefix.pch"; sourceTree = "<group>"; };
-		58D7397E04C150CD8CD968AEA7CB8A4D /* NGVolumeControl.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = NGVolumeControl.xcconfig; sourceTree = "<group>"; };
 		59E1E1DFDAF4AF6D2771DC70FAECC4D8 /* libPods-NGMoviePlayer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "libPods-NGMoviePlayer.a"; path = "libPods-NGMoviePlayer.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		5AE081D91A90D2636BCF71179272001B /* PSPushPopPressView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = PSPushPopPressView.h; sourceTree = "<group>"; };
-		7C13BD76A984F19BF81298BDB9879F0C /* NGVolumeControlDelegate.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = NGVolumeControlDelegate.h; path = NGVolumeControl/NGVolumeControl/NGVolumeControlDelegate.h; sourceTree = "<group>"; };
+		5EDD5FE6574B9A81352D80E920A199F7 /* NGVolumeControlKit.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = NGVolumeControlKit.h; path = NGVolumeControl/NGVolumeControlKit/NGVolumeControlKit.h; sourceTree = "<group>"; };
+		64BF07C3B730BEE1E0D76E56ED5F84AE /* NGVolumeControl.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = NGVolumeControl.m; path = NGVolumeControl/NGVolumeControl/NGVolumeControl.m; sourceTree = "<group>"; };
 		7FEDE7BB6D264DD5CFFDEBD50D7FED25 /* Pods-NGMoviePlayer-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-NGMoviePlayer-resources.sh"; sourceTree = "<group>"; };
-		96B13852E1E25D3CC6315D5965A79DCC /* PSPushPopPressView-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "PSPushPopPressView-dummy.m"; sourceTree = "<group>"; };
+		8C9888D6AE7341EC4207A46ADFA38700 /* NGVolumeControlDelegate.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = NGVolumeControlDelegate.h; path = NGVolumeControl/NGVolumeControl/NGVolumeControlDelegate.h; sourceTree = "<group>"; };
+		8EBF993F874183F81B568EA948B1C2B0 /* NGVolumeControl.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = NGVolumeControl.h; path = NGVolumeControl/NGVolumeControl/NGVolumeControl.h; sourceTree = "<group>"; };
+		919171B58BA9AD4A88050524CAAD191B /* PSPushPopPressView-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "PSPushPopPressView-dummy.m"; sourceTree = "<group>"; };
+		9AE5EA4E485C522360A580AA3CAFB671 /* NGGeometryFunctions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = NGGeometryFunctions.h; path = NGVolumeControl/NGVolumeControl/NGGeometryFunctions.h; sourceTree = "<group>"; };
 		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		B4185BBB0F373C865768C4028677BBD6 /* NGGeometryFunctions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = NGGeometryFunctions.h; path = NGVolumeControl/NGVolumeControl/NGGeometryFunctions.h; sourceTree = "<group>"; };
-		B612453DFEACC33FDEB024A6FA3302B8 /* PSPushPopPressView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = PSPushPopPressView.m; sourceTree = "<group>"; };
-		B6187EA9F8E49FC3256C94BF119021FC /* NGVolumeControl.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = NGVolumeControl.h; path = NGVolumeControl/NGVolumeControl/NGVolumeControl.h; sourceTree = "<group>"; };
-		B8DC69212C178099FEC5937CDD807A87 /* NGVolumeSlider.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = NGVolumeSlider.m; path = NGVolumeControl/NGVolumeControl/NGVolumeSlider.m; sourceTree = "<group>"; };
-		BAD99322184E12F14C5109D7ED501211 /* libNGVolumeControl.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libNGVolumeControl.a; path = libNGVolumeControl.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		BB525B36DB6E097FE397D741F6B1FDD4 /* NGVolumeControlExpandDirection.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = NGVolumeControlExpandDirection.h; path = NGVolumeControl/NGVolumeControl/NGVolumeControlExpandDirection.h; sourceTree = "<group>"; };
+		AA1E535E066771486F1D0B8ACAFEDF37 /* PSPushPopPressView-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "PSPushPopPressView-prefix.pch"; sourceTree = "<group>"; };
 		C543386E5856515E9A3C05D2C1B7D048 /* Pods-NGMoviePlayer-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-NGMoviePlayer-acknowledgements.markdown"; sourceTree = "<group>"; };
+		CCD800ECD1890575DF03A987E1612BC6 /* NGVolumeControlKit-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "NGVolumeControlKit-dummy.m"; sourceTree = "<group>"; };
 		D457E9C2E691258DB3A4477152607645 /* Pods-NGMoviePlayer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-NGMoviePlayer.debug.xcconfig"; sourceTree = "<group>"; };
+		D4C56C5F12BA6718B2DEE5764CB59BEF /* NGVolumeSlider.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = NGVolumeSlider.m; path = NGVolumeControl/NGVolumeControl/NGVolumeSlider.m; sourceTree = "<group>"; };
+		DFE4A50FA3BF70CE70CA575DE5388432 /* NGVolumeControl.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; name = NGVolumeControl.bundle; path = NGVolumeControl/Resources/NGVolumeControl.bundle; sourceTree = "<group>"; };
 		E06B3B06313D9DE2F6E4CDA32636988E /* libPSPushPopPressView.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libPSPushPopPressView.a; path = libPSPushPopPressView.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		EB0FA72A80AA57C67C03E7B5BBD95910 /* NGVolumeSlider.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = NGVolumeSlider.h; path = NGVolumeControl/NGVolumeControl/NGVolumeSlider.h; sourceTree = "<group>"; };
-		F0853622895B5EDF9FD04CCCAFE3E8C3 /* NGVolumeControl+NGCustomize.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NGVolumeControl+NGCustomize.h"; path = "NGVolumeControl/NGVolumeControl/NGVolumeControl+NGCustomize.h"; sourceTree = "<group>"; };
-		FC1E7D36076A5B7C0C2CE733793DFF74 /* PSPushPopPressView.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = PSPushPopPressView.xcconfig; sourceTree = "<group>"; };
+		F401367475417018FFA07BC8161A6215 /* NGVolumeControlExpandDirection.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = NGVolumeControlExpandDirection.h; path = NGVolumeControl/NGVolumeControl/NGVolumeControlExpandDirection.h; sourceTree = "<group>"; };
+		F5B2B1228A23ED3FEFC64720E23E2835 /* NGVolumeControl+NGCustomize.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NGVolumeControl+NGCustomize.h"; path = "NGVolumeControl/NGVolumeControl/NGVolumeControl+NGCustomize.h"; sourceTree = "<group>"; };
+		FA393B738CFB322D2E7C20110E9FF1E7 /* libNGVolumeControlKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libNGVolumeControlKit.a; path = libNGVolumeControlKit.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		FDA6064AC2CDDAD49C0C009B02C03AB4 /* PSPushPopPressView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = PSPushPopPressView.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		375017E057545B7A6EF040BD2FDA5CBF /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		755B8016DB6001BE0F302827CAA39195 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -86,7 +79,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		960549DCB592248634D89A3DAA3CF4F8 /* Frameworks */ = {
+		BDB4C31DCCEF4E4B22596D1DC7AA25C5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E2C708A5BF74EFA903D8102E226EB813 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -104,34 +104,42 @@
 			name = "Targets Support Files";
 			sourceTree = "<group>";
 		};
-		3C0699A547283DBBB75398B91D6B340D /* Support Files */ = {
+		08EB7E35882CA86F5C6AEBB3F5266B59 /* PSPushPopPressView */ = {
 			isa = PBXGroup;
 			children = (
-				58D7397E04C150CD8CD968AEA7CB8A4D /* NGVolumeControl.xcconfig */,
-				0F2B2C170321D33659F09FFE4C41656E /* NGVolumeControl-dummy.m */,
-				504EACBE8BD3B6EA8DE8542FAEFED65A /* NGVolumeControl-prefix.pch */,
+				FDA6064AC2CDDAD49C0C009B02C03AB4 /* PSPushPopPressView.h */,
+				1C681BC0319EDD21190A573A524A55A1 /* PSPushPopPressView.m */,
+				D07B9E18B1E4EF170747A14698069A4C /* Support Files */,
 			);
-			name = "Support Files";
-			path = "../Target Support Files/NGVolumeControl";
+			name = PSPushPopPressView;
+			path = PSPushPopPressView;
 			sourceTree = "<group>";
 		};
-		427EAC35F53FE727779920529D0600B0 /* NGVolumeControl */ = {
+		179820A5760CE55966BC3E9D01B86B4B /* NGVolumeControlKit */ = {
 			isa = PBXGroup;
 			children = (
-				B4185BBB0F373C865768C4028677BBD6 /* NGGeometryFunctions.h */,
-				B6187EA9F8E49FC3256C94BF119021FC /* NGVolumeControl.h */,
-				39EB2BE6C5CAD2E44E612FFD1A25029E /* NGVolumeControl.m */,
-				F0853622895B5EDF9FD04CCCAFE3E8C3 /* NGVolumeControl+NGCustomize.h */,
-				7C13BD76A984F19BF81298BDB9879F0C /* NGVolumeControlDelegate.h */,
-				BB525B36DB6E097FE397D741F6B1FDD4 /* NGVolumeControlExpandDirection.h */,
-				38063763FE71813E7F99AD190EF4BE6B /* NGVolumeControlKit.h */,
-				EB0FA72A80AA57C67C03E7B5BBD95910 /* NGVolumeSlider.h */,
-				B8DC69212C178099FEC5937CDD807A87 /* NGVolumeSlider.m */,
-				F470F846823D23A9F7E9A29DB48CBA60 /* Resources */,
-				3C0699A547283DBBB75398B91D6B340D /* Support Files */,
+				9AE5EA4E485C522360A580AA3CAFB671 /* NGGeometryFunctions.h */,
+				8EBF993F874183F81B568EA948B1C2B0 /* NGVolumeControl.h */,
+				64BF07C3B730BEE1E0D76E56ED5F84AE /* NGVolumeControl.m */,
+				F5B2B1228A23ED3FEFC64720E23E2835 /* NGVolumeControl+NGCustomize.h */,
+				8C9888D6AE7341EC4207A46ADFA38700 /* NGVolumeControlDelegate.h */,
+				F401367475417018FFA07BC8161A6215 /* NGVolumeControlExpandDirection.h */,
+				5EDD5FE6574B9A81352D80E920A199F7 /* NGVolumeControlKit.h */,
+				19CAD2E9B210593CA61D77E0AD5CB459 /* NGVolumeSlider.h */,
+				D4C56C5F12BA6718B2DEE5764CB59BEF /* NGVolumeSlider.m */,
+				626A01EECB41FC9F71C3F7E0E5462A9B /* Resources */,
+				81F2695F37B614943100AD5DD73C95B9 /* Support Files */,
 			);
-			name = NGVolumeControl;
-			path = NGVolumeControl;
+			name = NGVolumeControlKit;
+			path = NGVolumeControlKit;
+			sourceTree = "<group>";
+		};
+		626A01EECB41FC9F71C3F7E0E5462A9B /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				DFE4A50FA3BF70CE70CA575DE5388432 /* NGVolumeControl.bundle */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 		75C1EBF073F2A9DF9E4B8D945AEE9122 /* Pods-NGMoviePlayer */ = {
@@ -148,34 +156,34 @@
 			path = "Target Support Files/Pods-NGMoviePlayer";
 			sourceTree = "<group>";
 		};
-		999310F071C1DF39C4B5FDA54C5ED09C /* Pods */ = {
+		81F2695F37B614943100AD5DD73C95B9 /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
-				427EAC35F53FE727779920529D0600B0 /* NGVolumeControl */,
-				BCBA302EEAE3D9B1B59BF106BC8C58FD /* PSPushPopPressView */,
+				09CE08B65E928A9792D29307C088BB8A /* NGVolumeControlKit.xcconfig */,
+				CCD800ECD1890575DF03A987E1612BC6 /* NGVolumeControlKit-dummy.m */,
+				047B7DA0CB31B1785E6DB52A540BC4AD /* NGVolumeControlKit-prefix.pch */,
 			);
-			name = Pods;
+			name = "Support Files";
+			path = "../Target Support Files/NGVolumeControlKit";
 			sourceTree = "<group>";
 		};
-		BC16ED8C7AB18B756368289C254146EA /* Products */ = {
+		B59B7EF0A9FABF2EA1D3663DCA70A033 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				BAD99322184E12F14C5109D7ED501211 /* libNGVolumeControl.a */,
+				FA393B738CFB322D2E7C20110E9FF1E7 /* libNGVolumeControlKit.a */,
 				59E1E1DFDAF4AF6D2771DC70FAECC4D8 /* libPods-NGMoviePlayer.a */,
 				E06B3B06313D9DE2F6E4CDA32636988E /* libPSPushPopPressView.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		BCBA302EEAE3D9B1B59BF106BC8C58FD /* PSPushPopPressView */ = {
+		C75F2E7E99D87B6CCC35782AC0DF1D9F /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				5AE081D91A90D2636BCF71179272001B /* PSPushPopPressView.h */,
-				B612453DFEACC33FDEB024A6FA3302B8 /* PSPushPopPressView.m */,
-				EDFEE206CED3B9CCC9AD6E92E25CA7BD /* Support Files */,
+				179820A5760CE55966BC3E9D01B86B4B /* NGVolumeControlKit */,
+				08EB7E35882CA86F5C6AEBB3F5266B59 /* PSPushPopPressView */,
 			);
-			name = PSPushPopPressView;
-			path = PSPushPopPressView;
+			name = Pods;
 			sourceTree = "<group>";
 		};
 		CF1408CF629C7361332E53B88F7BD30C = {
@@ -183,10 +191,21 @@
 			children = (
 				9D940727FF8FB9C785EB98E56350EF41 /* Podfile */,
 				D89477F20FB1DE18A04690586D7808C4 /* Frameworks */,
-				999310F071C1DF39C4B5FDA54C5ED09C /* Pods */,
-				BC16ED8C7AB18B756368289C254146EA /* Products */,
+				C75F2E7E99D87B6CCC35782AC0DF1D9F /* Pods */,
+				B59B7EF0A9FABF2EA1D3663DCA70A033 /* Products */,
 				03697A498EAEDBE2774357F28CB0626C /* Targets Support Files */,
 			);
+			sourceTree = "<group>";
+		};
+		D07B9E18B1E4EF170747A14698069A4C /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				010DAE5BBA0E03218BD6547011008EAC /* PSPushPopPressView.xcconfig */,
+				919171B58BA9AD4A88050524CAAD191B /* PSPushPopPressView-dummy.m */,
+				AA1E535E066771486F1D0B8ACAFEDF37 /* PSPushPopPressView-prefix.pch */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/PSPushPopPressView";
 			sourceTree = "<group>";
 		};
 		D89477F20FB1DE18A04690586D7808C4 /* Frameworks */ = {
@@ -196,29 +215,10 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		EDFEE206CED3B9CCC9AD6E92E25CA7BD /* Support Files */ = {
-			isa = PBXGroup;
-			children = (
-				FC1E7D36076A5B7C0C2CE733793DFF74 /* PSPushPopPressView.xcconfig */,
-				96B13852E1E25D3CC6315D5965A79DCC /* PSPushPopPressView-dummy.m */,
-				01B3962DB79569375B620348C660E588 /* PSPushPopPressView-prefix.pch */,
-			);
-			name = "Support Files";
-			path = "../Target Support Files/PSPushPopPressView";
-			sourceTree = "<group>";
-		};
-		F470F846823D23A9F7E9A29DB48CBA60 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				2A3B90192E09BF8720C31788E012ED48 /* NGVolumeControl.bundle */,
-			);
-			name = Resources;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		6AFD098362D5BCE51714719F3DD64DAD /* Headers */ = {
+		6A8971C7874E28477811A555C77653D8 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -233,17 +233,17 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		BB4561CA04A59AEC0243D5AF1194EF34 /* Headers */ = {
+		C04856D9C25FD596373A7FA2C30F73DA /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				32FC6AB0201D16A625411F52868C6F9C /* NGGeometryFunctions.h in Headers */,
-				5515CC979A7553930CE0B2DCCAF167DC /* NGVolumeControl+NGCustomize.h in Headers */,
-				76E58CA06BFC99C8C76BD64917C7DE92 /* NGVolumeControl.h in Headers */,
-				F36A51974BAA1784B8834D98CE516E55 /* NGVolumeControlDelegate.h in Headers */,
-				8752A33AA818F390005152C987D51E7D /* NGVolumeControlExpandDirection.h in Headers */,
-				69B9FB5A5EB981ACD842C3AA9277FA38 /* NGVolumeControlKit.h in Headers */,
-				AF7B0DAF6A756222AA771DCAC82CA6E9 /* NGVolumeSlider.h in Headers */,
+				CB81513B1A6DA852390C290E07BB5633 /* NGGeometryFunctions.h in Headers */,
+				EB20626B0FCD00E591E20435575B35D2 /* NGVolumeControl+NGCustomize.h in Headers */,
+				C1A25E8414944F6BCD94FBCB654E6A3B /* NGVolumeControl.h in Headers */,
+				BF1FAE96C01973C8D8CB873710C92B71 /* NGVolumeControlDelegate.h in Headers */,
+				BB5C02E253BC451BF277301A3A465D85 /* NGVolumeControlExpandDirection.h in Headers */,
+				0B6D54AB62B980BE6B184A59D73CF910 /* NGVolumeControlKit.h in Headers */,
+				2AA4D61BA03F0E5AF3A77BCCC98CC571 /* NGVolumeSlider.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -252,17 +252,17 @@
 /* Begin PBXNativeTarget section */
 		641778F72617A6F0FB8E1FB476352174 /* Pods-NGMoviePlayer */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 396AD4E87E5E1FE85C81BCDF2CE82B3F /* Build configuration list for PBXNativeTarget "Pods-NGMoviePlayer" */;
+			buildConfigurationList = BC689646D1DAB7C5CCAB633AEE426035 /* Build configuration list for PBXNativeTarget "Pods-NGMoviePlayer" */;
 			buildPhases = (
-				6AFD098362D5BCE51714719F3DD64DAD /* Headers */,
-				D572F6E4BCDC0D969A0BD6AD0ECB97F9 /* Sources */,
-				960549DCB592248634D89A3DAA3CF4F8 /* Frameworks */,
+				6A8971C7874E28477811A555C77653D8 /* Headers */,
+				F4FDE49E2C7A822722489CABB358BBAA /* Sources */,
+				BDB4C31DCCEF4E4B22596D1DC7AA25C5 /* Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				C1BF07C4497F4B6A7317E20BBB880C77 /* PBXTargetDependency */,
-				A710E397E6B5661F082305DA9A7E7A08 /* PBXTargetDependency */,
+				E69F2BA9753A59FF5C3A7E9AF1AA50DA /* PBXTargetDependency */,
+				43CF5B5AE3FA56D48A863C98B2350DF4 /* PBXTargetDependency */,
 			);
 			name = "Pods-NGMoviePlayer";
 			productName = "Pods-NGMoviePlayer";
@@ -286,21 +286,21 @@
 			productReference = E06B3B06313D9DE2F6E4CDA32636988E /* libPSPushPopPressView.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		C3E2FDDF54FC408FF39DC2A8CD2CA42F /* NGVolumeControl */ = {
+		E8B5733BCE2A0BF026139898B59CE9F1 /* NGVolumeControlKit */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B339B1C2F4C50E7E287625F2E40F25EE /* Build configuration list for PBXNativeTarget "NGVolumeControl" */;
+			buildConfigurationList = 0AD687C9A03C3905241B72AA12D9355E /* Build configuration list for PBXNativeTarget "NGVolumeControlKit" */;
 			buildPhases = (
-				BB4561CA04A59AEC0243D5AF1194EF34 /* Headers */,
-				41990594EC53DD7F7BB4DB1411AA34B2 /* Sources */,
-				375017E057545B7A6EF040BD2FDA5CBF /* Frameworks */,
+				C04856D9C25FD596373A7FA2C30F73DA /* Headers */,
+				D02B90E9D8E32A17F1F16FD89827A072 /* Sources */,
+				E2C708A5BF74EFA903D8102E226EB813 /* Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = NGVolumeControl;
-			productName = NGVolumeControl;
-			productReference = BAD99322184E12F14C5109D7ED501211 /* libNGVolumeControl.a */;
+			name = NGVolumeControlKit;
+			productName = NGVolumeControlKit;
+			productReference = FA393B738CFB322D2E7C20110E9FF1E7 /* libNGVolumeControlKit.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -321,11 +321,11 @@
 				Base,
 			);
 			mainGroup = CF1408CF629C7361332E53B88F7BD30C;
-			productRefGroup = BC16ED8C7AB18B756368289C254146EA /* Products */;
+			productRefGroup = B59B7EF0A9FABF2EA1D3663DCA70A033 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				C3E2FDDF54FC408FF39DC2A8CD2CA42F /* NGVolumeControl */,
+				E8B5733BCE2A0BF026139898B59CE9F1 /* NGVolumeControlKit */,
 				641778F72617A6F0FB8E1FB476352174 /* Pods-NGMoviePlayer */,
 				95DB8773585BE62D55B35F540FDC2070 /* PSPushPopPressView */,
 			);
@@ -333,16 +333,6 @@
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
-		41990594EC53DD7F7BB4DB1411AA34B2 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				F0800AC84EDC7FE6813C71C7EAE50CC1 /* NGVolumeControl-dummy.m in Sources */,
-				75C558BC634C31E846D7035302F7AFC0 /* NGVolumeControl.m in Sources */,
-				A7B5D7462437DE27FE5A96DCAC646BCC /* NGVolumeSlider.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		7DF120533C769AC003BB2F561DAF70D4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -352,56 +342,68 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D572F6E4BCDC0D969A0BD6AD0ECB97F9 /* Sources */ = {
+		D02B90E9D8E32A17F1F16FD89827A072 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5A1C3FF55464FF50060F320BF7A1A2E9 /* Pods-NGMoviePlayer-dummy.m in Sources */,
+				5CB3E686BBCADFCD51F9912BE481E4C7 /* NGVolumeControl.m in Sources */,
+				CCCEFB977B93A0F95A208430EEA76610 /* NGVolumeControlKit-dummy.m in Sources */,
+				FD4A1F006045409A12F8AF910C7E677B /* NGVolumeSlider.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F4FDE49E2C7A822722489CABB358BBAA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1C81AB64331A266F154C0CE16FA1F37C /* Pods-NGMoviePlayer-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		A710E397E6B5661F082305DA9A7E7A08 /* PBXTargetDependency */ = {
+		43CF5B5AE3FA56D48A863C98B2350DF4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = PSPushPopPressView;
 			target = 95DB8773585BE62D55B35F540FDC2070 /* PSPushPopPressView */;
-			targetProxy = E7D5BE7492C140241B258D464C10ED34 /* PBXContainerItemProxy */;
+			targetProxy = A9EE2EE42A0B33BB2D8AC9A7908017B5 /* PBXContainerItemProxy */;
 		};
-		C1BF07C4497F4B6A7317E20BBB880C77 /* PBXTargetDependency */ = {
+		E69F2BA9753A59FF5C3A7E9AF1AA50DA /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			name = NGVolumeControl;
-			target = C3E2FDDF54FC408FF39DC2A8CD2CA42F /* NGVolumeControl */;
-			targetProxy = C0FC0D6D04AD3C912A313A3785983D29 /* PBXContainerItemProxy */;
+			name = NGVolumeControlKit;
+			target = E8B5733BCE2A0BF026139898B59CE9F1 /* NGVolumeControlKit */;
+			targetProxy = 100A52AAAC7272C4DDF5E3C01642BBB0 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		0A2E91A46402A2315C68B62D9466733C /* Debug */ = {
+		2DA50ADB3924C3CE5E505F3A484C63CB /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D457E9C2E691258DB3A4477152607645 /* Pods-NGMoviePlayer.debug.xcconfig */;
+			baseConfigurationReference = 09CE08B65E928A9792D29307C088BB8A /* NGVolumeControlKit.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				GCC_PREFIX_HEADER = "Target Support Files/NGVolumeControlKit/NGVolumeControlKit-prefix.pch";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				MACH_O_TYPE = staticlib;
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
-				PODS_ROOT = "$(SRCROOT)";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_MODULE_NAME = NGVolumeControlKit;
+				PRODUCT_NAME = NGVolumeControlKit;
+				PUBLIC_HEADERS_FOLDER_PATH = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
 		44CB856AD2448078A3AD577CFC10F6F0 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FC1E7D36076A5B7C0C2CE733793DFF74 /* PSPushPopPressView.xcconfig */;
+			baseConfigurationReference = 010DAE5BBA0E03218BD6547011008EAC /* PSPushPopPressView.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -483,30 +485,6 @@
 			};
 			name = Release;
 		};
-		708AFE7BDFA2C0A6AFF01286F4405B6B /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 58D7397E04C150CD8CD968AEA7CB8A4D /* NGVolumeControl.xcconfig */;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				GCC_PREFIX_HEADER = "Target Support Files/NGVolumeControl/NGVolumeControl-prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PRIVATE_HEADERS_FOLDER_PATH = "";
-				PRODUCT_MODULE_NAME = NGVolumeControl;
-				PRODUCT_NAME = NGVolumeControl;
-				PUBLIC_HEADERS_FOLDER_PATH = "";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
 		7EF7227D9B20A1D549000096ACCB23D7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -571,7 +549,7 @@
 			};
 			name = Debug;
 		};
-		93615245E0D91E729D67B15DB4477283 /* Release */ = {
+		810499355D4372B4AE44590454F4F8DC /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 292C09892920233EBC150FD49DCEC4FE /* Pods-NGMoviePlayer.release.xcconfig */;
 			buildSettings = {
@@ -593,9 +571,30 @@
 			};
 			name = Release;
 		};
+		A6929A52FAF664C03D1A09FEB8E11823 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D457E9C2E691258DB3A4477152607645 /* Pods-NGMoviePlayer.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MACH_O_TYPE = staticlib;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
 		B666825CCB4E5AB04AA23CDA2D68A764 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FC1E7D36076A5B7C0C2CE733793DFF74 /* PSPushPopPressView.xcconfig */;
+			baseConfigurationReference = 010DAE5BBA0E03218BD6547011008EAC /* PSPushPopPressView.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -616,37 +615,38 @@
 			};
 			name = Debug;
 		};
-		F467C5646E236AE9F391BD6DC401BCC3 /* Debug */ = {
+		FA1D1569B8AC13E9AC7D10F8B14805F5 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 58D7397E04C150CD8CD968AEA7CB8A4D /* NGVolumeControl.xcconfig */;
+			baseConfigurationReference = 09CE08B65E928A9792D29307C088BB8A /* NGVolumeControlKit.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				GCC_PREFIX_HEADER = "Target Support Files/NGVolumeControl/NGVolumeControl-prefix.pch";
+				GCC_PREFIX_HEADER = "Target Support Files/NGVolumeControlKit/NGVolumeControlKit-prefix.pch";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PRIVATE_HEADERS_FOLDER_PATH = "";
-				PRODUCT_MODULE_NAME = NGVolumeControl;
-				PRODUCT_NAME = NGVolumeControl;
+				PRODUCT_MODULE_NAME = NGVolumeControlKit;
+				PRODUCT_NAME = NGVolumeControlKit;
 				PUBLIC_HEADERS_FOLDER_PATH = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 			};
-			name = Debug;
+			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		396AD4E87E5E1FE85C81BCDF2CE82B3F /* Build configuration list for PBXNativeTarget "Pods-NGMoviePlayer" */ = {
+		0AD687C9A03C3905241B72AA12D9355E /* Build configuration list for PBXNativeTarget "NGVolumeControlKit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				0A2E91A46402A2315C68B62D9466733C /* Debug */,
-				93615245E0D91E729D67B15DB4477283 /* Release */,
+				2DA50ADB3924C3CE5E505F3A484C63CB /* Debug */,
+				FA1D1569B8AC13E9AC7D10F8B14805F5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -669,11 +669,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B339B1C2F4C50E7E287625F2E40F25EE /* Build configuration list for PBXNativeTarget "NGVolumeControl" */ = {
+		BC689646D1DAB7C5CCAB633AEE426035 /* Build configuration list for PBXNativeTarget "Pods-NGMoviePlayer" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				F467C5646E236AE9F391BD6DC401BCC3 /* Debug */,
-				708AFE7BDFA2C0A6AFF01286F4405B6B /* Release */,
+				A6929A52FAF664C03D1A09FEB8E11823 /* Debug */,
+				810499355D4372B4AE44590454F4F8DC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -7,6 +7,6 @@ project 'NGMoviePlayer/NGMoviePlayer.xcodeproj'
 inhibit_all_warnings!
 
 target 'NGMoviePlayer' do
-  pod 'NGVolumeControl', :git => 'https://github.com/NOUSguide/NGVolumeControl.git', :tag => '1.0.2'
+  pod 'NGVolumeControlKit', :git => 'https://github.com/NOUSguide/NGVolumeControl.git', :tag => '1.0.3'
   pod 'PSPushPopPressView', :git => 'https://github.com/NOUSguide/PSPushPopPressView.git', :tag => '1.0.1'
 end
